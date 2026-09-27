@@ -27,6 +27,7 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - `external.textChildren: {prop, styleMap}`: for containers whose children are text. Children become `<span style>{customProperties[prop]}</span>`; `styleMap` sends layer props to the span's CSS and doesn't forward them. Remocn Paper Sticker uses it.
   - `external.renameProps: {from: to}`: forwards a prop under another name after box sizing, so a component's own `width`/`height` no longer clash with the layer box. Remocn Reel uses `cardWidth/cardHeight`; Animated Bar Chart uses `chartWidth/chartHeight`. Older entries that hide those props (Glass Code Block/Walk, Animated Line Chart) could adopt it.
   - The studio preview ctx now carries `compW`/`compH`, which `wrapGeometry` needs for the window fit.
+- **Sub-folder component files, 2026-09-28:** `write_component_file` accepts one folder level (`remocn-ui/index.ts`), so multi-file remocn libs keep their relative imports (`./color`, `./timeline`). The render sync already copied folders. `@/lib/remocn-ui` maps to `community/remocn-ui/` in `remotion.config.ts` and in the tsconfig paths; that alias has to be its own key, because `@/lib/remocn` doesn't prefix-match it.
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
@@ -1149,6 +1150,34 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Bars mid-spring:** the bars use `scale` with `transformBox: fill-box` and an absolute pixel origin, so while springing they grow from a point below the baseline and overshoot past it. They settle exactly on it. The preview grows them from the baseline.
   - **Staggered stickers:** `check_scene` warns `simultaneous_entrances` for sticker groups, because the stagger lives in each layer's `at` prop, not its start frame. It's safe to ignore.
 - **Network note:** Reel frame 50 once timed out loading the 790 KB `commerce-tear-a-graphic.png` on a slow connection (Remotion's `<Img>` delayRender). A re-render passed. For client work, prefer local `staticFile()` images.
+
+### Claude Chat, ChatGPT, v0, Claude Code and OpenCode (remocn AI surfaces)
+
+- **Catalog ids:** `remocn_claude_chat`, `remocn_chat_gpt`, `remocn_v0`, `remocn_claude_code`, `remocn_opencode`
+- **Files:** the matching kebab-case `.tsx` files, plus two registry dependencies, verbatim, MIT:
+  - `caret.tsx`, the caret primitive, imported as `@/components/remocn/caret`.
+  - The `remocn-ui/` core lib: `index`, `timeline` (`useTypewriter`), `color` (needs `culori`, now installed with `@types/culori`), `theme`, `motion` and `types`.
+  - Fonts: Inter, and JetBrains Mono for the two CLIs, via `@remotion/google-fonts`.
+- **Size: all five are full frame.** Each scales its own 1280×720 stage to the composition and renders transparent. Pair each with its page colour, as in the tests: Claude Chat `#F5F4EF`, ChatGPT white, v0 black, Claude Code `#2B2A28`, OpenCode black. Each ships single-theme; the dark/light `THEMES` table isn't a prop.
+- **Controls:** every text prop plus `accentColor` (not on v0, whose button is white) and `speed`. `speed` has a minimum of 1, as the docs require, so the prompt always finishes typing.
+- **Timing, component frames:**
+  - Intro springs and fades over roughly 0–36.
+  - The placeholder shows with a blinking caret, once per second.
+  - Typing starts at frame 42 for the chat composers (22 characters/s) and at frame 48 for the CLIs (Claude Code 18 characters/s, OpenCode 20).
+  - The composers' button morph is a spring that starts at the same frame, so it lands as the first letter appears. ChatGPT's suggestion chips fade out with it.
+  - Natural lengths are 150 frames, and 160 for Claude Code.
+- **Source vs. docs:**
+  - **Claude Chat:** the source declares `greeting` but never renders it. There's no serif Fraunces headline or sunburst, just the input card, so `greeting` isn't exposed.
+  - **Claude Code:** the source's default model line is "Opus 4.8 • Max 20x", where the docs say Sonnet 4.5.
+  - **OpenCode:** the default query includes the quote marks.
+  - **Claude Code sample content:** the "What's new" list is built-in sample data.
+- **Preview:** kind `aichat`. It ports the stage layout, the intro springs, the fade windows, `useTypewriter`'s reveal count, the caret blink and the morph springs. Icons are simplified and text widths are estimated, so caret and chevron x positions can be a few pixels off; the OpenCode wordmark paths are verbatim.
+- **Verified:** 2026-09-28, [remocn-ai-contact.png](renders/remocn-ai-contact.png), 22 stills, 0 errors, render frames matching the preview's letter counts:
+  - Claude Chat: "Draft a launc" at frame 60; a custom purple-accent card.
+  - ChatGPT at 46: "Ma", mid-morph, chips fading.
+  - v0: "a landing page for m" at 70.
+  - Claude Code: "edit src/them" at 70; a custom user and working directory.
+  - OpenCode: `"What is the t` at 70.
 
 ### Typewriter Text
 

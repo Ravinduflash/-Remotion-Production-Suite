@@ -24,6 +24,8 @@
     "@remotion/shapes": "4.0.526",
     "@remotion/three": "4.0.526",
     "@turf/turf": "^7.4.0",
+    "@types/culori": "^4.0.1",
+    "culori": "^4.0.2",
     "maplibre-gl": "^6.11.2",
     "opentype.js": "^2.0.0",
     "react": "^19.1.0",

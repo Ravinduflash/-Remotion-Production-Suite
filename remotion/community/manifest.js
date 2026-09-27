@@ -11372,5 +11372,440 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 160
+  },
+  {
+    "id": "remocn_claude_chat",
+    "componentName": "ClaudeChat",
+    "name": "Claude Chat (remocn)",
+    "desc": "remocn • claude.ai-style input card: placeholder + blinking caret, prompt types from frame 42, waveform button morphs into the terracotta send button • transparent (pair with #F5F4EF)",
+    "icon": "💬",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/claude-chat",
+      "exportName": "ClaudeChat",
+      "packages": [
+        "@remotion/google-fonts",
+        "culori"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "placeholder": "Try: draft an email · summarize a doc · plan your week",
+        "prompt": "Draft a launch tweet for our new release",
+        "modelName": "Opus 4.8",
+        "modelTier": "Max",
+        "accentColor": "#D97757",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Claude Chat (remocn) (whole clip) • scales its own 1280×720 stage; transparent",
+        "items": [
+          {
+            "key": "placeholder",
+            "label": "PLACEHOLDER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "prompt",
+            "label": "PROMPT (types from frame 42, 22 chars/s)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "modelName",
+            "label": "MODEL NAME",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "modelTier",
+            "label": "MODEL TIER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1 so the prompt finishes)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "aichat",
+      "style": "claude"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_chat_gpt",
+    "componentName": "ChatGpt",
+    "name": "ChatGPT (remocn)",
+    "desc": "remocn • ChatGPT-style composer: heading, pill input and suggestion chips; prompt types from frame 42, voice button morphs to send, chips fade out • transparent (pair with white)",
+    "icon": "🟢",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/chat-gpt",
+      "exportName": "ChatGpt",
+      "packages": [
+        "@remotion/google-fonts",
+        "culori"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "greeting": "What's on your mind today?",
+        "placeholder": "Ask anything",
+        "prompt": "Make a sunset over a calm ocean",
+        "accentColor": "#2F6FED",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "ChatGPT (remocn) (whole clip) • scales its own 1280×720 stage; transparent",
+        "items": [
+          {
+            "key": "greeting",
+            "label": "HEADING",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "placeholder",
+            "label": "PLACEHOLDER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "prompt",
+            "label": "PROMPT (types from frame 42, 22 chars/s)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1 so the prompt finishes)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "aichat",
+      "style": "gpt"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_v0",
+    "componentName": "V0",
+    "name": "v0 (remocn)",
+    "desc": "remocn • dark v0-style composer: heading + textarea box, prompt types from frame 42, white mic button morphs to send • transparent (pair with black)",
+    "icon": "▫️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/v0",
+      "exportName": "V0",
+      "packages": [
+        "@remotion/google-fonts",
+        "culori"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "greeting": "What do you want to create?",
+        "placeholder": "Ask v0 to build…",
+        "prompt": "a landing page for my SaaS with pricing and testimonials",
+        "modelName": "v0 Max",
+        "projectName": "Project",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "v0 (remocn) (whole clip) • scales its own 1280×720 stage; transparent; no accent colour (button is white)",
+        "items": [
+          {
+            "key": "greeting",
+            "label": "HEADING",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "placeholder",
+            "label": "PLACEHOLDER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "prompt",
+            "label": "PROMPT (types from frame 42, 22 chars/s)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "modelName",
+            "label": "MODEL CHIP",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "projectName",
+            "label": "PROJECT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1 so the prompt finishes)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "aichat",
+      "style": "v0"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_claude_code",
+    "componentName": "ClaudeCode",
+    "name": "Claude Code (remocn)",
+    "desc": "remocn • Claude Code CLI welcome screen in a terminal window (dashed accent box, mascot, what's new); the command types into the prompt from frame 48 • transparent (pair with #2B2A28)",
+    "icon": "🟧",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/claude-code",
+      "exportName": "ClaudeCode",
+      "packages": [
+        "@remotion/google-fonts",
+        "culori"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "title": "Claude Code v2.0.0",
+        "userName": "Meaghan",
+        "model": "Opus 4.8 • Max 20x",
+        "cwd": "/users/meaghan/code/apps",
+        "placeholder": "Try \"edit <filepath> to ...\"",
+        "prompt": "edit src/theme.ts to add a dark mode toggle",
+        "accentColor": "#D97757",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Claude Code (remocn) (whole clip) • scales its own 1280×720 stage; transparent",
+        "items": [
+          {
+            "key": "title",
+            "label": "BOX TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "userName",
+            "label": "USER NAME",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "model",
+            "label": "MODEL LINE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "cwd",
+            "label": "WORKING DIRECTORY",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "placeholder",
+            "label": "PLACEHOLDER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "prompt",
+            "label": "COMMAND (types from frame 48, 18 chars/s)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1 so the prompt finishes)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "aichat",
+      "style": "code"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 160
+  },
+  {
+    "id": "remocn_opencode",
+    "componentName": "OpenCode",
+    "name": "OpenCode (remocn)",
+    "desc": "remocn • OpenCode TUI welcome screen: wordmark, input box with accent bar and status line, key hints; the query types from frame 48 • transparent (pair with black)",
+    "icon": "⬛",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/opencode",
+      "exportName": "OpenCode",
+      "packages": [
+        "@remotion/google-fonts",
+        "culori"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "placeholder": "Ask anything... ",
+        "query": "\"What is the tech stack of this project?\"",
+        "agentName": "Build",
+        "modelName": "Kimi K2.5",
+        "provider": "Moonshot AI",
+        "accentColor": "#2B7FFF",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "OpenCode (remocn) (whole clip) • scales its own 1280×720 stage; transparent",
+        "items": [
+          {
+            "key": "placeholder",
+            "label": "PROMPT PREFIX",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "query",
+            "label": "QUERY (types from frame 48, 20 chars/s)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "agentName",
+            "label": "AGENT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "modelName",
+            "label": "MODEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "provider",
+            "label": "PROVIDER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1 so the prompt finishes)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "aichat",
+      "style": "opencode"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
   }
 ];
