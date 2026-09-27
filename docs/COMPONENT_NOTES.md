@@ -36,6 +36,11 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Render timeout, raised 2026-09-28:** `render-project/remotion.config.ts` sets `Config.setDelayRenderTimeoutInMilliseconds(120000)`, instead of Remotion's default of 30 s.
     - **Why:** on this GPU-less machine SwiftShader compiles and draws Smoke Dissolve's smoke-ring shader for more than 30 s per still, at paper's minimum pixel ratio of 2, which is 3840×2160.
     - **Gate:** the paint gate also has a 90 s wall-clock fallback, so it can never hold a render on its own.
+  - **html-in-canvas, 2026-09-28:** `remotion.config.ts` calls `Config.setAllowHtmlInCanvasEnabled(true)`. That starts Chrome with the `CanvasDrawElement` Blink feature, so canvas transitions (remocn Glitch Cut and Ember Burn, Remotion's own shader transitions) take their real WebGL2 path rather than their CSS fallback.
+    - **Image hand-over:** those presentations capture each side as an element image and hand it back through `onElementImage(image, draw)`, together with `onUnmount` and `bothEnteringAndExiting`.
+    - **How TransitionLayer does it:** it passes these props and pairs the two captures with the same `drawIfSynced` logic as `@remotion/transitions`' `TransitionSeriesChildren`. Without them the canvas path throws `onElementImageRef.current is not a function`.
+  - **Stacking:** a presentation may re-stack its sides. Page Turn gives the exiting wrapper `zIndex: 2`, and that works because both sides render as siblings. The studio preview now paints slots in `wrapGeometry` `z` order, so `from` can sit above `to`.
+  - **Clipping and rotation:** slot geometry can also clip (Caret Wipe's bands) and rotate about an origin (Page Turn, Lens Zoom).
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
@@ -1250,6 +1255,39 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Zoom Blur:** a crossfade punch-in, plus a `rise: 80` variant.
   - **Smoke first attempt:** frames 56 and 82 failed at first on the 30 s timeout, which led to the fix above.
 - **Software-GL note:** all three paper fields drew correctly here; unlike GrainGradient's blob, no empty shapes.
+
+### Lens Zoom, Page Turn, ASCII Dissolve, Caret Wipe, Icon Scatter, Glitch Cut and Ember Burn (remocn transitions)
+
+- **Catalog ids:** `remocn_lens_zoom`, `remocn_page_turn`, `remocn_ascii_dissolve`, `remocn_caret_wipe`, `remocn_icon_scatter`, `remocn_glitch_cut`, `remocn_ember_burn`. These are transition layers: wrap A as `from` and B as `to`.
+- **Files:** the matching kebab-case `.tsx` files, plus `canvas-presentation.tsx`, the shared html-in-canvas / WebGL2 scaffolding and CSS-fallback routing, imported as `@/lib/remocn/canvas-presentation`. All verbatim, MIT.
+- **Default lengths:** lens 28 (`LENS_ZOOM_DURATION_IN_FRAMES`), page 24, ascii 40, caret 40, icons 40, glitch 12, ember 40. Each layer defaults to `30 + T + 30`.
+- **Per transition:**
+  - **Lens Zoom:** a hard cut at exactly 50%. The outgoing half punches in (scale 100→150%, rotation to −15°) and the incoming half steps down from 135% while unwinding from 345° to 360°.
+    - Props: the scale, FOV, blur and rotation ramps, anticipation, lens rings, blur samples and gain and fade, the five shake knobs, R/G/B scales and letterbox; 31 controls in all.
+    - Not exposed: `width`/`height` (it uses the composition size) and `distortionCenterX/Y` (the centre).
+    - Cost: each frame paints `blurSamples × (lensSteps + 1)` copies of the wrapped scene, ×3 with the RGB split. That's 210 copies by default, so keep the wrapped layers light.
+  - **Page Turn:** the exiting page lifts 128% of the height, rotates `angle` about `origin`, and snaps to `poses` stop-motion steps on eased progress (p³). It stays IN FRONT (`zIndex: 2`), and the entering scene is untouched.
+  - **ASCII Dissolve:**
+    - Exposed: `colorBack`, `colorFront`, `cellSize`, `ramp`, `accentDensity`, and `accentColor`, which has no default; the code tests `!== undefined`, so an empty string still turns accents on.
+    - Not exposed: text mode (`enterText` / `enterStyle`) and the `exitFade` / `enterFade` windows.
+  - **Caret Wipe:** complementary clip bands behind and ahead of the caret, with the lime caret drawn once in the entering pass.
+  - **Icon Scatter:** a seeded icon grid over a `coverColor` fill whose opacity follows 0→1→1→0 over 0 / 0.3 / 0.62 / 0.9. Match the cover to scene A.
+  - **Glitch Cut:** real html-in-canvas pixels: slice displacement, RGB split, block corruption and per-slice hand-over around 0.5. Keep it 8–14 frames. The CSS fallback, which is only used if the feature were off, shows red/cyan bands.
+  - **Ember Burn:** the fire follows A's luminance, so the bright title goes first; A chars and boils, sparks carry its own colours, and B arrives incandescent. The CSS fallback is a warm-flash crossfade.
+- **Preview:** kind `transition`, with curves ported for all seven.
+  - The lens cut, page poses and rotation, the caret clip bands, and the icons / ASCII / glitch timing windows follow the components.
+  - The glyph grid, icon field and glitch bands are stand-ins, and the burn itself isn't previewed.
+- **Verified:** 2026-09-28, [remocn-transitions3-contact.png](renders/remocn-transitions3-contact.png), 22 stills, 0 errors after the fixes:
+  - **Lens:** blur copies with RGB fringing into the cut, then B unwinding.
+  - **Page:** A swings up and left over B.
+  - **ASCII:** the glyph field over and between the scenes.
+  - **Caret:** A backspaced and B typed in behind the lime caret.
+  - **Icons:** icons over the cover, then B.
+  - **Glitch:** torn slices leaking the other scene.
+  - **Ember:** the first holes, a full blaze at 0.5, then B glowing with sparks.
+- **Found while testing:**
+  - The first two Glitch stills failed before TransitionLayer passed `onElementImage`.
+  - A studio edit I made commented out a line, so `update_asset` wraps threw `kids is not defined`. Both were fixed before the verified run, and neither was ever committed.
 
 ### Typewriter Text
 

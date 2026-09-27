@@ -180,6 +180,20 @@ const TransitionLayer: React.FC<{ factory: (props: Record<string, any>) => { com
   const T = Math.max(1, Math.round(frames));
   const during = frame >= at && frame < at + T;
   const box = React.useRef<HTMLDivElement>(null);
+  // html-in-canvas presentations (remocn Glitch Cut / Ember Burn, Remotion's own canvas transitions) capture each side
+  // as an element image and hand it back through onElementImage; TransitionSeries pairs the two captures and tells one
+  // side to draw both. Same pairing as @remotion/transitions' TransitionSeriesChildren.drawIfSynced.
+  type Img = { elementImage: any; progress: number | null; draw: ((a: any, b: any, p: number) => void) | null } | null;
+  const enteringImg = React.useRef<Img>(null), exitingImg = React.useRef<Img>(null);
+  const drawIfSynced = React.useCallback(() => {
+    const prev = enteringImg.current, next = exitingImg.current;
+    if (!next?.elementImage && prev?.elementImage) { next?.draw?.(null, null, 0); prev?.draw?.(prev.elementImage ?? null, null, 0); return; }
+    if (!prev?.elementImage && next?.elementImage) { prev?.draw?.(null, null, 0); next?.draw?.(null, next.elementImage ?? null, 0); return; }
+    if ((prev && next && prev.progress === next.progress) || !prev?.elementImage || !next?.elementImage) {
+      prev?.draw?.(prev?.elementImage ?? null, next?.elementImage ?? null, prev?.progress ?? next?.progress ?? 0);
+      next?.draw?.(null, null, 0);
+    }
+  }, []);
   // paper-design shaders apply each frame's uniforms after an async image decode and paint on the next animation frame;
   // remocn's wrappers only hold the first render for two frames, so the capture could miss the field. Hold every frame.
   React.useLayoutEffect(() => {
@@ -203,11 +217,15 @@ const TransitionLayer: React.FC<{ factory: (props: Record<string, any>) => { com
   const pres = factory(passedProps), P = pres.component;
   const p = Math.min(1, Math.max(0, (frame - at) / T));
   const keep = (node: React.ReactNode) => <Sequence from={-at} layout="none">{node}</Sequence>;
+  const canvasProps = (side: 'exiting' | 'entering') => {
+    const ref = side === 'exiting' ? exitingImg : enteringImg;
+    return { onElementImage: (elementImage: any, draw: any) => { ref.current = { elementImage, progress: p, draw }; drawIfSynced(); }, onUnmount: () => { ref.current = { elementImage: null, progress: null, draw: null }; drawIfSynced(); }, bothEnteringAndExiting: false };
+  };
   return (
     <AbsoluteFill ref={box}>
       <Sequence from={at} durationInFrames={T} layout="none" name="transition">
-        <P presentationDirection="exiting" presentationProgress={p} presentationDurationInFrames={T} passedProps={pres.props}>{keep(from)}</P>
-        <P presentationDirection="entering" presentationProgress={p} presentationDurationInFrames={T} passedProps={pres.props}>{keep(to)}</P>
+        <P presentationDirection="exiting" presentationProgress={p} presentationDurationInFrames={T} passedProps={pres.props} {...canvasProps('exiting')}>{keep(from)}</P>
+        <P presentationDirection="entering" presentationProgress={p} presentationDurationInFrames={T} passedProps={pres.props} {...canvasProps('entering')}>{keep(to)}</P>
       </Sequence>
     </AbsoluteFill>
   );

@@ -13360,5 +13360,1046 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 78
+  },
+  {
+    "id": "remocn_lens_zoom",
+    "componentName": "lensZoom",
+    "name": "Lens Zoom (remocn)",
+    "desc": "remocn transition • a hard cut disguised as a lens punch-in: barrel distortion, fading zoom blur, RGB split and camera shake around the splice at the midpoint (CSS copies; heavy)",
+    "icon": "🔍",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/lens-zoom",
+      "exportName": "lensZoom",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 28,
+        "inScaleFrom": 100,
+        "inScaleTo": 150,
+        "inFovFrom": 0,
+        "inFovTo": 160,
+        "inBlurFrom": 0,
+        "inBlurTo": 60,
+        "inRotationFrom": 0,
+        "inRotationTo": -15,
+        "outScaleFrom": 135,
+        "outScaleTo": 100,
+        "outFovFrom": 135,
+        "outFovTo": 0,
+        "outBlurFrom": 45,
+        "outBlurTo": 0,
+        "outRotationFrom": 345,
+        "outRotationTo": 360,
+        "anticipateScale": 100,
+        "anticipatePortion": 0.35,
+        "lensSteps": 9,
+        "blurSamples": 7,
+        "blurScaleGain": 1,
+        "blurFade": 1.5,
+        "shakeAmount": 50,
+        "shakeFrequency": 1.4,
+        "shakeCyclesPerUnit": 8,
+        "shakeTranslatePx": 73,
+        "shakeRotateDeg": 1.1,
+        "redScale": 1.01,
+        "greenScale": 1,
+        "blueScale": 0.99,
+        "letterboxAspect": 0
+      }
+    },
+    "controls": [
+      {
+        "group": "Lens Zoom (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; cut lands at 50%; each frame paints blurSamples × (lensSteps + 1) copies, ×3 with the RGB split",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 28)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "inScaleFrom",
+            "label": "OUT-GOING SCALE FROM %",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "inScaleTo",
+            "label": "OUT-GOING SCALE TO %",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "inFovFrom",
+            "label": "OUT-GOING FOV FROM °",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 179,
+            "step": 1
+          },
+          {
+            "key": "inFovTo",
+            "label": "OUT-GOING FOV TO °",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 179,
+            "step": 1
+          },
+          {
+            "key": "inBlurFrom",
+            "label": "OUT-GOING BLUR FROM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "inBlurTo",
+            "label": "OUT-GOING BLUR TO",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "inRotationFrom",
+            "label": "OUT-GOING ROT FROM °",
+            "kind": "range",
+            "keyframable": false,
+            "min": -360,
+            "max": 360,
+            "step": 1
+          },
+          {
+            "key": "inRotationTo",
+            "label": "OUT-GOING ROT TO °",
+            "kind": "range",
+            "keyframable": false,
+            "min": -360,
+            "max": 360,
+            "step": 1
+          },
+          {
+            "key": "outScaleFrom",
+            "label": "INCOMING SCALE FROM %",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "outScaleTo",
+            "label": "INCOMING SCALE TO %",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "outFovFrom",
+            "label": "INCOMING FOV FROM °",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 179,
+            "step": 1
+          },
+          {
+            "key": "outFovTo",
+            "label": "INCOMING FOV TO °",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 179,
+            "step": 1
+          },
+          {
+            "key": "outBlurFrom",
+            "label": "INCOMING BLUR FROM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "outBlurTo",
+            "label": "INCOMING BLUR TO",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "outRotationFrom",
+            "label": "INCOMING ROT FROM °",
+            "kind": "range",
+            "keyframable": false,
+            "min": -360,
+            "max": 720,
+            "step": 1
+          },
+          {
+            "key": "outRotationTo",
+            "label": "INCOMING ROT TO °",
+            "kind": "range",
+            "keyframable": false,
+            "min": -360,
+            "max": 720,
+            "step": 1
+          },
+          {
+            "key": "anticipateScale",
+            "label": "ANTICIPATE SQUEEZE % (100 = off)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "key": "anticipatePortion",
+            "label": "ANTICIPATE PORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.9,
+            "step": 0.01
+          },
+          {
+            "key": "lensSteps",
+            "label": "LENS RINGS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 24,
+            "step": 1
+          },
+          {
+            "key": "blurSamples",
+            "label": "BLUR SAMPLES (the expensive knob)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 24,
+            "step": 1
+          },
+          {
+            "key": "blurScaleGain",
+            "label": "BLUR SCALE GAIN",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "blurFade",
+            "label": "BLUR FADE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 6,
+            "step": 0.05
+          },
+          {
+            "key": "shakeAmount",
+            "label": "SHAKE (0 = off)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "shakeFrequency",
+            "label": "SHAKE FREQUENCY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 10,
+            "step": 0.05
+          },
+          {
+            "key": "shakeCyclesPerUnit",
+            "label": "SHAKE CYCLES / UNIT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 0.5
+          },
+          {
+            "key": "shakeTranslatePx",
+            "label": "SHAKE TRANSLATE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "shakeRotateDeg",
+            "label": "SHAKE ROTATE °",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 10,
+            "step": 0.05
+          },
+          {
+            "key": "redScale",
+            "label": "RED SCALE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.9,
+            "max": 1.1,
+            "step": 0.001
+          },
+          {
+            "key": "greenScale",
+            "label": "GREEN SCALE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.9,
+            "max": 1.1,
+            "step": 0.001
+          },
+          {
+            "key": "blueScale",
+            "label": "BLUE SCALE (all equal = no split)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.9,
+            "max": 1.1,
+            "step": 0.001
+          },
+          {
+            "key": "letterboxAspect",
+            "label": "LETTERBOX ASPECT (0 = off, e.g. 2.39)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 4,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "lens"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 88
+  },
+  {
+    "id": "remocn_page_turn",
+    "componentName": "pageTurn",
+    "name": "Page Turn (remocn)",
+    "desc": "remocn transition • the outgoing scene swings up and away like a notebook page in stop-motion poses, IN FRONT of the untouched incoming scene (CSS)",
+    "icon": "📄",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/page-turn",
+      "exportName": "pageTurn",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 24,
+        "angle": -7,
+        "origin": "18% 100%",
+        "poses": 8
+      }
+    },
+    "controls": [
+      {
+        "group": "Page Turn (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; the exiting page stays on top; 24f = 8 poses × 3",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 24)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "angle",
+            "label": "ANGLE ° at full lift (negative = left)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -45,
+            "max": 45,
+            "step": 0.5
+          },
+          {
+            "key": "origin",
+            "label": "PIVOT (CSS transform-origin)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "poses",
+            "label": "POSES (stop-motion steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 24,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "page"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 84
+  },
+  {
+    "id": "remocn_ascii_dissolve",
+    "componentName": "asciiDissolve",
+    "name": "ASCII Dissolve (remocn)",
+    "desc": "remocn transition • the outgoing scene blurs out under a rising grid of monospace glyphs, then the next resolves cell by cell as the field dissolves (canvas 2D text)",
+    "icon": "🔣",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ascii-dissolve",
+      "exportName": "asciiDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 40,
+        "colorBack": "#0d0d10",
+        "colorFront": "rgba(242,242,242,0.6)",
+        "cellSize": 22,
+        "ramp": " .:-=+*#%@",
+        "accentDensity": 0.05
+      }
+    },
+    "controls": [
+      {
+        "group": "ASCII Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; retro / terminal cut",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 40)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorFront",
+            "label": "GLYPH COLOR (CSS)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "cellSize",
+            "label": "CELL SIZE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 6,
+            "max": 80,
+            "step": 1
+          },
+          {
+            "key": "ramp",
+            "label": "DENSITY RAMP (light → dense)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT COLOR (leave unset for none)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentDensity",
+            "label": "ACCENT DENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "ascii"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 100
+  },
+  {
+    "id": "remocn_caret_wipe",
+    "componentName": "caretWipe",
+    "name": "Caret Wipe (remocn)",
+    "desc": "remocn transition • a typing caret sweeps across the frame: the outgoing scene is backspaced behind it and the next is typed in ahead (CSS clip)",
+    "icon": "▏",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/caret-wipe",
+      "exportName": "caretWipe",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 40,
+        "direction": "right",
+        "caretColor": "#C3E88D",
+        "caretWidth": 3,
+        "caretHeight": 0.5
+      }
+    },
+    "controls": [
+      {
+        "group": "Caret Wipe (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; best between UI / text scenes",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 40)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "direction",
+            "label": "DIRECTION",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "right",
+                "Right (types left → right)"
+              ],
+              [
+                "left",
+                "Left"
+              ]
+            ]
+          },
+          {
+            "key": "caretColor",
+            "label": "CARET",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "caretWidth",
+            "label": "CARET WIDTH px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "caretHeight",
+            "label": "CARET HEIGHT (fraction of frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.05,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "caret"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 100
+  },
+  {
+    "id": "remocn_icon_scatter",
+    "componentName": "iconScatter",
+    "name": "Icon Scatter (remocn)",
+    "desc": "remocn transition • a field of line icons flies in, a cover fill hides the swap at the peak, then the icons scatter away (SVG)",
+    "icon": "✳️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/icon-scatter",
+      "exportName": "iconScatter",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 40,
+        "count": 15,
+        "color": "#fafafa",
+        "coverColor": "#0a0a0a",
+        "coverOpacity": 0.92,
+        "strokeWidth": 2,
+        "flyDistance": 260,
+        "seed": "icon-scatter"
+      }
+    },
+    "controls": [
+      {
+        "group": "Icon Scatter (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; playful; match the cover to scene A",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 40)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "count",
+            "label": "ICONS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "ICON STROKE",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "coverColor",
+            "label": "COVER",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "coverOpacity",
+            "label": "COVER PEAK OPACITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "strokeWidth",
+            "label": "STROKE (24px viewBox units)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 6,
+            "step": 0.1
+          },
+          {
+            "key": "flyDistance",
+            "label": "SCATTER DISTANCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1200,
+            "step": 5
+          },
+          {
+            "key": "seed",
+            "label": "SEED",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "icons"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 100
+  },
+  {
+    "id": "remocn_glitch_cut",
+    "componentName": "glitchCut",
+    "name": "Glitch Cut (remocn)",
+    "desc": "remocn transition • a hard cut torn into displaced slices with RGB split and corrupted blocks, each slice handing over on its own beat (html-in-canvas WebGL2; CSS band fallback)",
+    "icon": "📼",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/glitch-cut",
+      "exportName": "glitchCut",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 12,
+        "intensity": 1,
+        "slices": 24,
+        "rgbSplit": 1,
+        "blockNoise": 0.6
+      }
+    },
+    "controls": [
+      {
+        "group": "Glitch Cut (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; keep 8–14 frames",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 12)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "intensity",
+            "label": "DISPLACEMENT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "slices",
+            "label": "SLICES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "rgbSplit",
+            "label": "RGB SPLIT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "blockNoise",
+            "label": "BLOCK NOISE (canvas only)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "glitch"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 72
+  },
+  {
+    "id": "remocn_ember_burn",
+    "componentName": "emberBurn",
+    "name": "Ember Burn (remocn)",
+    "desc": "remocn transition • the outgoing frame catches fire where it is brightest, boils, chars and blows away as sparks of its own colour while the next arrives incandescent (html-in-canvas WebGL2; warm-flash fallback)",
+    "icon": "🔥",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ember-burn",
+      "exportName": "emberBurn",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 40,
+        "patches": 5,
+        "edgeSoftness": 0.07,
+        "contentBias": 0.6,
+        "heat": 0.5,
+        "glowColor": "#ff7a2f",
+        "emberAmount": 0.5
+      }
+    },
+    "controls": [
+      {
+        "group": "Ember Burn (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; give it ≥ 24 frames, 40 recommended",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 40)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "patches",
+            "label": "PATCHES (few big holes ↔ fine burn)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 30,
+            "step": 0.5
+          },
+          {
+            "key": "edgeSoftness",
+            "label": "RIM WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.005,
+            "max": 0.4,
+            "step": 0.005
+          },
+          {
+            "key": "contentBias",
+            "label": "CONTENT BIAS (0 = abstract)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "heat",
+            "label": "HEAT SHIMMER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "glowColor",
+            "label": "GLOW",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "emberAmount",
+            "label": "SPARKS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "ember"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 100
   }
 ];
