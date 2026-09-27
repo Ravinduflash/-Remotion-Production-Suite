@@ -864,6 +864,35 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - The studio previews match these frames.
 - **Soft Blur In** was pasted again with this batch. Its registry source matches the saved file, so nothing changed.
 
+### Micro Scale Fade, Scale Down Fade, Blur Out Up, Focus Blur Resolve, Line-by-Line Slide and Per-Word Crossfade (remocn)
+
+- **Catalog ids:** `remocn_micro_scale_fade`, `remocn_scale_down_fade`, `remocn_blur_out_up`, `remocn_focus_blur_resolve`, `remocn_line_by_line_slide`, `remocn_per_word_crossfade`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT
+- **Size:** full frame, transparent, centred. The text is dark #171717 by default, so pair it with a light Backdrop. The tests wrapped each one in a white `remocn_backdrop`.
+- **Controls, all whole clip:**
+  - `text`, `fontSize` (108 here; remocn's 72 is scaled 1.5×), `fontWeight`, `color` and `speed`.
+  - Micro Scale Fade: `scaleFrom` (0.96).
+  - Blur Out Up: `staggerDelay` (1 frame per word).
+  - Focus Blur Resolve: `blur` (14).
+  - Line-by-Line Slide: `text` is multiline, one line per row; `distance` is 72 (from 48).
+  - Per-Word Crossfade: `fromText` and `toText`.
+- **Preview:** one shared kind, `textarc`, with styles `micro`, `scaledown`, `blurout`, `focus`, `lines` and `crossfade`. It uses the sources' exact frame math and cubic-bezier curves through the shared `bezierEase()` helper in catalog.js. Exits read the layer duration.
+- **Exits are timed from the layer's duration.** Scale Down Fade, Blur Out Up, Focus Blur Resolve and Line-by-Line Slide read `useVideoConfig().durationInFrames` inside the layer's Sequence, so set `durationInFrames` on the layer to place the exit.
+  - Scale Down Fade: 16-frame entrance, and an exit over the last 11 frames.
+  - Focus Blur Resolve: a 23-frame blur-to-crisp focus pull, and an exit over the last 16 frames.
+  - Blur Out Up: words enter over 17 frames, staggered, and exit over the last 14 frames plus the stagger.
+  - Line-by-Line Slide: lines enter over 27 frames, 4 frames apart, and exit over the last 18 frames, 2 frames apart.
+  - Default layer lengths: 90 frames, and 60 for Micro Scale Fade, which is entrance only.
+- **Per-Word Crossfade doesn't use the duration.** The outgoing words fade over 15 frames with a 1-frame stagger, and the incoming words start 2 frames before the outgoing ones finish.
+  - `defaultDurationInFrames: 50`.
+  - **Chaining:** add the next link with `startFrame` = the previous link's end and `fromText` = the previous `toText`. Give each link `durationInFrames` so it disappears when the next one starts.
+- **Verified:** 2026-09-27, [remocn-textarc-contact.png](renders/remocn-textarc-contact.png):
+  - Micro Scale Fade: fading in at frame 4, settled at 40.
+  - Scale Down Fade, Blur Out Up and Focus Blur Resolve: entering at frame 6, holding at 45, exiting at 84 to 86 in a 90-frame layer.
+  - Line-by-Line Slide with custom lines ("Ship faster. / Stay focused. / Own your code."): lines 1 and 2 entering at frame 8, all three at 45, the first line exiting right at 84.
+  - Per-Word Crossfade chain: "Beautifully simple." → "Designed for focus." (frames 12 and 40) on layer 1, then "Designed for focus." → "Built for people." (frames 62 and 95) on layer 2, which starts at frame 50.
+  - The studio previews match.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

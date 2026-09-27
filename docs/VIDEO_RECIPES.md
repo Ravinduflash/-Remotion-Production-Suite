@@ -14,6 +14,10 @@ All timings are at 30 fps and 1920×1080 (`set_aspect 16:9`). Put a background l
 | Screenshot or page on a 3D set | `remocn_stage` wrapping a `remotion_img` | Camera `moves`, shake, lighting |
 | Agent chat to result | `remocn_chat_to_preview` (slots `chat`, `preview`) | Placeholders when a slot is empty |
 | Quiet moving background | `community_liquid_contours`, `community_moving_waves`, `community_paper_texture` | These stand in for remocn's `shader-simplex-noise`. Paper Texture suits dark text. |
+| Lines that stack up / value claims | `remocn_line_by_line_slide` (one line per row, exits right at the layer end) | The real `line-by-line-slide` the guides ask for |
+| Text with a matching exit | `remocn_scale_down_fade`, `remocn_focus_blur_resolve`, `remocn_blur_out_up` | Exit timed from the layer duration |
+| Phrase A → B → C swaps | `remocn_per_word_crossfade`, chained with startFrame | Keynote-style swaps |
+| Quiet label entrance | `remocn_micro_scale_fade` | |
 | Premium headline entrances | `remocn_soft_blur_in` (per-character blur-in), `remocn_shader_text_reveal` (shader-filled words), `remocn_type_fossil` (drafts → final word), `remocn_per_character_rise` (crisp), `remocn_bottom_up_letters` / `remocn_top_down_letters` (staircase, short words), `remocn_spring_scale_in` (playful word pop) | remocn; see the notes for backgrounds and durations |
 | Prefix + rotating word ("Looking for leads / customers / …") | `remocn_inline_word_roll` | A good fit for the hook's "three moments" or the breadth beat |
 | Headline or single line | `text_card` | `text` + `subtitle`, font size, colour and alignment. Keyframe opacity and scale for the entrance. |
@@ -229,7 +233,7 @@ These are remocn's house rules, adapted to this project. Sources: [Craft](https:
 
 ## Gaps: remocn components not in the catalog
 
-**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`), `chat-to-preview-layout`, `inline-word-roll`, `soft-blur-in`, `type-fossil`, `shader-text-reveal`, `per-character-rise`, `bottom-up-letters`, `top-down-letters` and `spring-scale-in`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
+**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`), `chat-to-preview-layout`, `inline-word-roll`, `soft-blur-in`, `type-fossil`, `shader-text-reveal`, `per-character-rise`, `bottom-up-letters`, `top-down-letters`, `spring-scale-in`, `micro-scale-fade`, `scale-down-fade`, `blur-out-up`, `focus-blur-resolve`, `line-by-line-slide` and `per-word-crossfade`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
 
@@ -237,9 +241,9 @@ These guides name remocn components that aren't registered here. They install wi
 |---|---|---|
 | `shader-simplex-noise` | A quiet noise field behind the whole video | Liquid Contours or Moving Waves |
 | `shader-swirl` | The swirl cover at the teaser's name reveal | Shine or Tear |
-| `line-by-line-slide` | Value claims stacking line by line | Staggered `text_card`s |
+| ~~`line-by-line-slide`~~ | Value claims stacking line by line | **Now registered** as `remocn_line_by_line_slide` |
 | Terminal, and remocn's text animations | Self-typing command line, varied reel motion | `community_typewriter`, keyframed `text_card`s |
-| `scale-down-fade`, `short-slide-right`, `kinetic-center-build` | Launch-video text entrances | Keyframed `text_card` scale, position and opacity; word-by-word captions |
+| `short-slide-right`, `kinetic-center-build` (`scale-down-fade` is now registered) | Launch-video text entrances | Keyframed `text_card` scale, position and opacity; word-by-word captions |
 | `color-panels`, `warp`, `mesh-gradient`, `voronoi`, `metaballs`, `god-rays` | The six montage backgrounds | The six background Elements listed in the Launch video recipe |
 | `shader-smoke-ring`, dithering cover | The outro bloom, and the transitions between beats | None yet; the plan uses plain cuts and fades |
 

@@ -4087,5 +4087,520 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_micro_scale_fade",
+    "componentName": "MicroScaleFade",
+    "name": "Micro Scale Fade (remocn)",
+    "desc": "remocn • calm tiny scale pop (0.96 → 1) with a fade for labels and sub-headings • entrance only",
+    "icon": "🔹",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/micro-scale-fade",
+      "exportName": "MicroScaleFade",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Welcome to motion.",
+        "scaleFrom": 0.96
+      }
+    },
+    "controls": [
+      {
+        "group": "Micro Scale Fade (remocn) (whole clip) • entrance only, dark text, pair with Backdrop",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "scaleFrom",
+            "label": "SCALE FROM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "textarc",
+      "style": "micro"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_scale_down_fade",
+    "componentName": "ScaleDownFade",
+    "name": "Scale Down Fade (remocn)",
+    "desc": "remocn • settles in (1.04 → 1, rises 8px), holds, then scales down and fades out over the layer's last 11 frames",
+    "icon": "🔻",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/scale-down-fade",
+      "exportName": "ScaleDownFade",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Quietly refined."
+      }
+    },
+    "controls": [
+      {
+        "group": "Scale Down Fade (remocn) (whole clip) • exit timed from the layer duration",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "textarc",
+      "style": "scaledown"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_blur_out_up",
+    "componentName": "BlurOutUp",
+    "name": "Blur Out Up (remocn)",
+    "desc": "remocn • words arrive clean, hold, then drift up with increasing blur at the end of the layer",
+    "icon": "💨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/blur-out-up",
+      "exportName": "BlurOutUp",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Clear in, airy out.",
+        "staggerDelay": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Blur Out Up (remocn) (whole clip) • exit timed from the layer duration",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "staggerDelay",
+            "label": "STAGGER (frames per word)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 10,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "textarc",
+      "style": "blurout"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_focus_blur_resolve",
+    "componentName": "FocusBlurResolve",
+    "name": "Focus Blur Resolve (remocn)",
+    "desc": "remocn • focus pull from heavy blur to crisp, hold, soft blur-out over the layer's last 16 frames",
+    "icon": "🎯",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/focus-blur-resolve",
+      "exportName": "FocusBlurResolve",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Focus resolves clearly.",
+        "blur": 14
+      }
+    },
+    "controls": [
+      {
+        "group": "Focus Blur Resolve (remocn) (whole clip) • exit timed from the layer duration",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "blur",
+            "label": "START BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "textarc",
+      "style": "focus"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_line_by_line_slide",
+    "componentName": "LineByLineSlide",
+    "name": "Line-by-Line Slide (remocn)",
+    "desc": "remocn • each line slides in from the left (4f stagger), holds, then exits to the right at the end of the layer",
+    "icon": "📜",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/line-by-line-slide",
+      "exportName": "LineByLineSlide",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Think different.\nDo more.",
+        "distance": 72
+      }
+    },
+    "controls": [
+      {
+        "group": "Line-by-Line Slide (remocn) (whole clip) • exit timed from the layer duration",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT (one line per row)",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "distance",
+            "label": "SLIDE DISTANCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "textarc",
+      "style": "lines"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_per_word_crossfade",
+    "componentName": "PerWordCrossfade",
+    "name": "Per-Word Crossfade (remocn)",
+    "desc": "remocn • fromText words drift up and fade while toText words fade in from below; chain layers A→B, B→C with startFrame",
+    "icon": "🔁",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/per-word-crossfade",
+      "exportName": "PerWordCrossfade",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "fromText": "Beautifully simple.",
+        "toText": "Designed for focus."
+      }
+    },
+    "controls": [
+      {
+        "group": "Per-Word Crossfade (remocn) (whole clip) • chain with startFrame; set durationInFrames so the next link takes over",
+        "items": [
+          {
+            "key": "fromText",
+            "label": "FROM TEXT (outgoing)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toText",
+            "label": "TO TEXT (incoming)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "textarc",
+      "style": "crossfade"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 50
   }
 ];
