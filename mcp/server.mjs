@@ -208,6 +208,7 @@ tool('add_asset', 'Add a catalog asset to the scene as a new layer. properties o
   catalogId: z.string().describe('from list_catalog, e.g. stickman_fighter, house, trading_chart, three_box, remotion_img, shape_star'),
   id: z.string().optional().describe('stable id you choose, e.g. "hero"'), name: z.string().optional(), frame: z.number().optional().describe('frame of the first keyframe (default 0)'),
   properties: props.optional(), keyframes: z.array(keyframe).optional(), index: z.number().optional().describe('layer index, 0 = back'),
+  startFrame: z.number().optional().describe('external components: component frame 0 happens at this composition frame'), durationInFrames: z.number().optional().describe('external components: hide after this many frames (some catalog entries set a default)'),
 }, (a) => call('addAsset', a));
 tool('update_asset', 'Rename, hide/show, lock/unlock or change the default easing of a layer. For external/community components, startFrame makes the component\'s own animation begin at that composition frame (it is hidden before), and durationInFrames hides it afterwards; pass null to clear.', { assetId: z.string(), name: z.string().optional(), visible: z.boolean().optional(), locked: z.boolean().optional(), easing, startFrame: z.number().nullable().optional(), durationInFrames: z.number().nullable().optional() }, (a) => call('updateAsset', a));
 tool('delete_asset', 'Remove a layer.', { assetId: z.string() }, (a) => call('deleteAsset', a));

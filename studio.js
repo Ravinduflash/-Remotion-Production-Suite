@@ -131,6 +131,8 @@
       const id = p.id && !getAsset(p.id) ? p.id : uid(cat.id);
       const props = fillDefaults({ catalogId: cat.id }, p.properties || {});
       const asset = { id, type: cat.type, componentName: cat.componentName, catalogId: cat.id, name: p.name || cat.name, visible: true, locked: false, easing: p.easing || cat.easing || 'linear', keyframes: [{ frame: Math.max(0, Math.round(p.frame || 0)), properties: props }] };
+      if (cat.defaultDurationInFrames && p.durationInFrames === undefined) asset.durationInFrames = cat.defaultDurationInFrames;
+      if (p.startFrame !== undefined) asset.startFrame = Math.max(0, Math.round(p.startFrame)); if (p.durationInFrames) asset.durationInFrames = Math.round(p.durationInFrames);
       if (cat.external) { asset.external = clone(cat.external); asset.renderTarget = cat.renderTarget || 'html'; if (cat.preview) asset.preview = clone(cat.preview); }
       if (Array.isArray(p.keyframes) && p.keyframes.length) { asset.keyframes = p.keyframes.map(k => ({ frame: Math.round(k.frame || 0), properties: fillDefaults(asset, k.properties), easing: k.easing })); sortKfs(asset); }
       if (typeof p.index === 'number') store.assets.splice(clamp(p.index, 0, store.assets.length), 0, asset); else store.assets.push(asset);

@@ -1833,5 +1833,151 @@ window.CommunityManifest = [
       "kind": "canvasfx",
       "style": "tear"
     }
+  },
+  {
+    "id": "community_rotating_cards",
+    "componentName": "ProductCollection",
+    "name": "Rotating Cards",
+    "desc": "Remotion Elements • 3 image cards (A/B/C) each take centre once, 150-frame clip",
+    "icon": "🃏",
+    "external": {
+      "importPath": "./community/ProductCollection",
+      "exportName": "ProductCollection",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 420,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1080,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Rotating Cards • fixed 900×660 stage at (60,180); self-contained 150-frame clip",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "cards"
+    },
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "community_picture_in_picture",
+    "componentName": "PictureInPictureTransition",
+    "name": "Picture in Picture",
+    "desc": "Remotion Elements • scene A shrinks from full frame into a top-right box over scene B",
+    "icon": "🖼️",
+    "external": {
+      "importPath": "./community/PictureInPictureTransition",
+      "exportName": "PictureInPictureTransition",
+      "packages": [],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Picture in Picture • built for 1920×1080 (hard-coded 1363px move); images hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "pip"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "community_split_screen",
+    "componentName": "SlideToSplitScreen",
+    "name": "Slide to Split Screen",
+    "desc": "Remotion Elements • full-frame scene opens to a 60/40 split and closes again",
+    "icon": "🪟",
+    "external": {
+      "importPath": "./community/SlideToSplitScreen",
+      "exportName": "SlideToSplitScreen",
+      "packages": [],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Slide to Split Screen • sizes itself to the composition; images hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "split"
+    },
+    "fullFrame": true
   }
 ];

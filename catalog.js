@@ -359,6 +359,29 @@
         data.forEach(([l], i) => { if (i % 2 === 0) out += `<text x="${pts[i][0]}" y="${y0 + ch + 104}" fill="#4b5563" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="40">${l}</text>`; });
         if (f > 58) { const k = cl((f - 58) / 12), [lx, ly] = pts[pts.length - 1]; out += `<g transform="translate(${lx} ${ly - 30}) scale(${k.toFixed(3)})"><rect x="-68" y="-80" width="136" height="80" rx="12" fill="#2563eb"/><text x="0" y="-24" fill="#fff" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="44">74K</text></g>`; }
         return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+      case 'cards': { // Rotating Cards element: 3 cards (A pink-centre B, C) in a 900×660 container at (60,180); centre card changes over frames 24–122; fades in 0–10 / out 142–149
+        const f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v)), eio = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, sx = W / 1080, sy = H / 1080;
+        const raw = 2 * cl((f - 24) / (150 - 28 - 24)), ti = Math.min(Math.floor(raw), 1), scroll = ti + eio(cl((raw - ti - 0.18) / 0.64)), op = Math.min(cl(f / 10), cl((149 - f) / 7));
+        const imgs = ['https://remotion.media/transition-bg-blue.jpg', 'https://remotion.media/transition-bg-pink.jpg', 'https://remotion.media/transition-bg-blue.jpg'];
+        const cards = [0, 1, 2].map(i => { const u = i - scroll; const slot = ((((u + 1.5) % 3) + 3) % 3) - 1.5, d = Math.abs(slot), es = 8 + Math.min(i, 1) * 5, ep = 1 - Math.pow(1 - cl((f - es) / 18), 3);
+          return { i, slot, d, vis: cl((1.18 - d) / 0.16) * ep, x: 60 + 300 + slot * 270, y: 180 + 40 + Math.min(d, 1.3) * 36 + (1 - ep) * 180, rot: slot * 5.5, sc: (1.02 - (0.18 * Math.min(d, 1.5) / 1.5)) * (0.86 + ep * 0.14) }; }).sort((a, b) => b.d - a.d);
+        let out = `<defs><clipPath id="cc_${ctx.uid}"><rect x="60" y="180" width="900" height="660"/></clipPath></defs><g clip-path="url(#cc_${ctx.uid})" opacity="${op.toFixed(2)}">`;
+        cards.forEach(c => { if (c.vis <= 0.01) return; const cx = c.x + 150, cy = c.y + 280;
+          out += `<g opacity="${c.vis.toFixed(2)}" transform="translate(${cx.toFixed(1)} ${cy.toFixed(1)}) rotate(${c.rot.toFixed(2)}) scale(${c.sc.toFixed(3)}) translate(-150 -280)"><clipPath id="ci_${ctx.uid}_${c.i}"><rect width="300" height="560" rx="6"/></clipPath><image href="${imgs[c.i]}" width="300" height="560" preserveAspectRatio="xMidYMid slice" clip-path="url(#ci_${ctx.uid}_${c.i})"${c.i === 2 ? ' style="filter:hue-rotate(-65deg)"' : ''}/><text x="150" y="336" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="160" letter-spacing="-8">${'ABC'[c.i]}</text></g>`; });
+        return `<g transform="scale(${sx.toFixed(4)} ${sy.toFixed(4)})">${out}</g></g>`; }
+      case 'pip': { // Picture in Picture element: scene A (blue) shrinks from full frame to a box at top-right over B (pink), frames 15–50
+        const f = num(ctx.frame, 0), p = Math.max(0, Math.min(1, (f - 15) / 35)), e = 1 - Math.pow(1 - p, 3), k = W / 1920, id = 'pip_' + ctx.uid;
+        const sc = 1 - e * 0.62, cL = e * 0.302, cT = e * 0.06, tx = e * 1363 * k, ty = e * 23 * k, r = e * 48;
+        const ax = tx + W * cL * sc, ay = ty + H * cT * sc, aw = W * (1 - 2 * cL) * sc, ah = H * (1 - 2 * cT) * sc;
+        return `<defs><clipPath id="${id}"><rect x="${ax.toFixed(1)}" y="${ay.toFixed(1)}" width="${aw.toFixed(1)}" height="${ah.toFixed(1)}" rx="${(r * sc).toFixed(1)}"/></clipPath></defs>
+          <image href="https://remotion.media/transition-bg-pink.jpg" width="${W}" height="${H}" preserveAspectRatio="xMidYMid slice"/><text x="${W / 2}" y="${H / 2 + 84}" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="240">B</text>
+          <g clip-path="url(#${id})"><g transform="translate(${tx.toFixed(1)} ${ty.toFixed(1)}) scale(${sc.toFixed(4)})"><image href="https://remotion.media/transition-bg-blue.jpg" width="${W}" height="${H}" preserveAspectRatio="xMidYMid slice"/><text x="${W / 2}" y="${H / 2 + 84}" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="240">A</text></g></g>`; }
+      case 'split': { // Slide to Split Screen element: A narrows to 60% while B (40%) + white divider slide in from the right; opens 20–52, closes 98–130
+        const f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v)), ez = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        const sp = f < 52 ? ez(cl((f - 20) / 32)) : f < 98 ? 1 : 1 - ez(cl((f - 98) / 32)), bw = W * 0.4, dv = 15, aw = W - bw - dv, shift = (W - aw) / 2, id = 'spl_' + ctx.uid;
+        const aW = W + (aw - W) * sp, bx = W - (bw + dv) + (1 - sp) * (bw + dv);
+        return `<defs><clipPath id="${id}"><rect width="${aW.toFixed(1)}" height="${H}"/></clipPath></defs><g clip-path="url(#${id})"><g transform="translate(${(-shift * sp).toFixed(1)} 0)"><image href="https://remotion.media/transition-bg-blue.jpg" width="${W}" height="${H}" preserveAspectRatio="xMidYMid slice"/><text x="${W / 2}" y="${H / 2 + 84}" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="240">A</text></g></g>
+          <g transform="translate(${bx.toFixed(1)} 0)"><rect width="${dv}" height="${H}" fill="#fff"/><svg x="${dv}" width="${bw}" height="${H}"><image href="https://remotion.media/transition-bg-pink.jpg" width="${bw}" height="${H}" preserveAspectRatio="xMidYMid slice"/><text x="${bw / 2}" y="${H / 2 + 84}" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="240">B</text></svg></g>`; }
       case 'callout': { // Wiggling Callout element: blue speech bubble at (80,195) 600×370, rotates 0→10→-7→3→0° over frames 0–26 around its bottom centre
         const f = Math.max(0, Math.min(26, num(ctx.frame, 0))), keys = [[0, 0], [7, 10], [14, -7], [20, 3], [26, 0]], eq = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; let rot = 0;
         for (let i = 0; i < keys.length - 1; i++) if (f >= keys[i][0] && f <= keys[i + 1][0]) { const t = (f - keys[i][0]) / (keys[i + 1][0] - keys[i][0]); rot = keys[i][1] + (keys[i + 1][1] - keys[i][1]) * eq(t); break; }
@@ -519,7 +542,7 @@
     const controls = m.controls && m.controls.length ? m.controls : [{ group: m.componentName, items: Object.entries(cp).map(([k, v]) => typeof v === 'number' ? { key: k, label: k.toUpperCase(), kind: 'number' } : typeof v === 'boolean' ? { key: k, label: k.toUpperCase(), kind: 'checkbox' } : /^#[0-9a-f]{6}$/i.test(String(v)) ? { key: k, label: k.toUpperCase(), kind: 'color' } : { key: k, label: k.toUpperCase(), kind: 'text' }) }];
     return { id: m.id, tab: m.tab || 'community', type: 'external', componentName: m.componentName, name: m.name || m.componentName, desc: m.desc || m.description || (m.external && m.external.importPath) || 'community component', icon: m.icon || '🧩', renderTarget: 'html',
       preview: m.preview || { kind: 'card' }, external: Object.assign({ importPath: './community/' + m.componentName, exportName: m.componentName, sizeMode: 'style' }, m.external || {}),
-      defaults: Object.assign(base(200, 200), m.defaults || {}, { customProperties: cp }), controls, render: renderExternal, easing: m.easing, fullFrame: !!m.fullFrame, fullWidth: !!m.fullWidth };
+      defaults: Object.assign(base(200, 200), m.defaults || {}, { customProperties: cp }), controls, render: renderExternal, easing: m.easing, fullFrame: !!m.fullFrame, fullWidth: !!m.fullWidth, defaultDurationInFrames: m.defaultDurationInFrames };
   }
 
   const CATALOG_BY_ID = Object.fromEntries(CATALOG.map(c => [c.id, c]));

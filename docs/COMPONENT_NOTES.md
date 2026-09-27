@@ -49,6 +49,8 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Remotion's renderer switches that feature on for every render, in `@remotion/renderer/dist/open-browser.js`, and its headless Chrome is 149.0.7790.0. So real renders work.
   - An ordinary browser or Remotion Studio shows `HTML_IN_CANVAS_UNSUPPORTED_MESSAGE` unless `chrome://flags/#canvas-draw-element` is enabled.
   - The studio preview here does not need the feature, because it draws its own SVG approximation.
+- **Default layer duration, added 2026-09-27:** a manifest entry can set `defaultDurationInFrames`. `add_asset` then gives the layer that duration automatically, and `add_asset` also accepts `startFrame` and `durationInFrames` directly. Use it for self-contained clips such as Rotating Cards, whose `productCollectionDurationInFrames` is 150.
+- **Hard-coded remote images:** Rotating Cards, Picture in Picture and Slide to Split Screen, like Shine and Tear, load `remotion.media` images. Renders need network access, and using your own scenes means editing the source.
 - **TypeScript target:** `render-project/tsconfig.json` targets ES2021, because Elements use `String.replaceAll`.
 
 ## Components
@@ -358,6 +360,46 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - The tear springs over frames 15 to 25, with jaggedness 24 and 5° rotation, then holds.
   - The image URL is hard-coded, as in Shine.
   - It needs HtmlInCanvas.
+
+### Rotating Cards
+
+- **Catalog id:** `community_rotating_cards`
+- **File:** `ProductCollection.tsx`, from Remotion Elements `commerce/product-collection`, saved verbatim. The export is `ProductCollection`, and the file also exports `productCollectionDurationInFrames = 150`.
+- **Packages:** `@remotion/google-fonts` for Inter
+- **Size:** a fixed 900×660 stage at 60, 180 inside a 1080×1080 layer box. Scale the layer to resize it.
+- **Layer duration:** 150 frames by default, through `defaultDurationInFrames`
+- **Controls:** box size only. The labels A, B and C and the images are hard-coded. Card C is the blue image with `hue-rotate(-65deg)`, which renders green.
+- **Preview:** `cards`, with the same scroll, entry and fade timing
+- **Verified:** 2026-09-27, [layouts-contact.png](renders/layouts-contact.png): A entering at frame 10, B centred at 60, C centred at 110
+- **Notes:**
+  - It fades in over frames 0 to 10 and out over 142 to 149. The centre card changes over frames 24 to 122.
+  - It is a self-contained clip: a 150-frame layer is exactly one play-through.
+
+### Picture in Picture
+
+- **Catalog id:** `community_picture_in_picture`
+- **File:** `PictureInPictureTransition.tsx`, from Remotion Elements `layouts/picture-in-picture-transition`, saved verbatim
+- **Packages:** none beyond `remotion`
+- **Size:** it is full-frame through `AbsoluteFill`, but **built for 1920×1080**. The final position is a hard-coded `translate: 1363px 23px`, so on other sizes the box lands in the wrong place. For other aspect ratios, use a 1920×1080 box and scale the layer.
+- **Controls:** box size only. Scenes A and B are hard-coded images with letters.
+- **Preview:** `pip`
+- **Verified:** 2026-09-27: full frame at 0, boxed at the top right at 60
+- **Notes:**
+  - Scene A shrinks to 0.38×, is cropped to about 40% width, and rounds to a 48 px corner radius over frames 15 to 50, with a spring.
+  - To use your own scenes, replace the two `Interactive.Div` children. That is a source edit.
+
+### Slide to Split Screen
+
+- **Catalog id:** `community_split_screen`
+- **File:** `SlideToSplitScreen.tsx`, from Remotion Elements `layouts/slide-to-split-screen`, saved verbatim
+- **Packages:** none beyond `remotion`
+- **Size:** full-frame, sized from `useVideoConfig()`, so it adapts to any aspect ratio. Verified at 16:9 and 9:16.
+- **Controls:** box size only
+- **Preview:** `split`
+- **Verified:** 2026-09-27: open 60/40 with a 15 px white divider at frame 70, in both aspects
+- **Notes:**
+  - It opens over frames 20 to 52, holds, then closes back to full frame over 98 to 130.
+  - Because it reads the **composition** size, not the layer box, it is meant to cover the whole frame. Scaling the layer does not change its internal layout.
 
 ### Typewriter Text
 
