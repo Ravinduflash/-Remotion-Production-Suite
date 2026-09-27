@@ -18,7 +18,7 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **The check:** a regression scene rendered on React 18 and React 19 differs only in one small box around the popping word, 0.22% of the frame. That word is now 2.7% wider, the intended 3% pop. The 3D knot, stickman, environments, chart, shape, image and spectrum are pixel-identical, see [regression-compare.png](renders/regression-compare.png). An effects background was also re-verified.
   - **Rule of thumb:** when an Element's numeric style seems to have no effect, suspect React's unit handling first.
   - **Upgrade note:** upgrading needed a fresh install because npm's resolver stuck on the old React 18 tree. Move `node_modules/.remotion` aside first, which holds Remotion's 270 MB headless Chrome, then restore it.
-- **Version pinning:** `@remotion/*` packages must match the installed `remotion` version exactly. Since 2026-09-27 the render step pins missing `@remotion/*` installs to that version, e.g. `@remotion/effects@4.0.526`. `render-project/package.json` records them with a caret range, so keep versions aligned if you run `npm install` by hand.
+- **Version pinning:** `@remotion/*` packages must match the installed `remotion` version exactly. Since 2026-09-27 the render step pins missing `@remotion/*` installs to that version, e.g. `@remotion/effects@4.0.526`. From 2026-09-27 (News Article Highlight) those installs also use `--save-exact`, so `package.json` records `4.0.526` rather than `^4.0.526`. Other packages keep npm's default caret range. Keep versions aligned if you run `npm install` by hand.
 - **Transform props:** Elements expose `Interactive.transformSchema` props such as `style.translate` and `style.scale`. They are not mapped, because the scene layer already positions, scales and rotates each asset.
 - **Base props:** `Interactive.baseSchema` props such as `from`, `durationInFrames` and `trimBefore` are not mapped either. Timing comes from our keyframes. Voice Note is the exception, see below.
 - **Keyframe interpolation:** colours and other strings switch at the next keyframe instead of fading. Numbers interpolate.
@@ -32,6 +32,7 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - lists all pages in `studio_status`.
 - **Isolated testing:** open the studio as `index.html?bridge=ws://localhost:7778` and start the server with `STUDIO_WS_PORT=7778`. Tests then never touch a studio on the default port 7777.
 - **`clear_scene` keeps the canvas size,** as well as fps and duration. Call `set_aspect` and `set_timeline` again when the next scene needs different ones. This mis-framed the first Liquid Contours test scene.
+- **Layer-length timing:** since 2026-09-27 the preview context carries `layerDuration`, meaning the layer's `durationInFrames`, or the rest of the composition when it is unset. Inside the render's `<Sequence>`, `useVideoConfig().durationInFrames` returns that same value, so components that time their exit from it, such as Polaroid Pictures, preview correctly.
 - **Composition-length loops:** Moving Waves and Moving Zigzags tie their motion to `durationInFrames`. They flow exactly one loop per composition, whatever its length. A longer video means slower motion, not more loops.
 - **Non-keyframable controls, 2026-09-27:** controls marked `keyframable: false` in the manifest write their value to every keyframe of the asset, and the inspector labels them "WHOLE CLIP". This matches Remotion's own schemas: caption lists, bar counts and clip lengths should not change mid-clip. Before this, a caption edit at frame 25 created a new keyframe, so frames 0 to 24 kept the old captions. Agents get the same behaviour with `set_property { allKeyframes: true }`. `list_catalog` reports the flag on each control.
 - **JSON control kind:** `kind: "json"` is a text box for structured props such as `captions`. Invalid JSON gets a red border and is not written until it parses.
@@ -492,6 +493,59 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Upstream also draws a sample "Background" image** (the blue building with "A") underneath the interface, so it covers everything below it in the scene tree. To check your own footage, put the guide at the top and edit out the first `<CanvasImage>`. That is a deliberate edit to the source. Without that edit it only shows the interface over the sample.
   - The interface images come from `remotion.media`, so renders need network access.
   - Upstream says the zones were measured from iOS captures. Treat them as a reference, not a guarantee.
+
+### News Article Highlight
+
+- **Catalog id:** `community_news_article_highlight`
+- **File:** `NewsArticleHighlight.tsx`, from Remotion Elements `text/news-article-highlight`, saved verbatim
+- **Packages:** `@remotion/rough-notation`, first installed 2026-09-27 and pinned to 4.0.526
+- **Size:** full frame through `AbsoluteFill`, `fullFrame: true`. The 1420×458 article is centred in the box.
+- **Controls:** box size only. The headline, the category "Politics", the summary and the highlighted words are all hard-coded.
+- **Preview:** `article`, an HTML copy of the article with highlighter bars growing left to right
+- **Verified:** 2026-09-27 on Paper Texture, [story-contact.png](renders/story-contact.png) top row:
+  - Frame 20: no highlights yet.
+  - Frame 50: "government shutdown" highlighted.
+  - Frame 100: "funding lapses" highlighted as well.
+- **Notes:**
+  - Timeline:
+    - Frames 31 to 55: the first two words are highlighted.
+    - Frames 60 to 84: the next two.
+    - Frames 125 to 149: everything fades out.
+  - `defaultDurationInFrames: 150`.
+  - **The text is dark (#181816) and the article has no background of its own,** so put a light background under it, such as Paper Texture or Notebook Paper, or light footage.
+  - The rough-notation highlight is a hand-drawn, slightly uneven marker. The preview draws plain bars.
+
+### On-Screen Messages
+
+- **Catalog id:** `community_on_screen_messages`
+- **File:** `OnScreenMessages.tsx`, from Remotion Elements `storytelling/on-screen-messages`, saved verbatim
+- **Packages:** `@remotion/google-fonts`, for Inter 400
+- **Size:** a fixed 1260×680 layout, `sizeMode: none`, centred on 16:9 at (330, 200)
+- **Controls:** box size only. The three messages are hard-coded.
+- **Preview:** `messages`, the same bubbles and tails in HTML
+- **Verified:** 2026-09-27, contact sheet middle row: one bubble at frame 6, all three at frame 70
+- **Notes:**
+  - The bubbles fade and rise 32 px in at frames 2 to 10 (grey), 27 to 35 (blue, right) and 52 to 59 (grey).
+  - They do not animate out; the last bubble has settled by frame 59. `defaultDurationInFrames: 90`.
+  - The bubble tails come from a global `<style>` tag with the classes `.on-screen-message-from-them` and `-from-me`. Two copies in one scene share the same rules, which is harmless.
+
+### Polaroid Pictures
+
+- **Catalog id:** `community_polaroid_pictures`
+- **File:** `PolaroidPictures.tsx`, from Remotion Elements `storytelling/polaroid-pictures`, saved verbatim
+- **Packages:** `@remotion/google-fonts`, for Caveat 600 in the captions
+- **Size:** a fixed 1480×640 layout, `sizeMode: none`, centred on 16:9 at (220, 220)
+- **Controls:** box size only. The photos (the blue, pink and green-tinted scene images with A, B and C) and the captions are hard-coded.
+- **Preview:** `polaroids`, three taped cards with the same in, hold and out motion, timed from `layerDuration`
+- **Verified:** 2026-09-27, contact sheet bottom row. A 150-frame layer in a 180-frame composition:
+  - Frame 40: the cards are landing.
+  - Frame 100: they hold with a slow drift.
+  - Frame 138: they fly out.
+- **Notes:**
+  - **The exit is timed from the layer's length,** meaning `useVideoConfig().durationInFrames`. The cards fly out over the layer's last 26 to 30 frames. Frame 138 of a 150-frame layer confirms this: timed from the 180-frame composition, they would still be holding.
+  - So set `durationInFrames` on the layer to choose when they leave. `defaultDurationInFrames: 150`. Without a layer duration, they leave at the end of the composition.
+  - The cards fly in over frames 8 to 34, 20 to 46 and 32 to 58, overshooting the box from off-screen. The layer must not be clipped.
+  - The images come from `remotion.media`.
 
 ### Typewriter Text
 

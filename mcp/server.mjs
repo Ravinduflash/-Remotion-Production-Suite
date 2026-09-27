@@ -145,7 +145,9 @@ async function runJob(job, progress = () => { }) {
     const remotionVersion = (() => { try { return JSON.parse(fs.readFileSync(path.join(nm, 'remotion', 'package.json'), 'utf8')).version; } catch { return null; } })();
     // @remotion/* packages must match the installed remotion version exactly, or Remotion refuses to render.
     const missing = (bundle.packages || []).filter(p => !fs.existsSync(path.join(nm, ...p.split('/')))).map(p => (remotionVersion && (p.startsWith('@remotion/') || p === 'remotion') && !/@[\d^~]/.test(p.slice(1))) ? `${p}@${remotionVersion}` : p);
-    if (missing.length) { job.status = 'installing'; say('Installing missing packages: ' + missing.join(' ')); const r = await run('npm', ['install', '--no-audit', '--no-fund', ...missing], RENDER_PROJECT, () => { }); if (r.code !== 0) throw new Error('npm install failed for ' + missing.join(' ') + ':\n' + r.out.slice(-2000)); }
+    // Pinned @remotion/* installs use --save-exact so package.json keeps "4.0.x" rather than "^4.0.x"; other packages keep npm's default range.
+    const pinned = missing.filter(p => p.startsWith('@remotion/') || p.startsWith('remotion@')), ranged = missing.filter(p => !pinned.includes(p));
+    for (const [pkgs, extra] of [[pinned, ['--save-exact']], [ranged, []]]) { if (!pkgs.length) continue; job.status = 'installing'; say('Installing missing packages: ' + pkgs.join(' ')); const r = await run('npm', ['install', '--no-audit', '--no-fund', ...extra, ...pkgs], RENDER_PROJECT, () => { }); if (r.code !== 0) throw new Error('npm install failed for ' + pkgs.join(' ') + ':\n' + r.out.slice(-2000)); }
     // 3. render
     fs.mkdirSync(path.join(RENDER_PROJECT, 'out'), { recursive: true });
     const safeName = String(job.params.outName || bundle.name || 'master').replace(/[^\w.-]+/g, '_');

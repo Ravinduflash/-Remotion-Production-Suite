@@ -2330,5 +2330,156 @@ window.CommunityManifest = [
       "kind": "safezones"
     },
     "fullFrame": true
+  },
+  {
+    "id": "community_news_article_highlight",
+    "componentName": "NewsArticleHighlight",
+    "name": "News Article Highlight",
+    "desc": "Remotion Elements • headline with hand-drawn highlighter sweeps over key words; fades out 125–149 • dark text, needs a light background",
+    "icon": "📰",
+    "external": {
+      "importPath": "./community/NewsArticleHighlight",
+      "exportName": "NewsArticleHighlight",
+      "packages": [
+        "@remotion/rough-notation"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "News Article Highlight • full frame, 1420×458 article centred; text hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "article"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "community_on_screen_messages",
+    "componentName": "OnScreenMessages",
+    "name": "On-Screen Messages",
+    "desc": "Remotion Elements • iMessage-style thread, 3 bubbles rise in at frames 2, 27, 52",
+    "icon": "💬",
+    "external": {
+      "importPath": "./community/OnScreenMessages",
+      "exportName": "OnScreenMessages",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 330,
+      "baseY": 200,
+      "customProperties": {
+        "width": 1260,
+        "height": 680
+      }
+    },
+    "controls": [
+      {
+        "group": "On-Screen Messages • fixed 1260×680; messages hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "messages"
+    },
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "community_polaroid_pictures",
+    "componentName": "PolaroidPictures",
+    "name": "Polaroid Pictures",
+    "desc": "Remotion Elements • three taped instant photos fly in, drift, and fly out over the layer's last 30 frames",
+    "icon": "📸",
+    "external": {
+      "importPath": "./community/PolaroidPictures",
+      "exportName": "PolaroidPictures",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 220,
+      "baseY": 220,
+      "customProperties": {
+        "width": 1480,
+        "height": 640
+      }
+    },
+    "controls": [
+      {
+        "group": "Polaroid Pictures • fixed 1480×640; exit timed from layer duration",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "polaroids"
+    },
+    "defaultDurationInFrames": 150
   }
 ];

@@ -243,7 +243,7 @@
       if (asset.visible === false) return; const cat = catalogOf(asset); if (!cat) return; const p = sampleAsset(asset, f); samples[asset.id] = p;
       if (asset.type === 'three') { threeLayers.push({ asset, p }); const sz = (p.customProperties.size || 200) * (p.scale || 1) / 2; hits += `<rect class="asset hit ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" x="${p.baseX - sz}" y="${p.baseY - sz}" width="${sz * 2}" height="${sz * 2}" fill="transparent"/>`; if (!ThreeBridge.ready) svg += `<g class="asset three-placeholder" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${p.opacity}">${cat.render(p.customProperties, { uid: asset.id })}</g>`; return; }
       const local = f - (asset.startFrame || 0); if (asset.type === 'external' && (local < 0 || (asset.durationInFrames && local >= asset.durationInFrames))) return; // layer not active at this frame
-      svg += `<g class="asset ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${round2(p.opacity ?? 1)}">${cat.render(p.customProperties, { uid: asset.id, entry: cat, frame: asset.type === 'external' ? local : f, totalFrames: store.totalFrames, fps: store.fps })}</g>`;
+      svg += `<g class="asset ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${round2(p.opacity ?? 1)}">${cat.render(p.customProperties, { uid: asset.id, entry: cat, frame: asset.type === 'external' ? local : f, totalFrames: store.totalFrames, layerDuration: asset.durationInFrames || store.totalFrames - (asset.startFrame || 0), fps: store.fps })}</g>`;
     });
     $('assetsLayer').innerHTML = svg; $('hitLayer').innerHTML = hits;
     ThreeBridge.sync(threeLayers);
