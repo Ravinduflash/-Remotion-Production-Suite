@@ -110,7 +110,7 @@ The first run does `npm install` in `render-project/` and lets Remotion download
 
 ## External and community components (asset registry)
 
-Per-component notes, versions, verification renders and pipeline gotchas are kept in [docs/COMPONENT_NOTES.md](docs/COMPONENT_NOTES.md).
+Per-component notes, versions, verification renders and pipeline gotchas are kept in [docs/COMPONENT_NOTES.md](docs/COMPONENT_NOTES.md). Storyboards for common product videos (teaser, changelog, feature announcement, showcase reel, product demo), mapped to catalog components, are in [docs/VIDEO_RECIPES.md](docs/VIDEO_RECIPES.md).
 
 Any Remotion component can become a catalog asset. Built-in wrappers cover remotion's `<Img>`, `<OffthreadVideo>`, `<Audio>`, `@remotion/gif` and the `@remotion/shapes` primitives (Media and Community tabs). To add code you found on remotion.dev, GitHub or a blog:
 
