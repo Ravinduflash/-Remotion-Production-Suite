@@ -1583,5 +1583,105 @@ window.CommunityManifest = [
       "kind": "numcounter"
     },
     "fullFrame": false
+  },
+  {
+    "id": "community_pie_chart",
+    "componentName": "PieChart",
+    "name": "Pie Chart",
+    "desc": "Remotion Elements • 4-slice pie sweeps in with a labelled legend (~60 frames)",
+    "icon": "🥧",
+    "external": {
+      "importPath": "./community/PieChart",
+      "exportName": "PieChart",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Pie Chart • data is hard-coded in the source; animation starts at the layer's start frame",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "pie"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "community_vertical_bar_chart",
+    "componentName": "VerticalBarChart",
+    "name": "Vertical Bar Chart",
+    "desc": "Remotion Elements • 3 bars spring up one after another (~95 frames)",
+    "icon": "📶",
+    "external": {
+      "importPath": "./community/VerticalBarChart",
+      "exportName": "VerticalBarChart",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Vertical Bar Chart • data is hard-coded in the source; animation starts at the layer's start frame",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "vbars"
+    },
+    "fullFrame": true
   }
 ];

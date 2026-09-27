@@ -359,6 +359,26 @@
         data.forEach(([l], i) => { if (i % 2 === 0) out += `<text x="${pts[i][0]}" y="${y0 + ch + 104}" fill="#4b5563" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="40">${l}</text>`; });
         if (f > 58) { const k = cl((f - 58) / 12), [lx, ly] = pts[pts.length - 1]; out += `<g transform="translate(${lx} ${ly - 30}) scale(${k.toFixed(3)})"><rect x="-68" y="-80" width="136" height="80" rx="12" fill="#2563eb"/><text x="0" y="-24" fill="#fff" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="44">74K</text></g>`; }
         return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+      case 'pie': { // Pie Chart element: slices sweep 0→360° over frames 8–60, legend rows wipe in from frame 8
+        const f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v)), eio = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        const data = [['#2563eb', '#fff', 'Focused work', 42], ['#6b7280', '#fff', 'Meetings', 26], ['#9ca3af', '#111827', 'Planning', 18], ['#d1d5db', '#111827', 'Admin', 14]];
+        const pad = 56, size = Math.min(680, H - pad * 2), gap = 72, rowW = W - pad * 2, x0 = pad, cy = H / 2, cx = x0 + size / 2, R = size * 284 / 600, reveal = 360 * eio(cl((f - 8) / 52));
+        let out = `<rect width="${W}" height="${H}" fill="#f5f6f7"/><circle cx="${cx}" cy="${cy}" r="${R}" fill="#e5e7eb" opacity="${eio(cl(f / 8)).toFixed(2)}"/>`, a = 0;
+        const pt = deg => [cx + R * Math.cos((deg - 90) * Math.PI / 180), cy + R * Math.sin((deg - 90) * Math.PI / 180)];
+        data.forEach(([c, , , v]) => { const s0 = a, e0 = Math.min(a + v / 100 * 360, reveal); a += v / 100 * 360; if (e0 <= s0) return; const [sx, sy] = pt(s0), [ex, ey] = pt(e0); out += `<path d="M${cx} ${cy} L${sx.toFixed(1)} ${sy.toFixed(1)} A${R} ${R} 0 ${e0 - s0 > 180 ? 1 : 0} 1 ${ex.toFixed(1)} ${ey.toFixed(1)} Z" fill="${c}"/>`; });
+        const lx = x0 + size + gap, lw = Math.max(40, rowW - size - gap), lf = f - 8, rows = data.length, rh = 104, rg = 18, ly0 = cy - (rows * rh + (rows - 1) * rg) / 2;
+        data.forEach(([c, fg, label, v], i) => { const crop = 1 - eio(cl(lf / 44)), vis = lw * (1 - crop), y = ly0 + i * (rh + rg); if (vis <= 0) return;
+          out += `<svg x="${(lx + lw - vis).toFixed(1)}" y="${y}" width="${vis.toFixed(1)}" height="${rh}" overflow="hidden"><g transform="translate(${-(lw - vis).toFixed(1)} 0)"><rect width="${lw}" height="${rh}" rx="12" fill="${c}"/><text x="32" y="${rh / 2 + 13}" fill="${fg}" opacity="${eio(cl((lf - 32) / 12)).toFixed(2)}" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="38">${label}</text><text x="${lw - 32}" y="${rh / 2 + 16}" fill="${fg}" opacity="${eio(cl((lf - 6) / 12)).toFixed(2)}" text-anchor="end" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="46">${v}%</text></g></svg>`; });
+        return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+      case 'vbars': { // Vertical Bar Chart element: bars grow one after another (start 22 + i*24), values rise above them
+        const f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v)), eo = t => 1 - Math.pow(1 - t, 3);
+        const data = [['Jonny', 34, false], ['Igor', 89, false], ['Mehmet', 163, true]], pad = 56, chartW = 1080, left = W / 2 - chartW / 2, bw = 280;
+        const labelH = 68, top = pad, bottom = H - pad - labelH, avail = bottom - top; let out = `<rect width="${W}" height="${H}" fill="#f5f6f7"/><rect x="${left}" y="${bottom - 1.5}" width="${chartW}" height="3" fill="#c5cad2"/>`;
+        data.forEach(([label, v, hi], i) => { const s0 = 22 + i * 24, e0 = s0 + 16 + Math.round(v / 163 * 8), g = f >= e0 ? 1 : eo(cl((f - s0) / (e0 - s0))), full = avail * v / 163 * 0.9, h = full * g, x = left + i * ((chartW - bw) / 2);
+          if (h > 0) out += `<path d="M${x} ${bottom} V${(bottom - h + 12).toFixed(1)} Q${x} ${(bottom - h).toFixed(1)} ${x + 12} ${(bottom - h).toFixed(1)} H${x + bw - 12} Q${x + bw} ${(bottom - h).toFixed(1)} ${x + bw} ${(bottom - h + 12).toFixed(1)} V${bottom} Z" fill="${hi ? '#2563eb' : '#b9c0ca'}"/>`;
+          if (f > e0 - 8) out += `<text x="${x + bw / 2}" y="${(bottom - h - 12).toFixed(1)}" fill="#111827" opacity="${cl((f - (e0 - 8)) / 10).toFixed(2)}" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="48">${v}</text>`;
+          out += `<text x="${x + bw / 2}" y="${bottom + 56}" fill="#111827" opacity="${g.toFixed(2)}" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="40">${label}</text>`; });
+        return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
       case 'numcounter': { // Number Counter element: 0 → 24,813 over 90 frames, ease-out-expo
         const t = Math.max(0, Math.min(1, num(ctx.frame, 0) / 90)), e = 1 - Math.pow(2, -10 * t) /* same as Easing.out(Easing.exp): tops out at 0.99902, so the real counter ends at 24,789 */, v = Math.round(e * 24813).toLocaleString('en-US');
         return `<text x="${W / 2}" y="${H / 2 + 52}" fill="#171717" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="150" letter-spacing="-4.5">${v}</text>`; }

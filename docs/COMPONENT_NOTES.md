@@ -44,6 +44,7 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - `check_scene` reports `layer_starts_after_end` as an error and `layer_cut_off` as a warning.
   - **Verified** on the Number Counter with start 60 and duration 120: hidden at frames 59 and 181, finished at frame 150. See [data-contact.png](renders/data-contact.png).
   - **Scope:** built-in assets such as stickmen and widgets still use keyframes for timing. Layer timing applies only to external components.
+- **Fixed-size Elements on other aspect ratios:** many Remotion Elements are laid out in fixed pixels for 1920×1080, for example a 680 px pie or a 1080 px bar plot. For narrower frames, keep the layer box at 1920×1080 and scale the whole layer instead of shrinking the box: `scale = frameWidth / 1920`, with `baseY` centring it. This was verified with the Pie Chart at 1:1, see [pie-1x1-scaled-f75.png](renders/pie-1x1-scaled-f75.png).
 - **TypeScript target:** `render-project/tsconfig.json` targets ES2021, because Elements use `String.replaceAll`.
 
 ## Components
@@ -281,6 +282,35 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Notes:**
   - **It ends at 24,789, not 24,813.** `Easing.out(Easing.exp)` tops out at 1 − 2⁻¹⁰ ≈ 0.99902, and 24,813 × 0.99902 rounds to 24,789. This is upstream behaviour, not a timing error: frame 150 is exactly local frame 90.
   - A different easing in the source, such as `Easing.out(Easing.cubic)`, would land exactly on the target.
+
+### Pie Chart
+
+- **Catalog id:** `community_pie_chart`
+- **File:** `PieChart.tsx`, from Remotion Elements `data/pie-chart`, saved verbatim
+- **Packages:** `@remotion/google-fonts` for Inter
+- **Size:** it fills the layer box and is full-frame. The pie is a fixed 680 px, then a 72 px gap, then the legend, which takes the remaining width.
+- **Controls:** box size only. The data is hard-coded: Focused work 42%, Meetings 26%, Planning 18%, Admin 14%.
+- **Preview:** `pie`, which covers the slice sweep and the legend wipe
+- **Verified:** 2026-09-27, [pie-16x9-f75.png](renders/pie-16x9-f75.png), with mid-animation and aspect tests in [data2-contact.png](renders/data2-contact.png)
+- **Notes:**
+  - The slices sweep 0 to 360° over frames 8 to 60.
+  - The legend rows wipe in over frames 8 to 52.
+  - The pie scales 0.96 to 1 using `output: 'perceptual-scale'`, which needs Remotion 4.0.5xx.
+  - **At 1:1 or 9:16 the legend is cut off** when the box shrinks to the frame. Keep the box at 1920×1080 and scale the layer instead. At 1:1 that means scale 0.5625 and baseY 236.
+
+### Vertical Bar Chart
+
+- **Catalog id:** `community_vertical_bar_chart`
+- **File:** `VerticalBarChart.tsx`, from Remotion Elements `data/vertical-bar-chart`, saved verbatim
+- **Packages:** `@remotion/google-fonts` for Inter
+- **Size:** it fills the layer box and is full-frame. The plot is a fixed 1080 px wide, with three 280 px bars.
+- **Controls:** box size only. The data is hard-coded: Jonny 34, Igor 89, Mehmet 163 highlighted.
+- **Preview:** `vbars`, which covers bar growth, value pop-up and label rise with the same per-bar timings
+- **Verified:** 2026-09-27, [vbars-16x9-f110.png](renders/vbars-16x9-f110.png). The preview at frame 55 matched the render: Jonny done, Igor growing with no value yet, Mehmet not started.
+- **Notes:**
+  - Bar *i* starts growing at local frame 22 + 24*i*.
+  - Mehmet, the last bar, finishes around frame 94.
+  - In 9:16 the 1080 px plot exactly fills a 1080 px-wide frame, ignoring the 56 px padding. It works, but has no side margin, so scale the layer down slightly if you want one.
 
 ### Typewriter Text
 
