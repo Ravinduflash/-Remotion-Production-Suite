@@ -178,6 +178,50 @@ Finish the 16:9 cut completely first, then re-cut it.
 - **Render time on this machine:** real renders are slow. A 120-frame clip at 0.25 scale took 73 s, and heavy WebGL components like the map flyover take much longer per frame. Expect a 30-second video to take many minutes.
 - **After changes:** render again. Renders are cheap to repeat.
 
+## Craft rules
+
+These are remocn's house rules, adapted to this project. Sources: [Craft](https://remocn.dev/docs/craft), [Design defaults](https://remocn.dev/docs/craft/design-defaults), [Motion principles](https://remocn.dev/docs/craft/motion-principles) and [Anti-patterns](https://remocn.dev/docs/craft/anti-patterns).
+
+**Scope:** the rules govern what **you add**: `text_card` lines, your own cards, colours and keyframed motion. They don't govern a registered component whose effect *is* the point. Letter-spacing inside Location Lower Third, the watercolour map or the shine sweep stays as designed.
+
+### Design defaults for your own layers
+
+- **Sentence case and default tracking.** No reflex ALL-CAPS and no wide `letterSpacing`. `check_scene` adds a `craft_text_style` note when a text layer does either.
+- **Solid text.** No gradient-filled text, and no decorative gradient washes on cards. Gradients belong on backgrounds.
+- **No glow.** If you need separation, use a 1 px border or a small neutral shadow. Avoid blur above about 24 px, spread, coloured glows and stacked shadows.
+- **Stay in one palette:**
+  - Text: near-black #171717 on light, off-white #fafafa on dark.
+  - Backgrounds: #0a0a0a, or the recipes' warm #141318.
+  - Surface: #27272a.
+  - One accent, such as green #22c55e, sky #0ea5e9 or violet #a855f7.
+  - Brand components (YouTube, social cards) keep their own colours.
+- **Fonts:** Inter for UI and body text, Manrope for display, Fraunces for serif, JetBrains Mono for code. The studio preview loads Inter, Cormorant Garamond, Caveat, Mona Sans, Space Grotesk and JetBrains Mono. Components load their fonts through `@remotion/google-fonts` at module level, never per frame.
+
+### Motion principles as studio operations
+
+| Principle | In this studio |
+|---|---|
+| **Staging:** one focal action per beat | Give each beat its own layers with `startFrame`/`durationInFrames`. Fade out or scale down whatever is leaving. |
+| **Overlap:** stagger siblings 3 to 6 frames | Offset each sibling's `startFrame` or first visible keyframe. `check_scene` warns `simultaneous_entrances` when 3 or more layers enter on the same frame. |
+| **Slow in, slow out** | Use an ease-out default easing for entrances (`update_asset`). Keep linear only for constant drifts. |
+| **Anticipation, exaggeration (capped)** | At most a 1 to 3 frame wind-up and a 110 % scale peak. No cartoon recoil. |
+| **Timing:** duration sets weight | Vary beat lengths: a hero reveal runs slower than a toast. Don't reuse one duration for everything. |
+| **Arc** | Keyframe `baseX` and `baseY` with different easings, or add a midpoint keyframe off the straight line. |
+| **Secondary action** | Keep it small and on theme, like the typewriter caret or the nudge's bell. It must not compete with the main action. |
+
+### Anti-patterns and how this project handles them
+
+| Anti-pattern | Here |
+|---|---|
+| Clipping a component by under-budgeting its Sequence | Each registered component has a `defaultDurationInFrames` for its natural length, and `add_asset` applies it. `check_scene` warns `layer_cut_off` when a layer runs past the composition. Don't shorten `durationInFrames` below the component's natural length. |
+| Wrong canvas size | **remocn components are laid out for 1280×720.** This project defaults to 1920×1080, which is what most Remotion Elements here are built for. When remocn components arrive, give them a 1280×720 box and scale the layer by 1.5, like the fixed 1920×1080 Elements. |
+| Animating layout properties | The scene layer positions each component with `transform` (rotate, scale) on an absolutely placed box. Keyframe `baseX`/`baseY`/`scale`, not a component's `width`/`height`. Changing the box size every frame reflows fixed-layout Elements. |
+| Non-deterministic code | Never use `Math.random()`, timers or `Date.now()` in a component; use `random(seed)` from `remotion` or `@remotion/random`. Check pasted source for these before registering it. |
+| Loading fonts mid-render | Components call `loadFont()` at module level. The Elements registered so far all do. |
+| Hardcoding a background on a component | remocn components are transparent. Some Remotion Elements here **do** own a background (YouTube End Card, Social Safe Zones, Picture in Picture), and their notes say so. Put those at the bottom of a beat, or accept that they cover what's below. |
+| Transitions mounted as components | remocn transitions are `@remotion/transitions` presentations, not layers. The scene tree has no `TransitionSeries` yet, so once they're pasted in they need a transition slot between beats. Until then, use cuts, fades and the reveal Elements (Shine, Tear, Picture in Picture). |
+| `willChange` on the wrong layer under a slow zoom | One `willChange: transform` per text container, never per word or character. It matters for slow `scale` keyframes on text layers. |
+
 ## Gaps: remocn components not in the catalog
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
