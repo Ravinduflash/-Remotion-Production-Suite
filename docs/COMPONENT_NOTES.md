@@ -12,7 +12,12 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 
 ## Pipeline notes
 
-- **Remotion version:** 4.0.526 is installed in `render-project/`. Remotion Elements built on `Interactive.withSchema` or `<Solid>` effects need 4.0.5xx or newer.
+- **Remotion version:** 4.0.526 is installed in `render-project/`. Remotion Elements built on `Interactive.withSchema` or `<Solid>` effects need 4.0.5xx or newer. Since 2026-09-27 every `remotion` and `@remotion/*` dependency is pinned to exactly `4.0.526` in `package.json`, so a fresh install cannot mix versions.
+- **React 19, since 2026-09-27:** the render project now runs React 19.3 with `@react-three/fiber` 9.8. Remotion Elements are written for React 19.
+  - **The failure:** React 18 appends `px` to plain numbers on CSS properties missing from its unitless list. So Popping Word's `scale: 1.03` became `scale: 1.03px`. The browser dropped that as invalid, with no error, and the pop never happened.
+  - **The check:** a regression scene rendered on React 18 and React 19 differs only in one small box around the popping word, 0.22% of the frame. That word is now 2.7% wider, the intended 3% pop. The 3D knot, stickman, environments, chart, shape, image and spectrum are pixel-identical, see [regression-compare.png](renders/regression-compare.png). An effects background was also re-verified.
+  - **Rule of thumb:** when an Element's numeric style seems to have no effect, suspect React's unit handling first.
+  - **Upgrade note:** upgrading needed a fresh install because npm's resolver stuck on the old React 18 tree. Move `node_modules/.remotion` aside first, which holds Remotion's 270 MB headless Chrome, then restore it.
 - **Version pinning:** `@remotion/*` packages must match the installed `remotion` version exactly. Since 2026-09-27 the render step pins missing `@remotion/*` installs to that version, e.g. `@remotion/effects@4.0.526`. `render-project/package.json` records them with a caret range, so keep versions aligned if you run `npm install` by hand.
 - **Transform props:** Elements expose `Interactive.transformSchema` props such as `style.translate` and `style.scale`. They are not mapped, because the scene layer already positions, scales and rotates each asset.
 - **Base props:** `Interactive.baseSchema` props such as `from`, `durationInFrames` and `trimBefore` are not mapped either. Timing comes from our keyframes. Voice Note is the exception, see below.
@@ -201,6 +206,33 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - The pill glides between words over 5 frames.
   - It needs network access for Montserrat.
   - The white text has a heavy black stroke, so it reads on any background.
+
+### Popping Word Captions
+
+- **Catalog id:** `community_popping_word_captions`
+- **File:** `PoppingWordCaptions.tsx`, from Remotion Elements `captions/popping-word-captions`, saved verbatim
+- **Packages:** `@remotion/captions`, `@remotion/google-fonts` for Montserrat, `@remotion/layout-utils`
+- **Size:** `sizeMode: props`, default 682×252 with 0.8-second pages
+- **Controls:** `captions` is whole-clip. Time between pages, width and height are also available.
+- **Preview:** `captions` with style `pop`. The spoken word turns blue and is drawn 3% larger.
+- **Verified:** 2026-09-27, [word-captions-f26.png](renders/word-captions-f26.png) and [word-captions-f70.png](renders/word-captions-f70.png), top row. It highlighted "starts" and "single" on time. At frame 28 the popping word measured 225 px wide against 219 px for the same word in Word Highlight.
+- **Notes:**
+  - The word being spoken turns blue and springs to 1.03× over up to 4 frames, then shrinks back before it ends.
+  - The pop is subtle by design.
+  - It **needs React 19**. On React 18 the scale is silently ignored and the component looks exactly like Word Highlight.
+
+### Word Highlight Captions
+
+- **Catalog id:** `community_word_highlight_captions`
+- **File:** `WordHighlightCaptions.tsx`, from Remotion Elements `captions/word-highlight-captions`, saved verbatim
+- **Packages:** `@remotion/captions`, `@remotion/google-fonts` for Montserrat, `@remotion/layout-utils`
+- **Size:** `sizeMode: props`, default 682×252 with 0.8-second pages
+- **Controls:** the same as Popping Word Captions
+- **Preview:** `captions` with style `highlight`
+- **Verified:** 2026-09-27, bottom row of the same renders
+- **Notes:**
+  - It is the same as Popping Word Captions without the scale.
+  - Between words, during a pause, no word is blue. Moving Pill differs here: its pill stays on the last spoken word.
 
 ### Typewriter Text
 

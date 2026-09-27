@@ -340,16 +340,18 @@
         return `<rect x="0" y="0" width="${W}" height="${H}" fill="${cp.color || '#ffffff'}"/><rect x="0" y="0" width="${W}" height="${H}" fill="#f3efe6" opacity="0.35"/>${lines}`; }
       case 'captions': { // style: basic | rounded | pill — shows the caption page active at the playhead
         const style = pv.style || 'basic', caps = Array.isArray(cp.captions) ? cp.captions : [], tMs = num(ctx.frame, 0) / Math.max(1, num(ctx.fps, 30)) * 1000;
-        const combine = num(cp.combineTokensWithinMilliseconds, style === 'pill' ? 800 : 2000), pages = [];
+        const wordStyle = style === 'pill' || style === 'highlight' || style === 'pop'; const combine = num(cp.combineTokensWithinMilliseconds, wordStyle ? 800 : 2000), pages = [];
         caps.forEach(c => { const last = pages[pages.length - 1]; if (!last || String(c.text).startsWith(' ') && last.startMs + combine < c.startMs) pages.push({ startMs: c.startMs, tokens: [c] }); else last.tokens.push(c); });
         pages.forEach((p, i) => { p.endMs = i + 1 < pages.length ? pages[i + 1].startMs : p.tokens[p.tokens.length - 1].endMs; });
         const page = pages.find(p => tMs >= p.startMs && tMs < p.endMs);
         const frame = `<rect x="0" y="0" width="${W}" height="${H}" fill="none" stroke="#ffd60a" stroke-opacity="0.35" stroke-dasharray="8 6"/>`;
         if (!page) return frame + `<text x="${W / 2}" y="${H / 2}" fill="#8a8aa0" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16">${caps.length ? 'no caption at this frame' : 'no captions set'}</text>`;
-        const text = page.tokens.map(t => t.text).join('').trim(), fs = style === 'pill' ? Math.min(80, W / Math.max(4, text.length * 0.55)) : Math.min(64, W / Math.max(4, text.length * 0.5)), tw = Math.min(W, text.length * fs * 0.52 + 44), th = fs * 1.5;
-        if (style === 'pill') { let x = W / 2 - (text.length * fs * 0.55) / 2, out = ''; const active = page.tokens.filter(t => t.startMs <= tMs).length - 1;
-          page.tokens.forEach((t, i) => { const w = String(t.text).trim().length * fs * 0.55, gap = fs * 0.28; if (i === active) out += `<rect x="${(x - 12).toFixed(1)}" y="${(H / 2 - fs / 2 - 12).toFixed(1)}" width="${(w + 24).toFixed(1)}" height="${(fs + 24).toFixed(1)}" rx="10" fill="#2563eb"/>`;
-            out += `<text x="${x.toFixed(1)}" y="${(H / 2 + fs * 0.35).toFixed(1)}" fill="#fff" stroke="#000" stroke-width="${(fs / 7).toFixed(1)}" paint-order="stroke" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="${fs.toFixed(1)}">${esc(String(t.text).trim())}</text>`; x += w + gap; });
+        const text = page.tokens.map(t => t.text).join('').trim(), fs = wordStyle ? Math.min(80, W / Math.max(4, text.length * 0.55)) : Math.min(64, W / Math.max(4, text.length * 0.5)), tw = Math.min(W, text.length * fs * 0.52 + 44), th = fs * 1.5;
+        if (wordStyle) { let x = W / 2 - (text.length * fs * 0.55) / 2, out = ''; // pill: latest started word; highlight / pop: word being spoken now
+          const active = style === 'pill' ? page.tokens.filter(t => t.startMs <= tMs).length - 1 : page.tokens.findIndex(t => tMs >= t.startMs && tMs < t.endMs);
+          page.tokens.forEach((t, i) => { const w = String(t.text).trim().length * fs * 0.55, gap = fs * 0.28; if (i === active && style === 'pill') out += `<rect x="${(x - 12).toFixed(1)}" y="${(H / 2 - fs / 2 - 12).toFixed(1)}" width="${(w + 24).toFixed(1)}" height="${(fs + 24).toFixed(1)}" rx="10" fill="#2563eb"/>`;
+            const on = i === active && style !== 'pill', k = on && style === 'pop' ? 1.03 : 1, wfs = fs * k;
+            out += `<text x="${(x - (w * (k - 1)) / 2).toFixed(1)}" y="${(H / 2 + fs * 0.35).toFixed(1)}" fill="${on ? '#2563eb' : '#fff'}" stroke="#000" stroke-width="${(fs / 7).toFixed(1)}" paint-order="stroke" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="${wfs.toFixed(1)}">${esc(String(t.text).trim())}</text>`; x += w + gap; });
           return frame + out; }
         // basic / rounded: wrap to at most 2 lines like the real components (≈0.52em per character)
         const fs2 = style === 'rounded' ? Math.min(64, H / 3) : 64, maxChars = Math.max(4, Math.floor((W - 44) / (fs2 * 0.52))), lines = [];

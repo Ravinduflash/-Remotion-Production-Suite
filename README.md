@@ -58,7 +58,8 @@ Interpolation is shared by the studio (`studio.js`) and Remotion (`SceneRenderer
 In a Remotion project (`npx create-video@latest`):
 
 ```bash
-npm i three @react-three/fiber @remotion/three      # only needed for 3D layers
+npm i react@19 react-dom@19                        # Remotion Elements expect React 19 (React 18 silently drops numeric `scale` styles)
+npm i three @react-three/fiber@9 @remotion/three    # only needed for 3D layers; fiber 9 pairs with React 19
 cp -r remotion/ src/remotion/
 ```
 

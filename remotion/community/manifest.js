@@ -1089,5 +1089,349 @@ window.CommunityManifest = [
       "kind": "captions",
       "style": "pill"
     }
+  },
+  {
+    "id": "community_popping_word_captions",
+    "componentName": "PoppingWordCaptions",
+    "name": "Popping Word Captions",
+    "desc": "Remotion Elements • spoken word turns blue and pops 3% larger",
+    "icon": "🫧",
+    "external": {
+      "importPath": "./community/PoppingWordCaptions",
+      "exportName": "PoppingWordCaptions",
+      "packages": [
+        "@remotion/captions",
+        "@remotion/google-fonts",
+        "@remotion/layout-utils"
+      ],
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 619,
+      "baseY": 780,
+      "customProperties": {
+        "captions": [
+          {
+            "text": "Every",
+            "startMs": 0,
+            "endMs": 400,
+            "timestampMs": 200,
+            "confidence": 1
+          },
+          {
+            "text": " story",
+            "startMs": 400,
+            "endMs": 800,
+            "timestampMs": 600,
+            "confidence": 1
+          },
+          {
+            "text": " starts",
+            "startMs": 800,
+            "endMs": 1200,
+            "timestampMs": 1000,
+            "confidence": 1
+          },
+          {
+            "text": " with",
+            "startMs": 1200,
+            "endMs": 1600,
+            "timestampMs": 1400,
+            "confidence": 1
+          },
+          {
+            "text": " a",
+            "startMs": 1600,
+            "endMs": 2000,
+            "timestampMs": 1800,
+            "confidence": 1
+          },
+          {
+            "text": " single",
+            "startMs": 2000,
+            "endMs": 2400,
+            "timestampMs": 2200,
+            "confidence": 1
+          },
+          {
+            "text": " frame.",
+            "startMs": 2400,
+            "endMs": 2800,
+            "timestampMs": 2600,
+            "confidence": 1
+          },
+          {
+            "text": " Build",
+            "startMs": 3050,
+            "endMs": 3450,
+            "timestampMs": 3250,
+            "confidence": 1
+          },
+          {
+            "text": " it",
+            "startMs": 3450,
+            "endMs": 3850,
+            "timestampMs": 3650,
+            "confidence": 1
+          },
+          {
+            "text": " with",
+            "startMs": 3850,
+            "endMs": 4250,
+            "timestampMs": 4050,
+            "confidence": 1
+          },
+          {
+            "text": " the",
+            "startMs": 4250,
+            "endMs": 4650,
+            "timestampMs": 4450,
+            "confidence": 1
+          },
+          {
+            "text": " Remotion",
+            "startMs": 4650,
+            "endMs": 5050,
+            "timestampMs": 4850,
+            "confidence": 1
+          },
+          {
+            "text": " Production",
+            "startMs": 5050,
+            "endMs": 5450,
+            "timestampMs": 5250,
+            "confidence": 1
+          },
+          {
+            "text": " Suite.",
+            "startMs": 5450,
+            "endMs": 5850,
+            "timestampMs": 5650,
+            "confidence": 1
+          }
+        ],
+        "combineTokensWithinMilliseconds": 800,
+        "width": 682,
+        "height": 252
+      }
+    },
+    "controls": [
+      {
+        "group": "Captions",
+        "items": [
+          {
+            "key": "captions",
+            "label": "CAPTIONS (Caption[] JSON — use build_captions)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "combineTokensWithinMilliseconds",
+            "label": "TIME BETWEEN PAGES (ms)",
+            "kind": "range",
+            "min": 0,
+            "max": 5000,
+            "step": 50
+          }
+        ]
+      },
+      {
+        "group": "Caption area",
+        "items": [
+          {
+            "key": "width",
+            "label": "WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 1920,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "HEIGHT",
+            "kind": "range",
+            "min": 40,
+            "max": 1080,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "captions",
+      "style": "pop"
+    }
+  },
+  {
+    "id": "community_word_highlight_captions",
+    "componentName": "WordHighlightCaptions",
+    "name": "Word Highlight Captions",
+    "desc": "Remotion Elements • spoken word turns blue, no motion",
+    "icon": "🖍️",
+    "external": {
+      "importPath": "./community/WordHighlightCaptions",
+      "exportName": "WordHighlightCaptions",
+      "packages": [
+        "@remotion/captions",
+        "@remotion/google-fonts",
+        "@remotion/layout-utils"
+      ],
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 619,
+      "baseY": 780,
+      "customProperties": {
+        "captions": [
+          {
+            "text": "Every",
+            "startMs": 0,
+            "endMs": 400,
+            "timestampMs": 200,
+            "confidence": 1
+          },
+          {
+            "text": " story",
+            "startMs": 400,
+            "endMs": 800,
+            "timestampMs": 600,
+            "confidence": 1
+          },
+          {
+            "text": " starts",
+            "startMs": 800,
+            "endMs": 1200,
+            "timestampMs": 1000,
+            "confidence": 1
+          },
+          {
+            "text": " with",
+            "startMs": 1200,
+            "endMs": 1600,
+            "timestampMs": 1400,
+            "confidence": 1
+          },
+          {
+            "text": " a",
+            "startMs": 1600,
+            "endMs": 2000,
+            "timestampMs": 1800,
+            "confidence": 1
+          },
+          {
+            "text": " single",
+            "startMs": 2000,
+            "endMs": 2400,
+            "timestampMs": 2200,
+            "confidence": 1
+          },
+          {
+            "text": " frame.",
+            "startMs": 2400,
+            "endMs": 2800,
+            "timestampMs": 2600,
+            "confidence": 1
+          },
+          {
+            "text": " Build",
+            "startMs": 3050,
+            "endMs": 3450,
+            "timestampMs": 3250,
+            "confidence": 1
+          },
+          {
+            "text": " it",
+            "startMs": 3450,
+            "endMs": 3850,
+            "timestampMs": 3650,
+            "confidence": 1
+          },
+          {
+            "text": " with",
+            "startMs": 3850,
+            "endMs": 4250,
+            "timestampMs": 4050,
+            "confidence": 1
+          },
+          {
+            "text": " the",
+            "startMs": 4250,
+            "endMs": 4650,
+            "timestampMs": 4450,
+            "confidence": 1
+          },
+          {
+            "text": " Remotion",
+            "startMs": 4650,
+            "endMs": 5050,
+            "timestampMs": 4850,
+            "confidence": 1
+          },
+          {
+            "text": " Production",
+            "startMs": 5050,
+            "endMs": 5450,
+            "timestampMs": 5250,
+            "confidence": 1
+          },
+          {
+            "text": " Suite.",
+            "startMs": 5450,
+            "endMs": 5850,
+            "timestampMs": 5650,
+            "confidence": 1
+          }
+        ],
+        "combineTokensWithinMilliseconds": 800,
+        "width": 682,
+        "height": 252
+      }
+    },
+    "controls": [
+      {
+        "group": "Captions",
+        "items": [
+          {
+            "key": "captions",
+            "label": "CAPTIONS (Caption[] JSON — use build_captions)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "combineTokensWithinMilliseconds",
+            "label": "TIME BETWEEN PAGES (ms)",
+            "kind": "range",
+            "min": 0,
+            "max": 5000,
+            "step": 50
+          }
+        ]
+      },
+      {
+        "group": "Caption area",
+        "items": [
+          {
+            "key": "width",
+            "label": "WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 1920,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "HEIGHT",
+            "kind": "range",
+            "min": 40,
+            "max": 1080,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "captions",
+      "style": "highlight"
+    }
   }
 ];
