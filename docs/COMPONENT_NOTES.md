@@ -28,6 +28,11 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - `external.renameProps: {from: to}`: forwards a prop under another name after box sizing, so a component's own `width`/`height` no longer clash with the layer box. Remocn Reel uses `cardWidth/cardHeight`; Animated Bar Chart uses `chartWidth/chartHeight`. Older entries that hide those props (Glass Code Block/Walk, Animated Line Chart) could adopt it.
   - The studio preview ctx now carries `compW`/`compH`, which `wrapGeometry` needs for the window fit.
 - **Sub-folder component files, 2026-09-28:** `write_component_file` accepts one folder level (`remocn-ui/index.ts`), so multi-file remocn libs keep their relative imports (`./color`, `./timeline`). The render sync already copied folders. `@/lib/remocn-ui` maps to `community/remocn-ui/` in `remotion.config.ts` and in the tsconfig paths; that alias has to be its own key, because `@/lib/remocn` doesn't prefix-match it.
+- **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
+  - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
+  - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
+  - **Paint gate:** `transition: { waitFor: '<css selector>' }` holds each transition frame until that selector matches inside the layer, plus four animation frames. It's there for shaders that paint asynchronously; paper-design mounts only after an image `decode()` and applies each frame's uniforms asynchronously. remocn's wrappers release `delayRender` after two animation frames regardless.
+  - **Registry typing:** `EXTERNAL_REGISTRY` / `SceneRendererProps.registry` now also hold factories.
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
@@ -1178,6 +1183,40 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - v0: "a landing page for m" at 70.
   - Claude Code: "edit src/them" at 70; a custom user and working directory.
   - OpenCode: `"What is the t` at 70.
+
+### Grain Dissolve, Wave Wipe, Shader Seam, Shader Spiral Pass, Ripple Zoom, Warp Dissolve and Swirl Dissolve (remocn transitions)
+
+- **Catalog ids:** `remocn_grain_dissolve`, `remocn_wave_wipe`, `remocn_shader_seam`, `remocn_shader_spiral_pass`, `remocn_ripple_zoom`, `remocn_warp_dissolve`, `remocn_swirl_dissolve`. These are transition layers; see "Transition layers" in the pipeline notes.
+- **Files:** the matching kebab-case `.tsx` files, verbatim, MIT, plus four registry dependencies (not catalog entries):
+  - `shader-grain-gradient.tsx` for grain, wave and ripple;
+  - `shader-warp.tsx`;
+  - `shader-swirl.tsx`;
+  - `shader-light-tunnel.tsx` for the spiral. It is remocn's standalone Light Tunnel shader as well and could be registered as a background later.
+- **Packages:** `@remotion/transitions` (pinned 4.0.526) and `@paper-design/shaders-react` 0.0.81, the WebGL fields behind grain, wave, ripple, warp and swirl. Shader Seam and Spiral Pass bring their own WebGL2 code.
+- **How to use one:**
+  1. Add the layer (full frame), with its `transitionAt` defaulting to 30 and `transitionFrames` set to the natural length: grain 76, wave 60, seam 60, spiral 72, ripple 88, warp 76, swirl 104. The default layer is `30 + T + 30` frames.
+  2. Wrap scene A's layers as `from` and scene B's as `to`.
+  3. Every other prop goes to the factory: colours (JSON arrays), backdrop, shape, noise, zoom, intensity, softness, speed, distortion, swirl, band count, spirals, twist, dissolve softness, detail, time offset.
+  - Seam's custom `shader` source isn't exposed; it uses the default remocn OpenShaders material.
+- **Scene backgrounds:**
+  - Seam, Spiral, Wave, Warp and Swirl want opaque scenes.
+  - Ripple Zoom wants a transparent incoming scene over a backdrop matching `colorBack` (#141318). The test puts a `base` Backdrop under the transition and wraps only B's title as `to`.
+- **Preview:** kind `transition`. `transitionState()` ports each presentation's own `interpolate()` curves: when each side fades, scales or slides, the field's coverage, Seam's opaque exchange at p = 0.4 and Spiral's exchange at p = 0.2. `wrapGeometry` moves the wrapped slots accordingly. The WebGL field is a vector stand-in: dots, bands, rings, blobs or silk.
+- **Software-WebGL limitation, found 2026-09-28:** this machine renders with SwiftShader (no GPU). On it, four of paper-design 0.0.81's seven GrainGradient shapes draw nothing but `colorBack` and grain: `blob`, `ripple`, `dots` and `truchet`. `wave`, `corners` and `sphere` work, as do Warp and Swirl.
+  - **Cause, at least for blob:** the shader calls `clamp(0., 1., length(...))` with its arguments in the wrong order (min > max), which GLSL leaves undefined. GPUs typically return `min(1, L)`; SwiftShader returns 1, which zeroes the shape.
+  - **How it was isolated:** the same result appears in a plain-Chrome test of the vanilla `ShaderMount` with paper's own blob preset.
+  - **Effect here:** Grain Dissolve's default `blob` field renders empty on this machine, though the scene choreography (fade, blur, condense) is still correct. Expect it to look right on a GPU renderer; for software renders pick `shape: 'wave' | 'corners' | 'sphere'`.
+  - **Ripple Zoom is fine in the render:** its rings do draw in the Remotion render at the dive's small scales (p = 0.2 and 0.5, frames 48 and 74), even though the scale-1 vanilla test showed an empty `ripple`.
+- **Wave Wipe mid-point:** at p = 0.5 the incoming scene already covers the bottom 58%, where the bands sit (they drift down with `offsetY`). A dark upper field there is correct; the bands show best around p ≈ 0.35–0.45.
+- **Verified:** 2026-09-28, [remocn-transitions-contact.png](renders/remocn-transitions-contact.png). A blue "Scene A" gradient changes to an orange "Scene B" at p = 0.2 / 0.5 / 0.8 for each transition, plus a Grain Dissolve `corners` variant and Swirl's after-frame. 24 stills, 0 errors:
+  - **Grain (blob):** A blurs and fades into the dark grain backdrop, and B condenses out blurred (the blob field is empty here, see above). The `corners` variant shows the grainy gradient field.
+  - **Wave:** the grain wave bands wash up at p = 0.38, and B rides in from below (58% of the frame at p = 0.5).
+  - **Seam:** the silk and halftone material eats through A with organic edges, is fully opaque at the swap, then dissolves along its brightness onto B, with the luminous folds going last.
+  - **Spiral:** the light-tunnel spiral covers A, the camera dives, and a feathered circular exit opens onto B at p = 0.85.
+  - **Ripple:** A blows past the camera through the rings, and B scales up out of the depth onto the #141318 base.
+  - **Warp:** A melts into the folding warp field, and B sharpens out of it.
+  - **Swirl:** a wound solid field at p = 0.2, open bands at 0.5, winding shut with B resolving at 0.85, and B alone after.
+- **Render cost:** software WebGL makes these the slowest stills here, 55–145 s each.
 
 ### Typewriter Text
 

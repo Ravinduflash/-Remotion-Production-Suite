@@ -11807,5 +11807,891 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_grain_dissolve",
+    "componentName": "grainDissolve",
+    "name": "Grain Dissolve (remocn)",
+    "desc": "remocn transition • the outgoing scene blurs away into soft grainy shapes; the next scene condenses out of the noise (WebGL grain gradient)",
+    "icon": "🌫️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/grain-dissolve",
+      "exportName": "grainDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 76,
+        "colors": [
+          "#3a3a52",
+          "#4a4a68",
+          "#8f88ae"
+        ],
+        "colorBack": "#141318",
+        "shape": "blob",
+        "noise": 0.3,
+        "zoom": 2,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Grain Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; needs ≥ ~50 frames",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 76)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACKDROP",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "shape",
+            "label": "SHAPE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "wave",
+                "wave"
+              ],
+              [
+                "dots",
+                "dots"
+              ],
+              [
+                "truchet",
+                "truchet"
+              ],
+              [
+                "corners",
+                "corners"
+              ],
+              [
+                "ripple",
+                "ripple"
+              ],
+              [
+                "blob",
+                "blob"
+              ],
+              [
+                "sphere",
+                "sphere"
+              ]
+            ]
+          },
+          {
+            "key": "noise",
+            "label": "GRAIN",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "zoom",
+            "label": "ZOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 6,
+            "step": 0.01
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "grain"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 136
+  },
+  {
+    "id": "remocn_wave_wipe",
+    "componentName": "waveWipe",
+    "name": "Wave Wipe (remocn)",
+    "desc": "remocn transition • a grainy wave field washes up over the outgoing scene, then the next scene rides in from below",
+    "icon": "🌊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/wave-wipe",
+      "exportName": "waveWipe",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 60,
+        "colors": [
+          "#3a3a52",
+          "#4a4a68",
+          "#8f88ae"
+        ],
+        "colorBack": "#141318",
+        "intensity": 0.2,
+        "softness": 0.7,
+        "noise": 0.4,
+        "zoom": 1.16,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Wave Wipe (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; vertical sweep",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 60)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACKDROP (match the scenes)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "intensity",
+            "label": "DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "noise",
+            "label": "GRAIN",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "zoom",
+            "label": "ZOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 6,
+            "step": 0.01
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "wave"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_shader_seam",
+    "componentName": "shaderSeam",
+    "name": "Shader Seam (remocn)",
+    "desc": "remocn transition • an OpenShaders silk + halftone material covers the frame, the scenes swap underneath, then it dissolves in place along its brightness (WebGL2)",
+    "icon": "🧵",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-seam",
+      "exportName": "shaderSeam",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 60,
+        "softness": 0.18,
+        "detail": 0.65,
+        "speed": 0,
+        "timeOffset": 0
+      }
+    },
+    "controls": [
+      {
+        "group": "Shader Seam (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; give each scene its own background",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 60)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "softness",
+            "label": "DISSOLVE SOFTNESS (0.02–0.4)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.02,
+            "max": 0.4,
+            "step": 0.01
+          },
+          {
+            "key": "detail",
+            "label": "ORGANIC DETAIL",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "speed",
+            "label": "MATERIAL SPEED (0 = still)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "timeOffset",
+            "label": "SHADER TIME OFFSET (s)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 0.1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "seam"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_shader_spiral_pass",
+    "componentName": "shaderSpiralPass",
+    "name": "Shader Spiral Pass (remocn)",
+    "desc": "remocn transition • the hero light-tunnel spiral covers the outgoing scene, the camera dives to its centre and a feathered exit opens onto the next scene (WebGL2)",
+    "icon": "🌀",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-spiral-pass",
+      "exportName": "shaderSpiralPass",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 72,
+        "speed": 1,
+        "spirals": 3,
+        "twist": 0.7,
+        "zoom": 14,
+        "softness": 0.12,
+        "timeOffset": 0
+      }
+    },
+    "controls": [
+      {
+        "group": "Shader Spiral Pass (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; give both scenes opaque backgrounds",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 72)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "speed",
+            "label": "FLOW SPEED (0–5)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "spirals",
+            "label": "SPIRALS (1–6)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 6,
+            "step": 1
+          },
+          {
+            "key": "twist",
+            "label": "TWIST (0–2)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "zoom",
+            "label": "DIVE ZOOM (2–24)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 24,
+            "step": 0.1
+          },
+          {
+            "key": "softness",
+            "label": "EXIT FEATHER (0.02–0.3)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.02,
+            "max": 0.3,
+            "step": 0.01
+          },
+          {
+            "key": "timeOffset",
+            "label": "SHADER TIME OFFSET (s)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 0.1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "spiral"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 132
+  },
+  {
+    "id": "remocn_ripple_zoom",
+    "componentName": "rippleZoom",
+    "name": "Ripple Zoom (remocn)",
+    "desc": "remocn transition • the outgoing scene blows past the camera, which dives through grainy ripple rings while the next scene scales up from the depth",
+    "icon": "🎯",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ripple-zoom",
+      "exportName": "rippleZoom",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 88,
+        "colors": [
+          "#3a3a52",
+          "#4a4a68",
+          "#8f88ae"
+        ],
+        "colorBack": "#141318",
+        "intensity": 0.5,
+        "softness": 0.5,
+        "noise": 0.5,
+        "zoom": 4,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Ripple Zoom (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; keep the incoming scene transparent over a backdrop matching colorBack",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 88)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACKDROP (match the scenes)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "intensity",
+            "label": "DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "noise",
+            "label": "GRAIN",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "zoom",
+            "label": "DIVE ZOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 12,
+            "step": 0.1
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "ripple"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 148
+  },
+  {
+    "id": "remocn_warp_dissolve",
+    "componentName": "warpDissolve",
+    "name": "Warp Dissolve (remocn)",
+    "desc": "remocn transition • the outgoing scene melts into a folding domain-warp colour field that straightens back into the next scene",
+    "icon": "🫠",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/warp-dissolve",
+      "exportName": "warpDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 76,
+        "colors": [
+          "#141318",
+          "#3a3a5c",
+          "#1f1d29",
+          "#8f88ae"
+        ],
+        "distortion": 0.8,
+        "swirl": 0.6,
+        "softness": 1,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Warp Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; needs ≥ ~50 frames",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 76)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "distortion",
+            "label": "PEAK DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "swirl",
+            "label": "SWIRL",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "warp"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 136
+  },
+  {
+    "id": "remocn_swirl_dissolve",
+    "componentName": "swirlDissolve",
+    "name": "Swirl Dissolve (remocn)",
+    "desc": "remocn transition • a banded swirl covers the frame, unwinds, holds and winds shut as the next scene resolves through it",
+    "icon": "🍥",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/swirl-dissolve",
+      "exportName": "swirlDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 104,
+        "colors": [
+          "#1f1d29",
+          "#413d56",
+          "#8f88ae"
+        ],
+        "colorBack": "#141318",
+        "bandCount": 10,
+        "softness": 0.35,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Swirl Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; statement move: needs ≥ ~80 frames",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 104)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACKDROP",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "bandCount",
+            "label": "BANDS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "softness",
+            "label": "BAND SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "swirl"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 164
   }
 ];

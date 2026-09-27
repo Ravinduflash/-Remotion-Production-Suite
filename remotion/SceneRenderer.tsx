@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, Sequence, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Sequence, continueRender, delayRender, useCurrentFrame } from 'remotion';
 import { ThreeCanvas } from '@remotion/three';
 import { AdvancedStickman, StickmanAngles } from './AdvancedStickman';
 import { SkyGradient, FloorLine, House, StreetBlock, IndoorRoom, Tree } from './Environments';
@@ -47,6 +47,13 @@ export interface ExternalDescriptor {
   /** Forward customProperties under another prop name after the layer-box sizing, e.g. { cardWidth: 'width' } when the
    *  component's own width/height props mean something else than the layer box (remocn Reel card, chart viewBox). */
   renameProps?: Record<string, string>;
+  /** The export is a @remotion/transitions presentation factory (remocn grainDissolve, waveWipe…), not a component.
+   *  The layer wraps two slots, `from` and `to` (children.slots), and plays the presentation between them over
+   *  customProperties.transitionFrames starting at layer frame customProperties.transitionAt — like TransitionSeries
+   *  with linearTiming, but the wrapped layers keep composition time. Every other prop is passed to the factory.
+   *  { waitFor: css selector }: during the transition each frame is held until that selector matches inside the layer,
+   *  plus a few animation frames — for shaders that paint asynchronously (paper-design mounts after an image decode). */
+  transition?: boolean | { waitFor?: string };
   /** CSS custom properties set on this layer only, e.g. { '--font-geist-sans': 'Segoe UI, sans-serif' } so a component renders in the font it measures with. */
   cssVars?: Record<string, string>;
   /** Constant style on the layer box, e.g. { display: 'flex', alignItems: 'center', justifyContent: 'center' } to centre an inline component (remocn RolodexFlip / ValueSwap). */
@@ -165,11 +172,52 @@ export function externalProps(asset: SceneAsset, p: Sampled): Record<string, any
   return Object.keys(style).length ? { ...cp, style } : cp;
 }
 
+/** Plays a TransitionPresentation between two already-built scenes, the way TransitionSeries + linearTiming does:
+ *  `from` alone before `at`, both (exiting under entering) for `frames` frames, then `to` alone. Inside the
+ *  transition the presentation sees its own frame 0 at `at`; the scenes are shifted back to keep their own time. */
+const TransitionLayer: React.FC<{ factory: (props: Record<string, any>) => { component: React.ComponentType<any>; props: Record<string, any> }; passedProps: Record<string, any>; at: number; frames: number; from?: React.ReactNode; to?: React.ReactNode; waitFor?: string }> = ({ factory, passedProps, at, frames, from, to, waitFor }) => {
+  const frame = useCurrentFrame();
+  const T = Math.max(1, Math.round(frames));
+  const during = frame >= at && frame < at + T;
+  const box = React.useRef<HTMLDivElement>(null);
+  // paper-design shaders apply each frame's uniforms after an async image decode and paint on the next animation frame;
+  // remocn's wrappers only hold the first render for two frames, so the capture could miss the field. Hold every frame.
+  React.useLayoutEffect(() => {
+    if (!during || !waitFor) return;
+    const handle = delayRender(`transition paint ${frame}`, { timeoutInMilliseconds: 60000 });
+    let raf = 0, done = false, settle = -1; const t0 = performance.now();
+    const finish = () => { if (!done) { done = true; continueRender(handle); } };
+    const tick = () => {
+      if (done) return;
+      if (settle < 0 && ((box.current && box.current.querySelector(waitFor)) || performance.now() - t0 > 15000)) settle = 4;
+      if (settle === 0) return finish();
+      if (settle > 0) settle--;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => { cancelAnimationFrame(raf); finish(); };
+  }, [frame, during, waitFor]);
+  if (frame < at) return <AbsoluteFill>{from}</AbsoluteFill>;
+  if (frame >= at + T) return <AbsoluteFill>{to}</AbsoluteFill>;
+  const pres = factory(passedProps), P = pres.component;
+  const p = Math.min(1, Math.max(0, (frame - at) / T));
+  const keep = (node: React.ReactNode) => <Sequence from={-at} layout="none">{node}</Sequence>;
+  return (
+    <AbsoluteFill ref={box}>
+      <Sequence from={at} durationInFrames={T} layout="none" name="transition">
+        <P presentationDirection="exiting" presentationProgress={p} presentationDurationInFrames={T} passedProps={pres.props}>{keep(from)}</P>
+        <P presentationDirection="entering" presentationProgress={p} presentationDurationInFrames={T} passedProps={pres.props}>{keep(to)}</P>
+      </Sequence>
+    </AbsoluteFill>
+  );
+};
+
 /* ---------------- the master renderer ---------------- */
 export interface SceneRendererProps {
   scene: SceneState;
   /** External / community components keyed by componentName (MasterScene.tsx generates this). */
-  registry?: Record<string, React.ComponentType<any>>;
+  /** Components — or, for `external.transition` entries, @remotion/transitions presentation factories. */
+  registry?: Record<string, React.ComponentType<any> | ((props: any) => any)>;
 }
 
 export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = {} }) => {
@@ -183,7 +231,7 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
   const layers = all.filter(l => !wrapped.has(l.asset.id)); // wrapped layers render inside their wrapper
   const isHtml = (a: SceneAsset) => a.renderTarget === 'html' || a.type === 'external';
   const threeLayers = layers.filter(l => l.asset.type === 'three');
-  const lookup = (name: string) => registry[name] || REGISTRY[name];
+  const lookup = (name: string) => (registry[name] || REGISTRY[name]) as React.ComponentType<any> | undefined; // transition factories are called, not rendered (TransitionLayer)
 
   // Keep true z-order (index 0 = back) across SVG and HTML assets: consecutive SVG assets share one
   // full-frame <svg>; each HTML (external) asset is its own absolutely positioned layer in between.
@@ -235,14 +283,20 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
         if (spec.slots && !Array.isArray(asset.wraps)) { for (const slot of spec.slots) { const ids = (asset.wraps as Record<string, string[]>)[slot]; if (ids && ids.length) props[slot] = canvas(ids, 'slot'); } }
         else if (Array.isArray(asset.wraps) && asset.wraps.length) props[spec.prop || 'children'] = canvas(asset.wraps, spec.fit || 'full');
       }
+      let el: React.ReactNode = <C {...props} />;
+      if (asset.external && asset.external.transition) {
+        const { from, to, transitionAt, transitionFrames, ...passed } = props;
+        const tr = asset.external.transition;
+        el = <TransitionLayer factory={C as any} passedProps={passed} at={typeof transitionAt === 'number' ? transitionAt : 30} frames={typeof transitionFrames === 'number' ? transitionFrames : 60} from={from} to={to} waitFor={typeof tr === 'object' ? tr.waitFor : undefined} />;
+      }
       return (
         <div key={asset.id} style={{ ...(asset.external && asset.external.layerStyle), ...(asset.external && asset.external.cssVars), position: 'absolute', left: p.baseX, top: p.baseY, width: cp.width, height: cp.height, opacity: p.opacity, transform: `rotate(${p.rotation}deg) scale(${p.scale})`, transformOrigin: '0 0' }}>
           {asset.startFrame || asset.durationInFrames ? (
             <Sequence from={asset.startFrame || 0} durationInFrames={asset.durationInFrames} layout="none" name={asset.name}>
-              <C {...props} />
+              {el}
             </Sequence>
           ) : (
-            <C {...props} />
+            el
           )}
         </div>
       );

@@ -341,6 +341,24 @@
   function bezierEase(x1, y1, x2, y2) {
     return t => { if (t <= 0) return 0; if (t >= 1) return 1; let u = t; for (let i = 0; i < 8; i++) { const x = 3 * (1 - u) * (1 - u) * u * x1 + 3 * (1 - u) * u * u * x2 + u * u * u - t, dx = 3 * (1 - u) * (1 - u) * x1 + 6 * (1 - u) * u * (x2 - x1) + 3 * u * u * (1 - x2); if (Math.abs(dx) < 1e-6) break; u = Math.max(0, Math.min(1, u - x / dx)); } return 3 * (1 - u) * (1 - u) * u * y1 + 3 * (1 - u) * u * u * y2 + u * u * u; };
   }
+  /** remocn transition presentations: where the layer is in its transition, and each side's look at that progress. */
+  function transitionState(cp, ctx) {
+    const f = num(ctx.frame, 0), at = num(cp.transitionAt, 30), T = Math.max(1, Math.round(num(cp.transitionFrames, 60))), p = Math.max(0, Math.min(1, (f - at) / T)), phase = f < at ? 'before' : f >= at + T ? 'after' : 'during';
+    const cl = v => Math.max(0, Math.min(1, v)), io = bezierEase(0.42, 0, 0.58, 1), ic = t => t * t * t, oc = t => 1 - Math.pow(1 - t, 3), sm = (a, b, v) => { const t = cl((v - a) / (b - a)); return t * t * (3 - 2 * t); }, smoother = t => t * t * t * (t * (t * 6 - 15) + 10);
+    const I = (a, b, v0, v1, e) => v0 + (v1 - v0) * (e || (t => t))(cl((p - a) / (b - a)));
+    const st = ((ctx.entry || {}).preview || {}).style;
+    let from = { o: 1, s: 1, ty: 0 }, to = { o: 1, s: 1, ty: 0 }, field = 0, extra = {};
+    if (st === 'grain') { from.o = I(0.14, 0.34, 1, 0); field = I(0, 0.26, 0, 1, io); to.o = I(0.7, 0.86, 0, 1); to.s = I(0.7, 1, 1.05, 1, oc); extra.k = I(0.08, 0.92, 0, 1, io); }
+    else if (st === 'wave') { from.o = I(0.3, 0.5, 1, 0, io); from.ty = I(0, 0.7, 0, -70, ic); field = I(0.18, 0.45, 0, 1, io); to.ty = p < 0.82 ? I(0.4, 0.82, 100, -3.5, oc) : I(0.82, 1, -3.5, 0, oc); extra.k = I(0, 1, 0, 0.7, bezierEase(0.45, 0, 0.55, 1)); }
+    else if (st === 'ripple') { from.o = I(0.35, 0.55, 1, 0, io); from.s = I(0.3, 0.62, 1, 1.6, ic); field = I(0.08, 0.32, 0, 1, io); to.o = I(0.45, 0.62, 0, 1); to.s = I(0.42, 0.97, 0.2, 1, bezierEase(0.33, 1, 0.68, 1)); extra.k = I(0.32, 1, 0.2, num(cp.zoom, 4), bezierEase(0.7, 0, 0.3, 1)); }
+    else if (st === 'warp') { from.o = I(0.2, 0.38, 1, 0); from.s = I(0, 0.38, 1, 1.16, ic); field = I(0, 0.32, 0, 1, io); to.o = I(0.66, 0.82, 0, 1); to.s = I(0.66, 1, 1.18, 1, oc); extra.k = p < 0.5 ? I(0, 0.5, 0.3, 1) : I(0.5, 1, 1, 0.4); }
+    else if (st === 'swirl') { from.o = I(0.06, 0.13, 1, 0); field = 1; to.o = I(0.77, 0.87, 0, 1); to.s = I(0.77, 1, 0.3, 1, oc); extra.k = p < 0.42 ? I(0.1, 0.42, 1, 0, io) : p < 0.64 ? 0 : I(0.64, 1, 0, 1, io); }
+    else if (st === 'seam') { const pres = smoother(cl(p / 0.34)), dis = smoother(cl((p - 0.46) / 0.54)); from.o = p < 0.4 ? 1 : 0; to.o = p >= 0.4 ? 1 : 0; field = pres * (1 - dis); extra.k = dis; }
+    else if (st === 'spiral') { const dive = cl((p - 0.08) / 0.84); from.o = p < 0.2 ? 1 : 0; from.s = 1 + 0.5 * sm(0, 0.22, p); field = sm(0, 0.18, p); to.o = p >= 0.2 ? sm(0.64, 0.72, p) : 0; to.s = 1 + 0.12 * (1 - sm(0.55, 1, p)); extra.k = Math.exp(Math.log(Math.max(2, Math.min(24, num(cp.zoom, 14)))) * dive * dive); extra.aperture = sm(0.64, 1, p) ** 2; }
+    if (phase === 'before') { from = { o: 1, s: 1, ty: 0 }; to.o = 0; field = 0; }
+    if (phase === 'after') { from.o = 0; to = { o: 1, s: 1, ty: 0 }; field = 0; }
+    return { p, phase, from, to, field, extra, st };
+  }
   /** Where a wrapper component (remocn Backdrop / Drift / Stage / ChatToPreviewLayout) draws its wrapped layers in the preview:
    *  { slot: { transform, clip?: {w,h,r}, inner?, opacity? } } in the wrapper's box coordinates. Mirrors SceneRenderer's canvas fits. */
   function wrapGeometry(cp, ctx) {
@@ -349,6 +367,9 @@
       return { children: { transform: `translate(${pad} ${pad})`, clip: { w: fw, h: fh, r: num(cp.radius, 1) / 100 * W }, inner: `translate(${((fw - W * sc) / 2).toFixed(2)} ${((fh - H * sc) / 2).toFixed(2)}) scale(${sc.toFixed(4)})` } }; }
     if (kind === 'paperkit' && (entry.preview || {}).style === 'polaroid') { const s = W / 652, mw = 620 * s, mh = 349 * s, cw = num(ctx.compW, 1920), ch = num(ctx.compH, 1080), sc = Math.max(mw / cw, mh / ch);
       return { children: { transform: `translate(${(16 * s).toFixed(2)} ${(16 * s).toFixed(2)})`, clip: { w: mw, h: mh, r: 0 }, inner: `translate(${((mw - cw * sc) / 2).toFixed(2)} ${((mh - ch * sc) / 2).toFixed(2)}) scale(${sc.toFixed(5)})` } }; }
+    if (kind === 'transition') { const s = transitionState(cp, ctx), g = (side, fade) => ({ transform: `translate(${W / 2} ${(H / 2 + side.ty / 100 * H).toFixed(2)}) scale(${side.s.toFixed(4)}) translate(${-W / 2} ${-H / 2})`, opacity: +(side.o * fade).toFixed(3) });
+      // the field is drawn over the exiting scene (and, in Shader Seam, over the entering one too); the preview stacks slots above it, so fade them by its opacity
+      return { from: g(s.from, 1 - s.field), to: g(s.to, s.st === 'seam' ? 1 - s.field : 1) }; }
     if (kind === 'drift') { const D = Math.max(1, num(ctx.layerDuration, 90)), sc = 1 + num(cp.grow, 0.035) * cl(f / D); return { children: { transform: `translate(${W / 2} ${H / 2}) scale(${sc.toFixed(5)}) translate(${-W / 2} ${-H / 2})` } }; }
     if (kind === 'stage') { const cs = cp.contentSize && cp.contentSize.width > 0 ? cp.contentSize : { width: W, height: H }, pw = W * 0.84, ph = pw * cs.height / cs.width;
       const keys = (Array.isArray(cp.moves) ? cp.moves : []).slice().sort((a, b) => a.at - b.at), pose = k => ({ x: cl(k.x ?? 0.5), y: cl(k.y ?? 0.5), zoom: k.zoom ?? 1 }); let P = { x: 0.5, y: 0.5, zoom: 1 };
@@ -896,6 +917,21 @@
           const hints = `${tx(1140, 506, 'commands', '#6B6B6B', 18, MONO, 'text-anchor="end"')}${tx(1140 - wM('commands', 18) - 8, 506, 'ctrl+p', '#EDEDED', 18, MONO, 'text-anchor="end" font-weight="700"')}${tx(1140 - wM('commands', 18) - 8 - wM('ctrl+p', 18) - 22, 506, 'agents', '#6B6B6B', 18, MONO, 'text-anchor="end"')}${tx(1140 - wM('commands', 18) - 8 - wM('ctrl+p', 18) - 22 - wM('agents', 18) - 8, 506, 'tab', '#EDEDED', 18, MONO, 'text-anchor="end" font-weight="700"')}`;
           return stage(`<g opacity="${lg.o.toFixed(3)}" transform="translate(0 ${(lg.ty + intro.ty * 0.4).toFixed(2)})">${logo}</g><g opacity="${bf.o.toFixed(3)}" transform="translate(0 ${(bf.ty + intro.ty * 0.6).toFixed(2)})">${around(640, 327, intro.sc, box)}</g><g opacity="${hf.o.toFixed(3)}" transform="translate(0 ${hf.ty.toFixed(2)})">${hints}</g>`); }
         return '';
+      }
+      case 'transition': { // remocn transition presentations: a stand-in for the shader field (the real ones are WebGL); the wrapped from/to scenes move per the presentation's own curves (wrapGeometry)
+        const s = transitionState(cp, ctx); if (s.phase !== 'during' || s.field <= 0.001) return `<rect width="${W}" height="${H}" fill="none"/>`;
+        const cols = Array.isArray(cp.colors) && cp.colors.length ? cp.colors.map(String) : ['#3a3a52', '#4a4a68', '#8f88ae'], back = esc(cp.colorBack || (s.st === 'seam' || s.st === 'spiral' ? '#07060b' : '#141318')), id = `${ctx.uid}_tr`, cx = W / 2, cy = H / 2, R = Math.hypot(W, H) / 2, k = s.extra.k || 0;
+        let g = `<rect width="${W}" height="${H}" fill="${back}"/>`;
+        if (s.st === 'grain') { const n = 7, zoom = num(cp.zoom, 2) * (0.9 + 0.25 * s.p); for (let i = 0; i < n * n; i++) { const x = ((i % n) + 0.5) / n * W, y = (Math.floor(i / n) + 0.5) / n * H, r = (W / n) * (0.25 + 0.5 * k) * zoom / 2; g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="${esc(cols[i % cols.length])}" style="filter:blur(${(k * 24).toFixed(1)}px)"/>`; } }
+        else if (s.st === 'wave') { for (let i = -2; i < 12; i++) { const y = ((i / 10) - k) * H; let d = `M0 ${y.toFixed(1)}`; for (let x = 0; x <= W; x += W / 16) d += ` L${x.toFixed(1)} ${(y + Math.sin(x / W * 6.28 * 1.5 + i) * H * 0.03).toFixed(1)}`; g += `<path d="${d} L${W} ${(y + H / 10).toFixed(1)} L0 ${(y + H / 10).toFixed(1)}Z" fill="${esc(cols[(i + 20) % cols.length])}" opacity="0.85" style="filter:blur(8px)"/>`; } }
+        else if (s.st === 'ripple' || s.st === 'spiral' || s.st === 'swirl') { const bands = s.st === 'swirl' ? Math.max(1, Math.round(num(cp.bandCount, 10))) : 12, zoom = s.st === 'ripple' ? k : s.st === 'spiral' ? k / 4 : 1;
+          for (let i = bands; i > 0; i--) { const r = R * 1.2 * i / bands * zoom; g += `<circle cx="${cx}" cy="${cy}" r="${Math.max(0, r).toFixed(1)}" fill="${esc(cols[i % cols.length])}"/>`; }
+          if (s.st !== 'ripple') g = `<g transform="rotate(${(s.st === 'swirl' ? k * 120 : s.p * 540).toFixed(1)} ${cx} ${cy})">${g}${Array.from({ length: s.st === 'spiral' ? Math.round(num(cp.spirals, 3)) : 4 }, (_, j) => `<path d="M${cx} ${cy} Q ${cx + R * 0.6} ${cy - R * 0.2} ${cx + R} ${cy + R * 0.4}" stroke="${esc(cols[j % cols.length])}" stroke-width="${(H * 0.06).toFixed(1)}" fill="none" opacity="0.7" transform="rotate(${j * 360 / (s.st === 'spiral' ? Math.round(num(cp.spirals, 3)) : 4)} ${cx} ${cy})"/>`).join('')}</g>`;
+          if (s.st === 'spiral' && s.extra.aperture > 0) g += `<circle cx="${cx}" cy="${cy}" r="${(R * 1.1 * s.extra.aperture).toFixed(1)}" fill="#000" opacity="0"/>`; }
+        else if (s.st === 'warp') { [[0.25, 0.3], [0.7, 0.35], [0.4, 0.75], [0.8, 0.8]].forEach(([x, y], i) => { g += `<ellipse cx="${(x * W + Math.sin(s.p * 6 + i) * W * 0.08 * k).toFixed(1)}" cy="${(y * H).toFixed(1)}" rx="${(W * 0.35).toFixed(1)}" ry="${(H * 0.3).toFixed(1)}" fill="${esc(cols[i % cols.length])}" style="filter:blur(${(40 + 40 * k).toFixed(0)}px)"/>`; }); }
+        else if (s.st === 'seam') { g += `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b1b4f"/><stop offset="0.45" stop-color="#b3447a"/><stop offset="0.7" stop-color="#f0a35c"/><stop offset="1" stop-color="#1b3b6f"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#${id})"/>`; for (let i = 0; i < 18; i++) g += `<path d="M${-W * 0.1} ${(i / 18 * H * 1.3).toFixed(1)} C ${W * 0.3} ${(i / 18 * H - H * 0.2).toFixed(1)}, ${W * 0.7} ${(i / 18 * H + H * 0.3).toFixed(1)}, ${W * 1.1} ${(i / 18 * H).toFixed(1)}" stroke="#fff" stroke-opacity="0.08" stroke-width="${(H * 0.02).toFixed(1)}" fill="none"/>`; }
+        const mask = s.st === 'spiral' && s.extra.aperture > 0 ? `<mask id="${id}_m"><rect width="${W}" height="${H}" fill="#fff"/><circle cx="${cx}" cy="${cy}" r="${((R + Math.min(W, H) * num(cp.softness, 0.12)) * s.extra.aperture).toFixed(1)}" fill="#000" style="filter:blur(${(Math.min(W, H) * 0.02).toFixed(0)}px)"/></mask>` : '';
+        return `${mask}<g opacity="${s.field.toFixed(3)}" ${mask ? `mask="url(#${id}_m)"` : ''}><svg width="${W}" height="${H}" overflow="hidden">${g}</svg></g>`;
       }
       case 'safezones': { // Social Safe Zones element: fixed 1080×1920 sample background + TikTok / Instagram Reels interface overlay
         const sx = W / 1080, sy = H / 1920, ui = cp.platform === 'tiktok' ? 'https://remotion.media/elements/social-safe-zones/tiktok-interface.png' : 'https://remotion.media/elements/social-safe-zones/instagram-reels-interface-v3.png';

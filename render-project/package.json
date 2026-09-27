@@ -9,6 +9,7 @@
     "still": "remotion still src/index.ts MasterScene out/frame.png"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "^0.0.81",
     "@react-three/fiber": "^9.3.0",
     "@remotion/captions": "4.0.526",
     "@remotion/cli": "4.0.526",
@@ -23,6 +24,7 @@
     "@remotion/sfx": "4.0.526",
     "@remotion/shapes": "4.0.526",
     "@remotion/three": "4.0.526",
+    "@remotion/transitions": "4.0.526",
     "@turf/turf": "^7.4.0",
     "@types/culori": "^4.0.1",
     "culori": "^4.0.2",
