@@ -8149,5 +8149,806 @@ window.CommunityManifest = [
       "kind": "inkunderline"
     },
     "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_rolling_number",
+    "componentName": "RollingNumber",
+    "name": "Rolling Number (remocn)",
+    "desc": "remocn • odometer: every digit place rolls at its own speed and lands exactly on the target over 80% of the layer • transparent",
+    "icon": "🔢",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/rolling-number",
+      "exportName": "RollingNumber",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "from": 0,
+        "to": 24813,
+        "fontSize": 180,
+        "color": "#171717",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Rolling Number (remocn) (whole clip) • count timed from the layer duration",
+        "items": [
+          {
+            "key": "from",
+            "label": "FROM (integer ≥ 0)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1000000000,
+            "step": 1
+          },
+          {
+            "key": "to",
+            "label": "TO (integer ≥ 0)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1000000000,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic5",
+      "style": "rolling"
+    },
+    "defaultDurationInFrames": 150,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_rolodex_flip",
+    "componentName": "RolodexFlip",
+    "name": "Rolodex Flip (remocn)",
+    "desc": "remocn • a word cycles through a list with a 3D rolodex card flip; the last value stays • transparent inline text",
+    "icon": "📇",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/rolodex-flip",
+      "exportName": "RolodexFlip",
+      "sizeMode": "none",
+      "omitProps": [
+        "fontSize",
+        "color",
+        "fontWeight",
+        "fontFamily"
+      ],
+      "styleMap": {
+        "fontSize": "fontSize",
+        "color": "color",
+        "fontWeight": "fontWeight",
+        "fontFamily": "fontFamily"
+      },
+      "layerStyle": {
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "fontFamily": "var(--font-geist-sans)"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "items": [
+          "button",
+          "dialog",
+          "command",
+          "tabs",
+          "chart-area"
+        ],
+        "from": 0,
+        "interval": 20,
+        "flipDuration": 10,
+        "fontSize": 96,
+        "fontWeight": 600,
+        "color": "#171717",
+        "fontFamily": "var(--font-geist-sans)"
+      }
+    },
+    "controls": [
+      {
+        "group": "Rolodex Flip (remocn) (whole clip) • centred in the box",
+        "items": [
+          {
+            "key": "items",
+            "label": "ITEMS (JSON array of strings)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "from",
+            "label": "FIRST FLIP AT (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "interval",
+            "label": "INTERVAL (frames per value)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "flipDuration",
+            "label": "FLIP FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic5",
+      "style": "rolodex"
+    },
+    "defaultDurationInFrames": 110,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_value_swap",
+    "componentName": "ValueSwap",
+    "name": "Value Swap (remocn)",
+    "desc": "remocn • swaps a value in place with a vertical slide at exact frames (before → after, status, price) • transparent inline text",
+    "icon": "🔃",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/value-swap",
+      "exportName": "ValueSwap",
+      "sizeMode": "none",
+      "omitProps": [
+        "fontSize",
+        "color",
+        "fontWeight",
+        "fontFamily"
+      ],
+      "styleMap": {
+        "fontSize": "fontSize",
+        "color": "color",
+        "fontWeight": "fontWeight",
+        "fontFamily": "fontFamily"
+      },
+      "layerStyle": {
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "fontFamily": "var(--font-geist-sans)"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "values": [
+          "$99",
+          "$199"
+        ],
+        "at": [
+          45
+        ],
+        "duration": 10,
+        "distance": 18,
+        "direction": "up",
+        "fontSize": 96,
+        "fontWeight": 600,
+        "color": "#171717",
+        "fontFamily": "var(--font-geist-sans)"
+      }
+    },
+    "controls": [
+      {
+        "group": "Value Swap (remocn) (whole clip) • centred in the box",
+        "items": [
+          {
+            "key": "values",
+            "label": "VALUES (JSON array, 2+)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "at",
+            "label": "SWAP FRAMES (JSON array, one per swap)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "duration",
+            "label": "SWAP FRAMES LONG",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "distance",
+            "label": "SLIDE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "direction",
+            "label": "DIRECTION",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "up",
+                "Up"
+              ],
+              [
+                "down",
+                "Down"
+              ]
+            ]
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic5",
+      "style": "swap"
+    },
+    "defaultDurationInFrames": 100,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_infinite_marquee",
+    "componentName": "InfiniteMarquee",
+    "name": "Infinite Marquee (remocn)",
+    "desc": "remocn • continuously scrolling horizontal text strip that loops seamlessly (filled or outlined) • transparent",
+    "icon": "📜",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/infinite-marquee",
+      "exportName": "InfiniteMarquee",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "ship · build · animate · ",
+        "fontSize": 180,
+        "color": "#171717",
+        "fontWeight": 900,
+        "pixelsPerFrame": 6,
+        "stroke": false,
+        "strokeColor": "#171717",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Infinite Marquee (remocn) (whole clip) • loops for the whole layer",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT (include trailing spacing)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "pixelsPerFrame",
+            "label": "SPEED px/frame",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 0.5
+          },
+          {
+            "key": "stroke",
+            "label": "OUTLINED",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "strokeColor",
+            "label": "STROKE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic5",
+      "style": "marquee"
+    },
+    "defaultDurationInFrames": 180,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_perspective_marquee",
+    "componentName": "PerspectiveMarquee",
+    "name": "Perspective Marquee (remocn)",
+    "desc": "remocn • 3D-tilted infinite marquee with depth-of-field blur and edge fades in fadeColor • pair with a matching dark background",
+    "icon": "🎞️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/perspective-marquee",
+      "exportName": "PerspectiveMarquee",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "items": [
+          "Vercel",
+          "Linear",
+          "Stripe",
+          "Figma",
+          "Notion",
+          "Raycast",
+          "Arc",
+          "Cursor"
+        ],
+        "fontSize": 84,
+        "color": "#fafafa",
+        "fontWeight": 700,
+        "pixelsPerFrame": 2,
+        "rotateY": -28,
+        "rotateX": 8,
+        "perspective": 1200,
+        "fadeColor": "#050505",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Perspective Marquee (remocn) (whole clip) • 1280×720 layout at scale 1.5; edges fade into fadeColor",
+        "items": [
+          {
+            "key": "items",
+            "label": "ITEMS (JSON array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "pixelsPerFrame",
+            "label": "SPEED px/frame",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "rotateY",
+            "label": "ROTATE Y°",
+            "kind": "range",
+            "keyframable": false,
+            "min": -80,
+            "max": 80,
+            "step": 1
+          },
+          {
+            "key": "rotateX",
+            "label": "ROTATE X°",
+            "kind": "range",
+            "keyframable": false,
+            "min": -60,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "perspective",
+            "label": "PERSPECTIVE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 200,
+            "max": 4000,
+            "step": 10
+          },
+          {
+            "key": "fadeColor",
+            "label": "EDGE FADE COLOR (= background)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic5",
+      "style": "pmarquee"
+    },
+    "defaultDurationInFrames": 240
+  },
+  {
+    "id": "remocn_matrix_decode",
+    "componentName": "MatrixDecode",
+    "name": "Matrix Decode (remocn)",
+    "desc": "remocn • random glyph scramble resolves left-to-right into the target text over revealDuration • paints a white background",
+    "icon": "🧬",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/matrix-decode",
+      "exportName": "MatrixDecode",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "ACCESS GRANTED",
+        "charset": "!@#$%^&*()_+-=<>?/\\|",
+        "fontSize": 108,
+        "color": "#22c55e",
+        "fontWeight": 600,
+        "revealDuration": 60,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Matrix Decode (remocn) (whole clip) • paints its own white background",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "charset",
+            "label": "SCRAMBLE CHARSET",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "revealDuration",
+            "label": "REVEAL FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic5",
+      "style": "matrix"
+    },
+    "defaultDurationInFrames": 90,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_rgb_glitch_text",
+    "componentName": "RGBGlitchText",
+    "name": "RGB Glitch Text (remocn)",
+    "desc": "remocn • three RGB-offset copies jitter for a few frames (glitchAt, glitchDuration) — a deterministic chromatic glitch • paints a #fafafa background",
+    "icon": "📺",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/rgb-glitch-text",
+      "exportName": "RGBGlitchText",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "SYSTEM",
+        "fontSize": 144,
+        "color": "#171717",
+        "fontWeight": 700,
+        "glitchAt": 20,
+        "glitchDuration": 8,
+        "intensity": 9,
+        "seed": "glitch",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "RGB Glitch Text (remocn) (whole clip) • paints its own #fafafa background",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "glitchAt",
+            "label": "GLITCH AT (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "glitchDuration",
+            "label": "GLITCH FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "seed",
+            "label": "SEED",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic5",
+      "style": "glitch"
+    },
+    "defaultDurationInFrames": 90,
+    "fullFrame": true
   }
 ];

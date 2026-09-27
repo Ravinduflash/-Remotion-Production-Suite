@@ -60,6 +60,10 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Per-layer CSS variables (`external.cssVars`), from 2026-09-27:** a manifest entry can set CSS custom properties on its own layer only.
   - **Why:** Kinetic Center Build measures word widths with `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto` but renders with `var(--font-geist-sans)`. Our global Geist stack resolves to Inter here, which is wider than the measured Segoe UI, so the fixed 10 px gaps vanished ("Wordspushleft.").
   - **The fix:** its entry sets `--font-geist-sans` to the measuring stack, so it renders in the font it measured with. The source file is untouched, and the global Geist mapping is unchanged for everything else.
+- **Inline components (`external.layerStyle` + `styleMap`), from 2026-09-27:** RolodexFlip and ValueSwap render an inline `span` that inherits the surrounding typography, which a bare layer box doesn't provide.
+  - `layerStyle` puts a constant style on the layer box: here, flex centring plus the Geist font stack.
+  - `styleMap` maps `fontSize`, `color`, `fontWeight` and `fontFamily` from the inspector onto the span's own `style` prop, which the components merge onto their wrapper. `omitProps` stops them also being passed as props.
+- **Deterministic randomness in previews:** `remotionRandom(seed)` in catalog.js is a port of Remotion's `random()` (mulberry32 over its 32-bit string hash). Previews of components that call `random()`, such as Matrix Decode's scramble and RGB Glitch's jitter, show exactly the glyphs and offsets the render does.
 - **Wrapper layers, from 2026-09-27:** a registered component whose `external.children` is set can render other layers inside it.
   - **How to use it:** call `update_asset { assetId, wraps: [ids] }`, or `{ slot: ids[] }` for slotted layouts. Pass `null` to clear. The Inspector's Layer timing group has a WRAPS LAYERS field.
   - **What the renderer does:** wrapped layers are skipped at top level and drawn on a composition-sized canvas passed as the prop (default `children`).
@@ -1025,6 +1029,37 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Nothing at frame 8, which is still inside the first pose.
   - Partial strokes at frames 12 and 16, then the full stroke with a dry, grainy tail at 30.
   - Custom: #1d4ed8, seed "hand-2", thickness 22, release 0.05.
+
+### Rolling Number, Rolodex Flip, Value Swap, Infinite Marquee, Perspective Marquee, Matrix Decode and RGB Glitch Text (remocn)
+
+- **Catalog ids:** `remocn_rolling_number`, `remocn_rolodex_flip`, `remocn_value_swap`, `remocn_infinite_marquee`, `remocn_perspective_marquee`, `remocn_matrix_decode`, `remocn_rgb_glitch_text`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT. Rolling Number also loads `@remotion/google-fonts/JetBrainsMono`.
+- **Size:**
+  - Full frame: Rolling Number (font 180), Infinite Marquee (180, 6 px per frame), Matrix Decode (108) and RGB Glitch (144, intensity 9).
+  - **Perspective Marquee is a 1280×720 box at scale 1.5**, because its depth blur is normalised to a hard-coded 640 px half-width.
+  - **Rolodex Flip and Value Swap are inline**, centred by `layerStyle`; see the pipeline note. Font 96.
+- **Backgrounds:** **Matrix Decode hard-codes white and RGB Glitch hard-codes #fafafa.** Perspective Marquee paints only edge fades in `fadeColor`, so put a matching background (#050505) under it. The rest are transparent.
+- **Controls, all whole clip:**
+  - `items`, `values` and `at` are JSON arrays.
+  - Value Swap's `direction` is a select (up or down); Infinite Marquee's `stroke` is a checkbox.
+  - Everything else is as documented.
+- **Preview:** one shared kind, `kinetic5`, with exact ports including `remotionRandom()`.
+- **Timing:**
+  - **Rolling Number counts over 80 % of the layer duration** (an out-poly-4 ease), then holds. Integers ≥ 0 only; counts down when `to` < `from`. Layer 150.
+  - **Rolodex Flip:** flips every `interval` (20) frames starting at `from` (0, so the first flip begins at once); the last value stays. Layer 110.
+  - **Value Swap:** swaps at the frames in `at`, each taking `duration` (10) frames. Layer 100.
+  - Both marquees loop for the whole layer.
+  - Matrix Decode resolves left to right over `revealDuration` (60) frames.
+  - RGB Glitch jitters over `glitchAt` to `glitchAt` + `glitchDuration` (frames 20 to 28).
+- **Verified:** 2026-09-27, [remocn-kinetic5-contact.png](renders/remocn-kinetic5-contact.png):
+  - Odometer 10,378 → 21,940 → 24 813, and a countdown from 24,813 (frame 50: about 3,973).
+  - Rolodex button → dialog → tabs → chart-area.
+  - Swap $99 → $199, and a chain Draft → In review → Shipped.
+  - Filled and outlined marquees.
+  - Perspective Marquee on #050505.
+  - Matrix "ACC%@?…" → "ACCESS GRANTED".
+  - SYSTEM glitching at frames 22 and 24.
+  - The first countdown still failed once, with an empty log, and passed on re-run; most likely a cold font fetch.
 
 ### Typewriter Text
 

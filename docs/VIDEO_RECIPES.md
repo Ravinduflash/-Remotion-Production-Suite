@@ -33,6 +33,12 @@ All timings are at 30 fps and 1920×1080 (`set_aspect 16:9`). Put a background l
 | Playful phrase morphs | `remocn_kinetic_morph_text` | Own background |
 | Beat-synced display word | `remocn_kinetic_warp` | Tune `keyframeStride` to the tempo |
 | Hand-drawn underline under a URL / stat | `remocn_ink_underline` | Set `delay` to when the text lands; box width = stroke length |
+| The number beat, counting | `remocn_rolling_number` (odometer, lands exactly) | Counts over 80% of the layer |
+| "Any component, same command" cycling | `remocn_rolodex_flip` | Inline, JSON items |
+| Before → after value / price | `remocn_value_swap` | Swap frames in `at` |
+| Ambient ticker band | `remocn_infinite_marquee`, `remocn_perspective_marquee` (3D, dark) | Loops |
+| Hacker / terminal reveal | `remocn_matrix_decode` | White background |
+| Glitch accent on a title | `remocn_rgb_glitch_text` | #fafafa background |
 | Keyword emphasis in a sentence | `remocn_marker_highlight` (painted block), `remocn_inline_highlight` (colour only) | White background |
 | Word-by-word body line | `remocn_staggered_fade_up` | White background |
 | Stacked lines with a matching exit | `remocn_mask_reveal_up` | Transparent |
@@ -254,7 +260,7 @@ These are remocn's house rules, adapted to this project. Sources: [Craft](https:
 
 ## Gaps: remocn components not in the catalog
 
-**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`), `chat-to-preview-layout`, `inline-word-roll`, `soft-blur-in`, `type-fossil`, `shader-text-reveal`, `per-character-rise`, `bottom-up-letters`, `top-down-letters`, `spring-scale-in`, `micro-scale-fade`, `scale-down-fade`, `blur-out-up`, `focus-blur-resolve`, `line-by-line-slide`, `per-word-crossfade`, `word-stream`, `word-push`, `sheen-slide-in`, `squeeze-in`, `fog-rise`, `caret-swap`, `zoom-words`, `centered-word-build`, `inline-pill-takeover`, `typed-split-wipe`, `shadow-sweep-text`, `outline-fill-track-text`, `gradient-scale-cut-text`, `rush-type`, `fade-through`, `shared-axis-y`, `shared-axis-z`, `strikethrough-replace`, `short-slide-right`, `kinetic-center-build`, `kinetic-morph-text`, `kinetic-warp`, `staggered-fade-up`, `mask-reveal-up`, `tracking-in`, `inline-highlight`, `marker-highlight` and `ink-underline` (with `brush` + `stop-motion`), as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
+**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`), `chat-to-preview-layout`, `inline-word-roll`, `soft-blur-in`, `type-fossil`, `shader-text-reveal`, `per-character-rise`, `bottom-up-letters`, `top-down-letters`, `spring-scale-in`, `micro-scale-fade`, `scale-down-fade`, `blur-out-up`, `focus-blur-resolve`, `line-by-line-slide`, `per-word-crossfade`, `word-stream`, `word-push`, `sheen-slide-in`, `squeeze-in`, `fog-rise`, `caret-swap`, `zoom-words`, `centered-word-build`, `inline-pill-takeover`, `typed-split-wipe`, `shadow-sweep-text`, `outline-fill-track-text`, `gradient-scale-cut-text`, `rush-type`, `fade-through`, `shared-axis-y`, `shared-axis-z`, `strikethrough-replace`, `short-slide-right`, `kinetic-center-build`, `kinetic-morph-text`, `kinetic-warp`, `staggered-fade-up`, `mask-reveal-up`, `tracking-in`, `inline-highlight`, `marker-highlight`, `ink-underline` (with `brush` + `stop-motion`), `rolling-number`, `rolodex-flip`, `value-swap`, `infinite-marquee`, `perspective-marquee`, `matrix-decode` and `rgb-glitch-text`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
 

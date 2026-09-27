@@ -42,6 +42,8 @@ export interface ExternalDescriptor {
   children?: { prop?: string; fit?: 'full' | 'backdrop' | 'stage' | 'slot'; slots?: string[] };
   /** CSS custom properties set on this layer only, e.g. { '--font-geist-sans': 'Segoe UI, sans-serif' } so a component renders in the font it measures with. */
   cssVars?: Record<string, string>;
+  /** Constant style on the layer box, e.g. { display: 'flex', alignItems: 'center', justifyContent: 'center' } to centre an inline component (remocn RolodexFlip / ValueSwap). */
+  layerStyle?: Record<string, any>;
 }
 
 export interface SceneAsset {
@@ -219,7 +221,7 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
         else if (Array.isArray(asset.wraps) && asset.wraps.length) props[spec.prop || 'children'] = canvas(asset.wraps, spec.fit || 'full');
       }
       return (
-        <div key={asset.id} style={{ ...(asset.external && asset.external.cssVars), position: 'absolute', left: p.baseX, top: p.baseY, width: cp.width, height: cp.height, opacity: p.opacity, transform: `rotate(${p.rotation}deg) scale(${p.scale})`, transformOrigin: '0 0' }}>
+        <div key={asset.id} style={{ ...(asset.external && asset.external.layerStyle), ...(asset.external && asset.external.cssVars), position: 'absolute', left: p.baseX, top: p.baseY, width: cp.width, height: cp.height, opacity: p.opacity, transform: `rotate(${p.rotation}deg) scale(${p.scale})`, transformOrigin: '0 0' }}>
           {asset.startFrame || asset.durationInFrames ? (
             <Sequence from={asset.startFrame || 0} durationInFrames={asset.durationInFrames} layout="none" name={asset.name}>
               <C {...props} />
