@@ -1,6 +1,6 @@
 # Video recipes
 
-These are storyboards for common product videos. Each beat is mapped to components already in this studio's catalog, so an agent can build the timeline through MCP.
+These are storyboards for six common product videos. Each beat is mapped to components already in this studio's catalog, so an agent can build the timeline through MCP.
 
 The structure comes from the remocn.dev guides, linked in each section. Those guides assume remocn's own components, which this project does not have yet; see [Gaps](#gaps-remocn-components-not-in-the-catalog). The summaries here are my own. Read the originals for their full prompts and directing tips.
 
@@ -87,6 +87,21 @@ Source: <https://remocn.dev/docs/guides/product-demo>. One flow, start to finish
 | Payoff | 1200–1350 | Keep the final screen, and add the payoff `text_card` |
 | Close | 1350–1500 | `community_typewriter` with the install command or URL, then the logo |
 
+## Launch video, about 35 s (1050 frames)
+
+Source: <https://remocn.dev/docs/guides/launch-video>. The full launch video: pain, reveal, tagline, positioning, a six-cut feature montage, value, install and outro. It is the Feature announcement's bigger sibling, selling the whole product rather than one release.
+
+| Beat | Frames | Build |
+|---|---|---|
+| Two pain lines | 0–120 | Two `text_card`s, 60 frames each. Keyframe scale from 1.08 to 1 and fade in; this replaces remocn's `scale-down-fade`. |
+| Reveal "Meet …" | 120–210 | `text_card`, uncovered by `community_shine` or `community_tear`. remocn uses `shader-swirl`. |
+| Tagline | 210–300 | `text_card`, keyframing `baseX` from -80 to 0 with opacity. This replaces `short-slide-right`. |
+| Positioning "Like X, for Y" | 300–390 | `community_basic_captions` or `community_popping_word_captions`, with `build_captions` to show one word at a time. This replaces `kinetic-center-build`. |
+| Six-cut montage | 390–690 | Six 50-frame cuts, each a different full-frame background plus a label `text_card`. Backgrounds: `community_liquid_contours`, `community_moving_waves`, `community_moving_zigzags`, `community_rotating_starburst`, `community_paper_texture`, `community_notebook_paper`. Give each background `startFrame` and `durationInFrames` so the cuts are hard. |
+| Three value claims | 690–840 | Staggered `text_card`s |
+| Install | 840–960 | A short title `text_card`, then `community_typewriter` with the command |
+| Outro | 960–1050 | `remotion_img` logo with a closing `text_card`. remocn draws the logo on over `shader-smoke-ring`, and there's no stand-in for that here. |
+
 ## Gaps: remocn components not in the catalog
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
@@ -97,5 +112,8 @@ These guides name remocn components that aren't registered here. They install wi
 | `shader-swirl` | The swirl cover at the teaser's name reveal | Shine or Tear |
 | `line-by-line-slide` | Value claims stacking line by line | Staggered `text_card`s |
 | Terminal, and remocn's text animations | Self-typing command line, varied reel motion | `community_typewriter`, keyframed `text_card`s |
+| `scale-down-fade`, `short-slide-right`, `kinetic-center-build` | Launch-video text entrances | Keyframed `text_card` scale, position and opacity; word-by-word captions |
+| `color-panels`, `warp`, `mesh-gradient`, `voronoi`, `metaballs`, `god-rays` | The six montage backgrounds | The six background Elements listed in the Launch video recipe |
+| `shader-smoke-ring`, dithering cover | The outro bloom, and the transitions between beats | None yet; the plan uses plain cuts and fades |
 
 **Style from the guides:** a warm dark background (#141318), off-white text, one accent colour and the Manrope font. Manrope isn't loaded in the catalog yet, so `text_card` falls back to its sans font.
