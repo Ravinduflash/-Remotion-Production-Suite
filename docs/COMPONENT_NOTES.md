@@ -49,6 +49,10 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - `registryDependencies` are fetched the same way; Stage needs `scene-motion.ts`.
   - The license is in [licenses/remocn-LICENSE.txt](licenses/remocn-LICENSE.txt), MIT, © 2026 Remocn.
   - **remocn is laid out for 1280×720.** Components that size by `useVideoConfig().width` (Backdrop, Stage) are full-frame at 1920×1080. Fixed-px layouts (Chat to Preview) use a 1280×720 box at layer scale 1.5.
+- **Geist font variables:** remocn components set `fontFamily: "var(--font-geist-sans), -apple-system, …, sans-serif"`, taken from remocn's Next.js template.
+  - **The problem:** when the variable is undefined, CSS treats the whole declaration as invalid at computed-value time, so the text falls back to the browser's **serif** default rather than the listed sans fonts. Soft Blur In and the Chat to Preview placeholders first rendered in serif this way.
+  - **The fix:** SceneRenderer's root now defines `--font-geist-sans` (Geist, Inter, Segoe UI, Arial, sans-serif) and `--font-geist-mono` (Geist Mono, JetBrains Mono, Consolas, monospace).
+  - Geist itself is not loaded; `@remotion/google-fonts` in 4.0.526 has no Geist. Inter or Segoe UI stands in.
 - **Wrapper layers, from 2026-09-27:** a registered component whose `external.children` is set can render other layers inside it.
   - **How to use it:** call `update_asset { assetId, wraps: [ids] }`, or `{ slot: ids[] }` for slotted layouts. Pass `null` to clear. The Inspector's Layer timing group has a WRAPS LAYERS field.
   - **What the renderer does:** wrapped layers are skipped at top level and drawn on a composition-sized canvas passed as the prop (default `children`).
@@ -774,6 +778,68 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Frame 100: the chat shrunk, and the preview placeholder in.
   - Frame 100 with a `remotion_img` in the preview slot: the image replaces the placeholder.
 - **Notes:** the placeholders have no background of their own around the columns (`check_scene` warns `no_background`), so put a background layer under it.
+
+### Inline Word Roll (remocn)
+
+- **Catalog id:** `remocn_inline_word_roll`
+- **File:** `inline-word-roll.tsx`, from remocn `inline-word-roll`, verbatim, MIT
+- **Size:** full frame, transparent. The line auto-fits within 84 % of the composition width.
+- **Controls, all whole clip:**
+  - `prefix` (stays put), `text` (words separated by `|` or new lines, multiline control) and `suffix` (rolls with each word).
+  - `fontSize`: 90 by default here. remocn's 60 is for 1280×720, so it's scaled 1.5× for 1080p.
+  - `fontFamily`, `fontWeight`, `color`.
+  - `interval` (12), `acceleration` (0.9, clamped 0.5 to 1) and `transitionFrames` (6).
+- **Preview:** `wordroll`. It uses the same switch schedule as `getInlineWordRollState`; word widths are estimated.
+- **Timing:** the default nine words finish at frame 75. Here `defaultDurationInFrames` is 105, adding a 30-frame hold. More words, a slower `interval` or `acceleration` 1 make it longer.
+- **Verified:** 2026-09-27, [remocn-type-contact.png](renders/remocn-type-contact.png) rows 1 and 2:
+  - "Looking for leads?" at frame 8, "appointments?" at 40, and "conversions?" at 90.
+  - Custom: "Built for whole teams." in #e8ef9b.
+- **Notes:** it measures fonts with `document.fonts` and `delayRender` before showing, so load custom font faces before use.
+
+### Soft Blur In (remocn)
+
+- **Catalog id:** `remocn_soft_blur_in`
+- **File:** `soft-blur-in.tsx`, from remocn `soft-blur-in`, verbatim, MIT
+- **Size:** full frame, transparent, with the text centred in the box
+- **Controls, all whole clip:** `text`, `blur` (12), `fontSize` (108 here; remocn's 72 is scaled 1.5×), `fontWeight`, `color` (#171717, **dark**) and `speed`
+- **Preview:** `softblur`, the same per-character opacity, blur and rise in HTML
+- **Timing:** each character takes 27 frames with a 1-frame stagger, so the reveal lasts the character count + 27 frames. `defaultDurationInFrames: 60`.
+- **Verified:** 2026-09-27, contact sheet row 2, **wrapped in a white `remocn_backdrop`**, remocn's own pairing: "Thin…" blurring in at frame 6, and "Think different." sharp at frame 50.
+- **Notes:**
+  - It is an entrance only, with no exit.
+  - The dark default colour needs a light background.
+  - It uses `--font-geist-sans`; see the pipeline note.
+
+### Type Fossil (remocn)
+
+- **Catalog id:** `remocn_type_fossil`
+- **File:** `type-fossil.tsx`, from remocn `type-fossil`, verbatim, MIT
+- **Size:** full frame. **It owns its background** (`backgroundColor` #eeeae2, or transparent). A 1280×720 SVG scales to fit, using `meet`.
+- **Controls, all whole clip:**
+  - `text` (the final word) and `drafts` (up to 12, `|` or new lines).
+  - `layers` (4 to 24), `depth` (50 to 150) and `fontSize` (in 1280×720 units, no scaling needed).
+  - `fontWeight`, `color`, `accentColor` (the contours), `backgroundColor` and `speed`.
+- **Preview:** `fossil`: offset contour copies behind the word, the draft schedule, and the collapse
+- **Timing:**
+  - Drafts wipe every 18 frames from frame 20, each wipe taking 8 frames.
+  - The collapse starts at 20 + (drafts − 1) × 18 + 16 and lasts 48 frames, followed by a 34-frame hold.
+  - The default six drafts come to 208 frames (`defaultDurationInFrames`). Each extra draft adds 18 frames. For three drafts, 154 frames is enough.
+- **Verified:** 2026-09-27, contact sheet rows 3 and 4:
+  - Default: "Maybe" with pink contours at frame 30, "Form" compressing at 150, and the clean imprint at 200.
+  - Custom: "Clarity" with the drafts "What if | Less | Closer", 20 layers, depth 110 and remocn's dark palette. "Closer" at frame 45, "Clarity" settled at 150.
+
+### Shader Text Reveal (remocn)
+
+- **Catalog id:** `remocn_shader_text_reveal`
+- **File:** `shader-text-reveal.tsx`, from remocn `shader-text-reveal`, verbatim, MIT, including the original OpenShaders hero-field and halftone GLSL
+- **Size:** full frame, a transparent WebGL2 canvas at the composition size. Text fits 72 % of the width, capped at 58 % of the height.
+- **Controls, all whole clip:** `text` (space-separated words play one at a time; new lines keep phrases together), `fontSize` (400 max), `fontFamily`, `fontWeight`, `wordDuration` (30, at least 12) and `intensity` (0 to 1; 0 gives white letters only)
+- **Preview:** `shadertext`, a flat magenta-to-violet gradient fading to white. The halftone material and the exit wave appear only in the render.
+- **Timing:** N words need at least (N − 1) × wordDuration + 0.6 × wordDuration frames. The default two words fit `defaultDurationInFrames: 75` with a hold. The last word stays.
+- **Verified:** 2026-09-27, contact sheet rows 4 and 5, over a black `remocn_backdrop`: "Your" at frame 12 with a lilac tint, then "product" at 45 and 70.
+  - On this machine's software WebGL, the material shows mostly as a soft tint.
+  - A frame took about 40 to 55 seconds. `renderTimeoutMs: 120000`.
+- **Notes:** it requires WebGL2; shader or font errors fail the render explicitly with `cancelRender`.
 
 ### Typewriter Text
 

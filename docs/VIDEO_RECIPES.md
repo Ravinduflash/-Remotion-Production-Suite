@@ -14,6 +14,8 @@ All timings are at 30 fps and 1920×1080 (`set_aspect 16:9`). Put a background l
 | Screenshot or page on a 3D set | `remocn_stage` wrapping a `remotion_img` | Camera `moves`, shake, lighting |
 | Agent chat to result | `remocn_chat_to_preview` (slots `chat`, `preview`) | Placeholders when a slot is empty |
 | Quiet moving background | `community_liquid_contours`, `community_moving_waves`, `community_paper_texture` | These stand in for remocn's `shader-simplex-noise`. Paper Texture suits dark text. |
+| Premium headline entrances | `remocn_soft_blur_in` (per-character blur-in), `remocn_shader_text_reveal` (shader-filled words), `remocn_type_fossil` (drafts → final word) | remocn; see the notes for backgrounds and durations |
+| Prefix + rotating word ("Looking for leads / customers / …") | `remocn_inline_word_roll` | A good fit for the hook's "three moments" or the breadth beat |
 | Headline or single line | `text_card` | `text` + `subtitle`, font size, colour and alignment. Keyframe opacity and scale for the entrance. |
 | Line that types itself (terminal, URL, CTA) | `community_typewriter` | `text`, `charsPerFrame`, `color`, `cursorColor` |
 | Words swapping in one slot | `community_spinning_text_wheel` | `items`, one per line. **The first item is where it lands.** It uses dark text, so give it a light background. |
@@ -227,7 +229,7 @@ These are remocn's house rules, adapted to this project. Sources: [Craft](https:
 
 ## Gaps: remocn components not in the catalog
 
-**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`) and `chat-to-preview-layout`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
+**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`), `chat-to-preview-layout`, `inline-word-roll`, `soft-blur-in`, `type-fossil` and `shader-text-reveal`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
 

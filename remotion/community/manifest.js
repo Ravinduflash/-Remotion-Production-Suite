@@ -3279,5 +3279,431 @@ window.CommunityManifest = [
       "kind": "chatpreview"
     },
     "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_inline_word_roll",
+    "componentName": "InlineWordRoll",
+    "name": "Inline Word Roll (remocn)",
+    "desc": "remocn • fixed prefix, the changing word rolls up through a masked slot, switches accelerate, line recentres • transparent",
+    "icon": "🎰",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/inline-word-roll",
+      "exportName": "InlineWordRoll",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "prefix": "Looking for",
+        "text": "leads | customers | subscribers | appointments | demos | quotes | registrants | trials | conversions",
+        "suffix": "?",
+        "fontSize": 90,
+        "fontFamily": "Arial, Helvetica, sans-serif",
+        "fontWeight": 400,
+        "color": "#f5f5f5",
+        "interval": 12,
+        "acceleration": 0.9,
+        "transitionFrames": 6
+      }
+    },
+    "controls": [
+      {
+        "group": "Copy (whole clip)",
+        "items": [
+          {
+            "key": "prefix",
+            "label": "PREFIX (stays put)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "text",
+            "label": "WORDS (separate with | or new lines)",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "suffix",
+            "label": "SUFFIX (rolls with each word)",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Type & timing (whole clip)",
+        "items": [
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (auto-fits 84% width)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "interval",
+            "label": "FIRST INTERVAL (frames)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "acceleration",
+            "label": "ACCELERATION (0.5–1, 1 = steady)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "transitionFrames",
+            "label": "ROLL FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "wordroll"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 105
+  },
+  {
+    "id": "remocn_shader_text_reveal",
+    "componentName": "ShaderTextReveal",
+    "name": "Shader Text Reveal (remocn)",
+    "desc": "remocn • WebGL2: each word fills with the OpenShaders magenta-violet halftone material, settles to white, then a dark wave removes it • transparent",
+    "icon": "✨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-text-reveal",
+      "exportName": "ShaderTextReveal",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "Your product",
+        "fontSize": 400,
+        "fontFamily": "Arial, sans-serif",
+        "fontWeight": 500,
+        "wordDuration": 30,
+        "intensity": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Copy (whole clip)",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT (space = word by word; new lines keep phrases)",
+            "kind": "multiline",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Look & timing (whole clip)",
+        "items": [
+          {
+            "key": "fontSize",
+            "label": "MAX FONT SIZE (fits 72% width, 58% height)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 40,
+            "max": 800,
+            "step": 1
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "wordDuration",
+            "label": "FRAMES PER WORD (≥ 12)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "intensity",
+            "label": "MATERIAL INTENSITY (0 = white only)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shadertext"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 75,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_type_fossil",
+    "componentName": "TypeFossil",
+    "name": "Type Fossil (remocn)",
+    "desc": "remocn • word with layered offset contours revises through drafts, then compresses into a clean imprint • owns its background",
+    "icon": "🪨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/type-fossil",
+      "exportName": "TypeFossil",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "Form",
+        "drafts": "Idea | Maybe | Try | Almost | Again | Closer",
+        "layers": 16,
+        "depth": 100,
+        "fontSize": 220,
+        "fontWeight": 600,
+        "color": "#302b26",
+        "accentColor": "#a800b7",
+        "backgroundColor": "#eeeae2",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Copy (whole clip)",
+        "items": [
+          {
+            "key": "text",
+            "label": "FINAL TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "drafts",
+            "label": "DRAFTS (| or new lines, up to 12; each adds 18 frames)",
+            "kind": "multiline",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Look (whole clip)",
+        "items": [
+          {
+            "key": "layers",
+            "label": "CONTOUR LAYERS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 4,
+            "max": 24,
+            "step": 1
+          },
+          {
+            "key": "depth",
+            "label": "DEPTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 50,
+            "max": 150,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "MAX FONT SIZE (1280×720 units)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 40,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "TEXT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "CONTOUR COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "fossil"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 208
+  },
+  {
+    "id": "remocn_soft_blur_in",
+    "componentName": "SoftBlurIn",
+    "name": "Soft Blur In (remocn)",
+    "desc": "remocn • per-character fade-in with blur → sharp and a small rise (entrance only) • dark text, transparent; pair with Backdrop",
+    "icon": "🌫️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/soft-blur-in",
+      "exportName": "SoftBlurIn",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "Think different.",
+        "blur": 12,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Soft Blur In (whole clip)",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "blur",
+            "label": "START BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "softblur"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
   }
 ];

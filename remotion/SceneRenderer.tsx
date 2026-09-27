@@ -231,7 +231,9 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
   };
 
   return (
-    <AbsoluteFill style={{ backgroundColor: scene.background || '#0a0a0f' }}>
+    // remocn components use var(--font-geist-sans/-mono) from their Next.js template. Left undefined, the whole font-family
+    // declaration is invalid and the text falls back to the browser's serif default, so give the variables a sans/mono stack.
+    <AbsoluteFill style={{ backgroundColor: scene.background || '#0a0a0f', ['--font-geist-sans' as any]: 'Geist, Inter, "Segoe UI", Arial, sans-serif', ['--font-geist-mono' as any]: '"Geist Mono", "JetBrains Mono", Consolas, monospace' }}>
       {renderLayers(layers, W, H, new Set())}
 
       {/* 3D layers */}
