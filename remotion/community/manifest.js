@@ -2751,5 +2751,182 @@ window.CommunityManifest = [
       "style": "marker"
     },
     "defaultDurationInFrames": 60
+  },
+  {
+    "id": "community_youtube_comment",
+    "componentName": "YouTubeCommentHighlight",
+    "name": "YouTube Comment Highlight",
+    "desc": "Remotion Elements • dark YouTube comment card springs up (0–48), sways in 3D, drops away (131–179) • HtmlInCanvas avatar",
+    "icon": "💭",
+    "external": {
+      "importPath": "./community/YouTubeCommentHighlight",
+      "exportName": "YouTubeCommentHighlight",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 400,
+      "baseY": 360,
+      "customProperties": {
+        "width": 1120,
+        "height": 360
+      }
+    },
+    "controls": [
+      {
+        "group": "YouTube Comment Highlight • fixed 1120×360, comment + avatar hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "ytcomment"
+    },
+    "defaultDurationInFrames": 180
+  },
+  {
+    "id": "community_youtube_end_card",
+    "componentName": "YouTubeEndCard",
+    "name": "YouTube End Card",
+    "desc": "Remotion Elements • light full-frame end screen: subscribe CTA, social handles, two thumbnail slots for YouTube end-screen videos",
+    "icon": "🔚",
+    "external": {
+      "importPath": "./community/YouTubeEndCard",
+      "exportName": "YouTubeEndCard",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "YouTube End Card • full frame, built for 1920×1080; handles hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "endcard"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "community_youtube_subscribe_nudge",
+    "componentName": "YouTubeSubscribeNudge",
+    "name": "YouTube Subscribe Nudge",
+    "desc": "Remotion Elements • channel card; cursor clicks Subscribe (61) → Subscribed, rings the bell (81); click + ding SFX • HtmlInCanvas avatar",
+    "icon": "🔔",
+    "external": {
+      "importPath": "./community/YouTubeSubscribeNudge",
+      "exportName": "YouTubeSubscribeNudge",
+      "packages": [
+        "@remotion/google-fonts",
+        "@remotion/media",
+        "@remotion/sfx"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 580,
+      "baseY": 420,
+      "customProperties": {
+        "width": 760,
+        "height": 240,
+        "avatarSrc": "https://remotion.media/elements/social-endcard-remotion-logo.png"
+      }
+    },
+    "controls": [
+      {
+        "group": "Channel (whole clip)",
+        "items": [
+          {
+            "key": "avatarSrc",
+            "label": "AVATAR SRC (URL / staticFile)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "clickSrc",
+            "label": "CLICK SFX SRC (leave unset for the built-in mouseClick)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "dingSrc",
+            "label": "BELL SFX SRC (leave unset for the built-in ding)",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "YouTube Subscribe Nudge • fixed 760×240",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "subnudge"
+    },
+    "defaultDurationInFrames": 120
   }
 ];

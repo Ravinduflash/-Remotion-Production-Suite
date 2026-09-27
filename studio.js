@@ -543,6 +543,8 @@
   function localBBox(asset, p) {
     const cp = p.customProperties || {};
     if (asset.type === 'three') { const s = (cp.size || 200) / 2; return { x: -s, y: -s, width: s * 2, height: s * 2 }; }
+    // External components render inside their layer box; measuring the preview would sample frame 0, where entrance animations may still be off-box
+    if (asset.type === 'external' && isNum(cp.width) && isNum(cp.height)) return { x: 0, y: 0, width: +cp.width, height: +cp.height };
     const cat = catalogOf(asset); if (!cat) return null;
     const layer = $('measureLayer'); layer.innerHTML = `<g>${cat.render(cp, { uid: 'm_' + asset.id, entry: cat })}</g>`;
     try { const bb = layer.firstChild.getBBox(); return { x: bb.x, y: bb.y, width: bb.width, height: bb.height }; } catch (e) { return null; } finally { layer.innerHTML = ''; }

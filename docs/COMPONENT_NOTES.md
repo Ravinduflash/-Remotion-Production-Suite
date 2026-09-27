@@ -35,6 +35,8 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Layer-length timing:** since 2026-09-27 the preview context carries `layerDuration`, meaning the layer's `durationInFrames`, or the rest of the composition when it is unset. Inside the render's `<Sequence>`, `useVideoConfig().durationInFrames` returns that same value, so components that time their exit from it, such as Polaroid Pictures, preview correctly.
 - **Multiline control:** since 2026-09-27 the inspector has a `multiline` control kind, a textarea whose value is a plain string with newlines. It was added for Spinning Text Wheel's `items`.
 - **Preview fonts:** since 2026-09-27 `index.html` loads the Google Fonts the Elements use: Inter, Cormorant Garamond, Caveat and Mona Sans. Studio previews then wrap text like the render does. Before this, Georgia fallbacks made the annotation previews wider.
+- **Offscreen check for external components, from 2026-09-27:** `check_scene` measures an external component by its layer box (width × height at baseX/baseY), not by its preview drawing. The preview is drawn at frame 0, where entrance animations can still be off-box. YouTube Comment Highlight starts 760 px below its box, and the old check reported it offscreen even though it was well inside the frame. Verified both ways: 0 errors in frame, and `offscreen` when moved to x=2500.
+- **Sound effects:** components can play audio through `@remotion/media` `<Audio>`, and it lands in the rendered MP4's AAC track. To verify timing, decode the audio to WAV with the compositor's `ffmpeg.exe` and measure loudness in 1600-sample windows, one frame at 48 kHz and 30 fps.
 - **Composition-length loops:** Moving Waves and Moving Zigzags tie their motion to `durationInFrames`. They flow exactly one loop per composition, whatever its length. A longer video means slower motion, not more loops.
 - **Non-keyframable controls, 2026-09-27:** controls marked `keyframable: false` in the manifest write their value to every keyframe of the asset, and the inspector labels them "WHOLE CLIP". This matches Remotion's own schemas: caption lists, bar counts and clip lengths should not change mid-clip. Before this, a caption edit at frame 25 created a new keyframe, so frames 0 to 24 kept the old captions. Agents get the same behaviour with `set_property { allKeyframes: true }`. `list_catalog` reports the flag on each control.
 - **JSON control kind:** `kind: "json"` is a text box for structured props such as `captions`. Invalid JSON gets a red border and is not written until it parses.
@@ -614,6 +616,73 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - The wheel spins one full turn and settles by frame 90. The landing item then fades from 0.28 to full opacity. `defaultDurationInFrames: 120`.
   - The text is dark (#182033), so it needs a light background.
   - A long list packs the items closer together on the drum, and items wider than 400 px are clipped.
+
+### YouTube Comment Highlight
+
+- **Catalog id:** `community_youtube_comment`
+- **File:** `YouTubeCommentHighlight.tsx`, from Remotion Elements `youtube/youtube-comment-highlight`, saved verbatim
+- **Packages:** `@remotion/google-fonts`, for Inter. The avatar is a `CanvasImage`, so it needs HtmlInCanvas; see the pipeline notes.
+- **Size:** a fixed 1120×360 (the card is 1120×300), `sizeMode: none`, centred on 16:9 at (400, 360)
+- **Controls:** box size only. The handle "@alexrenders", the comment, "2.4K" likes and the Unsplash avatar are hard-coded.
+- **Preview:** `ytcomment`, an HTML copy of the card
+- **Verified:** 2026-09-27, [youtube-contact.png](renders/youtube-contact.png) top row:
+  - Frame 20: springing in, tilted.
+  - Frame 90: holding.
+  - Frame 160: still near its position.
+- **Notes:**
+  - Timeline:
+    - Frames 0 to 48: the card springs up from 760 px below, with a small bounce.
+    - Throughout: it sways in 3D between -10° and 5° around the Y axis.
+    - Frames 131 to 179: it leaves downward. The exit is `Easing.out(spring)`, which lingers and then drops fast in the last frames.
+  - `defaultDurationInFrames: 180`.
+  - The avatar comes from `images.unsplash.com`, so renders need network access.
+
+### YouTube End Card
+
+- **Catalog id:** `community_youtube_end_card`
+- **File:** `YouTubeEndCard.tsx`, from Remotion Elements `youtube/youtube-end-card`, saved verbatim
+- **Packages:** `@remotion/google-fonts`, for Inter 500
+- **Size:** full frame through `AbsoluteFill`, `fullFrame: true`, **with its own #FAFAFA background**, so it covers every layer below it. Laid out for 1920×1080 in absolute px (`left: 80`, `right: 100`, 631×361 slots). On other aspect ratios, use a 1920×1080 box and scale the layer.
+- **Controls:** box size only. The avatar (the Remotion logo), "@remotion", "Remotion" and "remotion.dev" are hard-coded.
+- **Preview:** `endcard`, with text placeholders for the four brand icons
+- **Verified:** 2026-09-27, contact sheet middle row: the CTA rising at frame 20, everything in at frame 80
+- **Notes:**
+  - Timeline:
+    - Frames 35 to 65: the subscribe CTA rises 281 px into place.
+    - Frames 35 to 65: the Instagram, LinkedIn, X and website rows fade in, staggered.
+  - Nothing animates out. `defaultDurationInFrames: 150`.
+  - **The two black-bordered rectangles on the right are empty slots** for YouTube's own end-screen video elements, which YouTube Studio adds after upload. YouTube end screens run in the last 5 to 20 seconds of a video, so size the layer to match.
+
+### YouTube Subscribe Nudge
+
+- **Catalog id:** `community_youtube_subscribe_nudge`
+- **File:** `YouTubeSubscribeNudge.tsx`, from Remotion Elements `youtube/youtube-subscribe-nudge`, saved verbatim
+- **Packages:**
+  - `@remotion/google-fonts`.
+  - `@remotion/media`, for `<Audio>`.
+  - `@remotion/sfx`, first installed 2026-09-27 and pinned to exactly 4.0.526 by the `--save-exact` install.
+  - The avatar is a `CanvasImage`, so it needs HtmlInCanvas.
+- **Size:** a fixed 760×240, `sizeMode: none`, centred on 16:9 at (580, 420)
+- **Controls:** the Channel group, whole clip, holds `avatarSrc`, `clickSrc` and `dingSrc`. All three are real props.
+  - `avatarSrc` defaults to the Remotion logo.
+  - **Leave `clickSrc` and `dingSrc` unset** to get the built-in sounds. Clearing a field sends an empty string, which is not the same as unset: the component's defaults apply only to `undefined`.
+  - "Remotion" and "@remotion" are hard-coded.
+- **Preview:** `subnudge`, with the same button, bell and cursor timeline
+- **Verified:** 2026-09-27, contact sheet:
+  - Frame 50: the cursor reaches Subscribe.
+  - Frame 70: "✓ Subscribed".
+  - Frame 90: the filled bell is ringing.
+  - A custom `avatarSrc` (pink image) renders in the avatar.
+  - **Audio**, from a full 120-frame MP4 with an AAC track: silent until frame 62, the click at frames 62 to 65 (scheduled from 61, `trimBefore` 3), the bell from frame 82, peaking at -23 dB and fading out by frame 118.
+- **Notes:**
+  - Timeline:
+    - Frames 0 to 24: the card fades in.
+    - Frame 61: the click, and the button squishes.
+    - Frame 64: "Subscribed".
+    - Frame 81: the bell presses and swings until 101, with the ding.
+    - Frames 104 to 119: the card fades out.
+  - `defaultDurationInFrames: 120`.
+  - The built-in sounds come from `@remotion/sfx`. They are URLs on remotion.media, so renders need network access.
 
 ### Typewriter Text
 
