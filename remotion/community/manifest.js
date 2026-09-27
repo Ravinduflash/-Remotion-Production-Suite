@@ -2928,5 +2928,356 @@ window.CommunityManifest = [
       "kind": "subnudge"
     },
     "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_backdrop",
+    "componentName": "Backdrop",
+    "name": "Backdrop (remocn)",
+    "desc": "remocn • full-frame colour / gradient / image fill; WRAPPER: wrap layers to get a padded, rounded, shadowed frame (Screen Studio look)",
+    "icon": "🖼️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/backdrop",
+      "exportName": "Backdrop",
+      "sizeMode": "none",
+      "children": {
+        "fit": "backdrop"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fill": {
+          "type": "color",
+          "value": "#141318"
+        },
+        "padding": 4,
+        "radius": 1,
+        "shadow": "0 20px 60px rgba(0,0,0,0.4)"
+      }
+    },
+    "controls": [
+      {
+        "group": "Fill (whole clip)",
+        "items": [
+          {
+            "key": "fill",
+            "label": "FILL {type: color|gradient|image, value | src, fit}",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Frame (when wrapping layers)",
+        "items": [
+          {
+            "key": "padding",
+            "label": "PADDING (% of width)",
+            "kind": "range",
+            "min": 0,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "radius",
+            "label": "RADIUS (% of width)",
+            "kind": "range",
+            "min": 0,
+            "max": 10,
+            "step": 0.1
+          },
+          {
+            "key": "shadow",
+            "label": "SHADOW (CSS box-shadow, empty = none)",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "backdrop"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_drift",
+    "componentName": "Drift",
+    "name": "Drift (remocn)",
+    "desc": "remocn • WRAPPER: slow linear camera push-in (1 → 1 + grow) over the layer duration so no frame is static",
+    "icon": "🎥",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/drift",
+      "exportName": "Drift",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "grow": 0.035
+      }
+    },
+    "controls": [
+      {
+        "group": "Drift (whole clip) • wrap layers with update_asset wraps",
+        "items": [
+          {
+            "key": "grow",
+            "label": "GROW (0.03–0.05; negative = pull back)",
+            "kind": "range",
+            "min": -0.1,
+            "max": 0.1,
+            "step": 0.005,
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "drift"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_stage",
+    "componentName": "Stage",
+    "name": "Stage (remocn)",
+    "desc": "remocn • WRAPPER: puts wrapped layers (screenshot, video, scene) on a lit perspective studio plane with camera moves and handheld shake",
+    "icon": "🎬",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/stage",
+      "exportName": "Stage",
+      "sizeMode": "none",
+      "children": {
+        "fit": "stage"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "contentSize": {
+          "width": 1920,
+          "height": 1080
+        },
+        "moves": [],
+        "shake": 0,
+        "seed": "remocn-stage",
+        "backdrop": "linear-gradient(145deg, #17181d 0%, #09090b 72%)",
+        "rotateX": 14,
+        "rotateY": -20,
+        "perspective": 900,
+        "scale": 0.86,
+        "radius": 1.4,
+        "reflection": 0.24,
+        "shadow": 0.7,
+        "light": 0.55
+      }
+    },
+    "controls": [
+      {
+        "group": "Camera (whole clip)",
+        "items": [
+          {
+            "key": "moves",
+            "label": "MOVES [{at, x 0–1, y 0–1, zoom, rotate}] (layer-local frames)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "contentSize",
+            "label": "CONTENT SIZE {width, height} (wrapped canvas aspect)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "shake",
+            "label": "SHAKE (0.08–0.2 handheld)",
+            "kind": "range",
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "keyframable": false
+          },
+          {
+            "key": "seed",
+            "label": "SHAKE SEED",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Studio (whole clip)",
+        "items": [
+          {
+            "key": "backdrop",
+            "label": "BACKDROP (CSS background)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "rotateX",
+            "label": "ROTATE X°",
+            "kind": "range",
+            "min": -180,
+            "max": 180,
+            "step": 1,
+            "keyframable": false
+          },
+          {
+            "key": "rotateY",
+            "label": "ROTATE Y°",
+            "kind": "range",
+            "min": -180,
+            "max": 180,
+            "step": 1,
+            "keyframable": false
+          },
+          {
+            "key": "perspective",
+            "label": "PERSPECTIVE px",
+            "kind": "range",
+            "min": 50,
+            "max": 3000,
+            "step": 10,
+            "keyframable": false
+          },
+          {
+            "key": "scale",
+            "label": "PLANE SCALE",
+            "kind": "range",
+            "min": 0.1,
+            "max": 3,
+            "step": 0.01,
+            "keyframable": false
+          },
+          {
+            "key": "radius",
+            "label": "RADIUS (% of width)",
+            "kind": "range",
+            "min": 0,
+            "max": 10,
+            "step": 0.1,
+            "keyframable": false
+          },
+          {
+            "key": "reflection",
+            "label": "REFLECTION",
+            "kind": "range",
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "keyframable": false
+          },
+          {
+            "key": "shadow",
+            "label": "SHADOW",
+            "kind": "range",
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "keyframable": false
+          },
+          {
+            "key": "light",
+            "label": "LIGHT",
+            "kind": "range",
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "stage"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_chat_to_preview",
+    "componentName": "ChatToPreviewLayout",
+    "name": "Chat to Preview (remocn)",
+    "desc": "remocn • WRAPPER with slots chat + preview: the chat column shrinks (0.5 → 0.25) as the preview column grows; built-in placeholders when a slot is empty • 1280×720 layout, scale 1.5",
+    "icon": "💬",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/chat-to-preview-layout",
+      "exportName": "ChatToPreviewLayout",
+      "sizeMode": "none",
+      "children": {
+        "fit": "slot",
+        "slots": [
+          "chat",
+          "preview"
+        ]
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "startChatRatio": 0.5,
+        "endChatRatio": 0.25,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Split (whole clip) • slots: chat, preview (update_asset wraps {chat:[…], preview:[…]})",
+        "items": [
+          {
+            "key": "startChatRatio",
+            "label": "START CHAT RATIO",
+            "kind": "range",
+            "min": 0.1,
+            "max": 0.9,
+            "step": 0.01,
+            "keyframable": false
+          },
+          {
+            "key": "endChatRatio",
+            "label": "END CHAT RATIO (≥ 0.2)",
+            "kind": "range",
+            "min": 0.1,
+            "max": 0.9,
+            "step": 0.01,
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05,
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "chatpreview"
+    },
+    "defaultDurationInFrames": 120
   }
 ];

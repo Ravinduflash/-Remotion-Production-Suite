@@ -42,6 +42,26 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - New `simultaneous_entrances` warning, for 3 or more layers entering on one frame.
   - New `craft_text_style` note, for ALL-CAPS or wide-tracked text layers.
   - See the craft rules in [VIDEO_RECIPES.md](VIDEO_RECIPES.md).
+- **remocn components, from 2026-09-27:**
+  - remocn.dev doc pages show usage and props but not the source. The source comes from the shadcn registry that `npx shadcn add @remocn/<name>` reads: `https://remocn.dev/r/<name>.json`, where `files[].content` is the file.
+  - It is saved verbatim, with a 3-line header added: source, MIT license, alias note.
+  - Files keep remocn's kebab-case name (`backdrop.tsx`) so its own imports resolve: `@/lib/remocn/*` and `@/components/remocn/*` are aliased to `remotion/community/` in `render-project/remotion.config.ts` (webpack) and `tsconfig.json` (paths).
+  - `registryDependencies` are fetched the same way; Stage needs `scene-motion.ts`.
+  - The license is in [licenses/remocn-LICENSE.txt](licenses/remocn-LICENSE.txt), MIT, © 2026 Remocn.
+  - **remocn is laid out for 1280×720.** Components that size by `useVideoConfig().width` (Backdrop, Stage) are full-frame at 1920×1080. Fixed-px layouts (Chat to Preview) use a 1280×720 box at layer scale 1.5.
+- **Wrapper layers, from 2026-09-27:** a registered component whose `external.children` is set can render other layers inside it.
+  - **How to use it:** call `update_asset { assetId, wraps: [ids] }`, or `{ slot: ids[] }` for slotted layouts. Pass `null` to clear. The Inspector's Layer timing group has a WRAPS LAYERS field.
+  - **What the renderer does:** wrapped layers are skipped at top level and drawn on a composition-sized canvas passed as the prop (default `children`).
+  - **The fit decides how that canvas is mapped:**
+    - `full` (Drift): 1:1.
+    - `backdrop`: covers the inset frame, so it scales and crops slightly.
+    - `stage`: 0.84 × width plane, with height from `contentSize`.
+    - `slot` (Chat to Preview): unscaled, relative to the slot's top-left.
+  - **Timing:** children keep composition time. An inner `<Sequence from={-startFrame}>` undoes the wrapper's offset.
+  - **Nesting:** wrappers can nest, for example Backdrop ⊃ Drift ⊃ layers. Guards reject cycles, wrapping yourself, a layer in two wrappers, 3D layers, and non-wrapper components. Deleting a layer removes it from its wrapper, and a duplicated wrapper doesn't copy its children.
+  - **Studio preview:** `wrapGeometry()` in catalog.js mirrors each fit. Stage's preview is flat; the render has the 3D tilt, lights and reflection.
+  - **Agents:** `list_catalog` marks wrappers with `children` and `wrapsHint`. `check_scene` warns `wrap_missing` and `wrap_unsupported`.
+  - Also, `register_component`'s `external` schema now passes unknown fields through. Before, it silently dropped `children`.
 - **Composition-length loops:** Moving Waves and Moving Zigzags tie their motion to `durationInFrames`. They flow exactly one loop per composition, whatever its length. A longer video means slower motion, not more loops.
 - **Non-keyframable controls, 2026-09-27:** controls marked `keyframable: false` in the manifest write their value to every keyframe of the asset, and the inspector labels them "WHOLE CLIP". This matches Remotion's own schemas: caption lists, bar counts and clip lengths should not change mid-clip. Before this, a caption edit at frame 25 created a new keyframe, so frames 0 to 24 kept the old captions. Agents get the same behaviour with `set_property { allKeyframes: true }`. `list_catalog` reports the flag on each control.
 - **JSON control kind:** `kind: "json"` is a text box for structured props such as `captions`. Invalid JSON gets a red border and is not written until it parses.
@@ -688,6 +708,72 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
     - Frames 104 to 119: the card fades out.
   - `defaultDurationInFrames: 120`.
   - The built-in sounds come from `@remotion/sfx`. They are URLs on remotion.media, so renders need network access.
+
+### Backdrop (remocn)
+
+- **Catalog id:** `remocn_backdrop`
+- **File:** `backdrop.tsx`, from remocn `backdrop` (registry `registry/remocn/backdrop/index.tsx`), verbatim, MIT
+- **Packages:** none beyond `remotion`
+- **Size:** full frame, `fullFrame: true`. Padding and radius are percentages of the composition width, so they scale with resolution.
+- **Controls:**
+  - `fill`, whole clip: `{type: "color", value}`, `{type: "gradient", value: "linear-gradient(…)"}` or `{type: "image", src, fit}`.
+  - `padding` (4), `radius` (1) and `shadow` (a CSS box-shadow; an empty string means none).
+  - remocn's "live element as fill" option (a React node) isn't exposed. Put a background layer under a Backdrop that has no fill, or wrap it.
+- **Wrapper:** `fit: backdrop`. Without wrapped layers, it is a full-bleed fill with no frame. With them, it adds the padded, rounded, shadowed frame (the Screen Studio look), and the wrapped canvas covers the frame, cropping slightly.
+- **Preview:** `backdrop`
+- **Verified:** 2026-09-27, [remocn-layout-contact.png](renders/remocn-layout-contact.png) top row:
+  - A full-bleed indigo-to-violet gradient.
+  - A sky-to-violet gradient framing a Drift that wraps an image and a "Ship faster" title, at padding 6 and radius 1.5.
+
+### Drift (remocn)
+
+- **Catalog id:** `remocn_drift`
+- **File:** `drift.tsx`, from remocn `drift`, verbatim, MIT
+- **Size:** full frame. It draws nothing itself.
+- **Controls:** `grow`, whole clip. The default 0.035 means 3.5 % larger by the end; 0.03 to 0.05 is the working range, and a negative value pulls back.
+- **Wrapper:** `fit: full`. It scales its wrapped layers linearly from 1 to 1 + grow over `useVideoConfig().durationInFrames`, which is **the Drift layer's own duration**. Set `durationInFrames` on the Drift layer to drift one beat; unset, it spans the rest of the composition.
+- **Preview:** `drift`, with the same linear scale around the centre
+- **Verified:** 2026-09-27, contact sheet top row, middle and right. At grow 0.08 the framed image and title are visibly larger at frame 89 than at frame 0.
+- **Notes:** per remocn, text under Drift can tremble, so put `willChange: transform` on the text container. Don't layer Drift over content that already has strong motion.
+
+### Stage (remocn)
+
+- **Catalog id:** `remocn_stage`
+- **Files:** `stage.tsx`, plus its registry dependency `scene-motion.ts` (imported as `@/lib/remocn/scene-motion`), both from remocn, verbatim, MIT
+- **Size:** full frame, with its own studio backdrop, so it covers the layers below it
+- **Controls:**
+  - Camera, whole clip:
+    - `moves`: `[{at, x, y, zoom, rotate}]` in layer-local frames, with x and y from 0 to 1 on the surface.
+    - `contentSize`: `{width, height}` of the wrapped canvas.
+    - `shake` (0.08 to 0.2 for handheld) and `seed`.
+  - Studio: `backdrop` (CSS), `rotateX` (14), `rotateY` (-20), `perspective` (900), `scale` (0.86), `radius`, `reflection`, `shadow` and `light`.
+  - remocn's per-key `easing` function can't be expressed in JSON, so every segment uses the default EXPO easing. Repeat a pose to make a hold.
+- **Wrapper:** `fit: stage`. The wrapped layers form one plane surface: a canvas 1920 wide, with height 1920 × contentSize.height / contentSize.width, scaled 0.84.
+  - For a long page, set `contentSize` to the page's pixel size and put the screenshot as a `remotion_img` at (0, 0), 1920 wide and 1920 × h / w tall.
+- **Preview:** `stage`. The plane is drawn flat, with the moves, zoom and settle applied; the tilt, lights and reflection appear only in the render.
+- **Verified:** 2026-09-27, contact sheet middle row, with the blue image wrapped and moves zooming to (0.75, 0.3) at 1.6 by frame 80, shake 0.12:
+  - Frame 5: the plane settling in.
+  - Frame 40: mostly zoomed, since the EXPO easing front-loads the move.
+  - Frame 95: holding at the target.
+- **Notes:** the plane settles over the first 24 frames of the layer. Leave edge targets slightly inset, such as 0.04 and 0.96.
+
+### Chat to Preview (remocn)
+
+- **Catalog id:** `remocn_chat_to_preview`
+- **File:** `chat-to-preview-layout.tsx`, from remocn `chat-to-preview-layout`, verbatim, MIT. The export is `ChatToPreviewLayout`.
+- **Size:** a fixed-px layout designed for 1280×720, as a **1280×720 box at layer scale 1.5**
+- **Controls:** `startChatRatio` (0.5), `endChatRatio` (0.25; keep it at 0.2 or more) and `speed`, all whole clip
+- **Wrapper:** slots `chat` and `preview` (`fit: slot`), set with `update_asset wraps {chat: [ids], preview: [ids]}`.
+  - Wrapped layers are positioned relative to their column's top-left, in the 1280×720 layout's pixels.
+  - Column inner widths stay fixed (chat at least 520 px, preview at least 720 px) and are clipped as the split changes.
+  - **An empty slot shows remocn's placeholder**: a four-message chat, or a "Ship faster." landing page.
+- **Preview:** `chatpreview`, with the same columns and placeholders
+- **Timing:** the split morphs over 10 % to 70 % of **the layer's duration**, while the preview column fades and slides in. `defaultDurationInFrames: 120`.
+- **Verified:** 2026-09-27, contact sheet bottom row:
+  - Frame 5: the chat placeholder only.
+  - Frame 100: the chat shrunk, and the preview placeholder in.
+  - Frame 100 with a `remotion_img` in the preview slot: the image replaces the placeholder.
+- **Notes:** the placeholders have no background of their own around the columns (`check_scene` warns `no_background`), so put a background layer under it.
 
 ### Typewriter Text
 

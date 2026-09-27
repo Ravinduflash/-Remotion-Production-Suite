@@ -34,6 +34,12 @@ export interface ExternalDescriptor {
   sizeMode?: 'style' | 'props' | 'none';
   omitProps?: string[];          // customProperties keys not forwarded
   styleMap?: Record<string, string>; // customProperties key → CSS property (e.g. fit → objectFit)
+  /** Wrapper components (remocn Backdrop / Drift / Stage / ChatToPreviewLayout): the layers listed in the asset's
+   *  `wraps` are rendered as this component's children, on a canvas the size of the composition.
+   *  fit: 'full' (1:1) | 'backdrop' (cover the inset frame; inset = customProperties.padding % of width) |
+   *       'stage' (0.84 × width plane; height from customProperties.contentSize) | 'slot' (unscaled, slot-relative).
+   *  slots: named props (e.g. ['chat','preview']); then `wraps` is { slot: ids[] } instead of ids[]. */
+  children?: { prop?: string; fit?: 'full' | 'backdrop' | 'stage' | 'slot'; slots?: string[] };
 }
 
 export interface SceneAsset {
@@ -51,6 +57,8 @@ export interface SceneAsset {
   /** External layers only: unmount after this many frames. */
   durationInFrames?: number;
   external?: ExternalDescriptor;
+  /** Wrapper layers only: ids of the layers rendered as this component's children (or { slot: ids[] }). */
+  wraps?: string[] | Record<string, string[]>;
   preview?: Record<string, any>;
   keyframes: Keyframe[];
 }
@@ -149,7 +157,12 @@ export interface SceneRendererProps {
 export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = {} }) => {
   const frame = useCurrentFrame();
   const { width: W, height: H } = scene;
-  const layers = scene.assets.filter(a => a.visible !== false).map(asset => ({ asset, p: sampleAsset(asset, frame) }));
+  const all = scene.assets.filter(a => a.visible !== false).map(asset => ({ asset, p: sampleAsset(asset, frame) }));
+  type Layer = (typeof all)[number];
+  const byId = new Map(all.map(l => [l.asset.id, l] as const));
+  const wrapIds = (a: SceneAsset): string[] => !a.wraps ? [] : Array.isArray(a.wraps) ? a.wraps : Object.values(a.wraps).flat();
+  const wrapped = new Set(all.flatMap(l => wrapIds(l.asset)));
+  const layers = all.filter(l => !wrapped.has(l.asset.id)); // wrapped layers render inside their wrapper
   const isHtml = (a: SceneAsset) => a.renderTarget === 'html' || a.type === 'external';
   const threeLayers = layers.filter(l => l.asset.type === 'three');
   const lookup = (name: string) => registry[name] || REGISTRY[name];
@@ -157,50 +170,69 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
   // Keep true z-order (index 0 = back) across SVG and HTML assets: consecutive SVG assets share one
   // full-frame <svg>; each HTML (external) asset is its own absolutely positioned layer in between.
   // 3D layers render last, in one <ThreeCanvas> on top (same as the studio preview).
-  type Segment = { kind: 'svg'; items: typeof layers } | { kind: 'html'; item: (typeof layers)[number] };
-  const segments: Segment[] = [];
-  for (const l of layers) {
-    if (l.asset.type === 'three') continue;
-    if (isHtml(l.asset)) { segments.push({ kind: 'html', item: l }); continue; }
-    const last = segments[segments.length - 1];
-    if (last && last.kind === 'svg') last.items.push(l); else segments.push({ kind: 'svg', items: [l] });
-  }
+  const renderLayers = (list: Layer[], cw: number, ch: number, seen: Set<string>): React.ReactNode[] => {
+    type Segment = { kind: 'svg'; items: Layer[] } | { kind: 'html'; item: Layer };
+    const segments: Segment[] = [];
+    for (const l of list) {
+      if (l.asset.type === 'three') continue;
+      if (isHtml(l.asset)) { segments.push({ kind: 'html', item: l }); continue; }
+      const last = segments[segments.length - 1];
+      if (last && last.kind === 'svg') last.items.push(l); else segments.push({ kind: 'svg', items: [l] });
+    }
+    return segments.map((seg, si) => {
+      if (seg.kind === 'svg') {
+        return (
+          <svg key={`svg_${si}`} width={cw} height={ch} viewBox={`0 0 ${cw} ${ch}`} style={{ position: 'absolute', inset: 0 }}>
+            {seg.items.map(({ asset, p }) => {
+              const C = lookup(asset.componentName);
+              if (!C) return null;
+              return (
+                <g key={asset.id} transform={transformOf(p)} opacity={p.opacity}>
+                  <C {...p.customProperties} uid={asset.id} />
+                </g>
+              );
+            })}
+          </svg>
+        );
+      }
+      // External / community React components (remotion <Img>, @remotion/shapes, pasted Elements…)
+      const { asset, p } = seg.item;
+      const C = lookup(asset.componentName);
+      if (!C) return null;
+      const cp = p.customProperties;
+      const props = externalProps(asset, p);
+      const spec = asset.external && asset.external.children;
+      if (spec && asset.wraps && !seen.has(asset.id)) {
+        const inner = new Set(seen).add(asset.id);
+        const kidsOf = (ids: string[]) => scene.assets.filter(a => ids.includes(a.id)).map(a => byId.get(a.id)).filter(Boolean) as Layer[];
+        const canvas = (ids: string[], fit: string) => {
+          let left = 0, top = 0, scale = 1, w = W, h = H;
+          if (fit === 'backdrop') { const pad = ((typeof cp.padding === 'number' ? cp.padding : 4) / 100) * W, fw = W - 2 * pad, fh = H - 2 * pad; scale = Math.max(fw / W, fh / H); left = (fw - W * scale) / 2; top = (fh - H * scale) / 2; }
+          else if (fit === 'stage') { const cs = cp.contentSize; h = cs && cs.width > 0 && cs.height > 0 ? W * (cs.height / cs.width) : H; scale = 0.84; }
+          const body = <div style={{ position: 'absolute', left, top, width: w, height: h, transform: `scale(${scale})`, transformOrigin: '0 0' }}>{renderLayers(kidsOf(ids), w, h, inner)}</div>;
+          // children keep composition time even though the wrapper itself sits inside <Sequence from={startFrame}>
+          return asset.startFrame ? <Sequence from={-asset.startFrame} layout="none">{body}</Sequence> : body;
+        };
+        if (spec.slots && !Array.isArray(asset.wraps)) { for (const slot of spec.slots) { const ids = (asset.wraps as Record<string, string[]>)[slot]; if (ids && ids.length) props[slot] = canvas(ids, 'slot'); } }
+        else if (Array.isArray(asset.wraps) && asset.wraps.length) props[spec.prop || 'children'] = canvas(asset.wraps, spec.fit || 'full');
+      }
+      return (
+        <div key={asset.id} style={{ position: 'absolute', left: p.baseX, top: p.baseY, width: cp.width, height: cp.height, opacity: p.opacity, transform: `rotate(${p.rotation}deg) scale(${p.scale})`, transformOrigin: '0 0' }}>
+          {asset.startFrame || asset.durationInFrames ? (
+            <Sequence from={asset.startFrame || 0} durationInFrames={asset.durationInFrames} layout="none" name={asset.name}>
+              <C {...props} />
+            </Sequence>
+          ) : (
+            <C {...props} />
+          )}
+        </div>
+      );
+    });
+  };
 
   return (
     <AbsoluteFill style={{ backgroundColor: scene.background || '#0a0a0f' }}>
-      {segments.map((seg, si) => {
-        if (seg.kind === 'svg') {
-          return (
-            <svg key={`svg_${si}`} width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ position: 'absolute', inset: 0 }}>
-              {seg.items.map(({ asset, p }) => {
-                const C = lookup(asset.componentName);
-                if (!C) return null;
-                return (
-                  <g key={asset.id} transform={transformOf(p)} opacity={p.opacity}>
-                    <C {...p.customProperties} uid={asset.id} />
-                  </g>
-                );
-              })}
-            </svg>
-          );
-        }
-        // External / community React components (remotion <Img>, @remotion/shapes, pasted Elements…)
-        const { asset, p } = seg.item;
-        const C = lookup(asset.componentName);
-        if (!C) return null;
-        const cp = p.customProperties;
-        return (
-          <div key={asset.id} style={{ position: 'absolute', left: p.baseX, top: p.baseY, width: cp.width, height: cp.height, opacity: p.opacity, transform: `rotate(${p.rotation}deg) scale(${p.scale})`, transformOrigin: '0 0' }}>
-            {asset.startFrame || asset.durationInFrames ? (
-              <Sequence from={asset.startFrame || 0} durationInFrames={asset.durationInFrames} layout="none" name={asset.name}>
-                <C {...externalProps(asset, p)} />
-              </Sequence>
-            ) : (
-              <C {...externalProps(asset, p)} />
-            )}
-          </div>
-        );
-      })}
+      {renderLayers(layers, W, H, new Set())}
 
       {/* 3D layers */}
       {threeLayers.length > 0 && (

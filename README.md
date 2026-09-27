@@ -110,6 +110,8 @@ The first run does `npm install` in `render-project/` and lets Remotion download
 
 ## External and community components (asset registry)
 
+**Wrapper layers.** Some components wrap other layers, for example remocn's Backdrop (framed background), Drift (slow push-in), Stage (3D studio plane) and Chat to Preview (two slots). `update_asset { assetId, wraps: [ids] }` or `{ chat: [...], preview: [...] }` renders those layers inside the wrapper. They keep their own timing and coordinates on a composition-sized canvas that the wrapper fits into its frame. Wrappers can nest. remocn files import `@/lib/remocn/*` and `@/components/remocn/*`, which the render project aliases to `remotion/community/`.
+
 Per-component notes, versions, verification renders and pipeline gotchas are kept in [docs/COMPONENT_NOTES.md](docs/COMPONENT_NOTES.md). Storyboards for common product videos (teaser, changelog, feature announcement, showcase reel, product demo, launch video), mapped to catalog components, are in [docs/VIDEO_RECIPES.md](docs/VIDEO_RECIPES.md).
 
 Any Remotion component can become a catalog asset. Built-in wrappers cover remotion's `<Img>`, `<OffthreadVideo>`, `<Audio>`, `@remotion/gif` and the `@remotion/shapes` primitives (Media and Community tabs). To add code you found on remotion.dev, GitHub or a blog:

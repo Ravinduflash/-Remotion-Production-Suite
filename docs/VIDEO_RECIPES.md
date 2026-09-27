@@ -10,6 +10,9 @@ All timings are at 30 fps and 1920×1080 (`set_aspect 16:9`). Put a background l
 
 | Need | Catalog id | Notes |
 |---|---|---|
+| Scene frame / background | `remocn_backdrop` (wrap a beat's layers for the padded, rounded frame), `remocn_drift` (wrap any static beat for a slow push-in) | Real remocn components; see the wrapper notes in COMPONENT_NOTES.md |
+| Screenshot or page on a 3D set | `remocn_stage` wrapping a `remotion_img` | Camera `moves`, shake, lighting |
+| Agent chat to result | `remocn_chat_to_preview` (slots `chat`, `preview`) | Placeholders when a slot is empty |
 | Quiet moving background | `community_liquid_contours`, `community_moving_waves`, `community_paper_texture` | These stand in for remocn's `shader-simplex-noise`. Paper Texture suits dark text. |
 | Headline or single line | `text_card` | `text` + `subtitle`, font size, colour and alignment. Keyframe opacity and scale for the entrance. |
 | Line that types itself (terminal, URL, CTA) | `community_typewriter` | `text`, `charsPerFrame`, `color`, `cursorColor` |
@@ -223,6 +226,8 @@ These are remocn's house rules, adapted to this project. Sources: [Craft](https:
 | `willChange` on the wrong layer under a slow zoom | One `willChange: transform` per text container, never per word or character. It matters for slow `scale` keyframes on text layers. |
 
 ## Gaps: remocn components not in the catalog
+
+**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`) and `chat-to-preview-layout`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
 

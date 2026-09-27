@@ -326,6 +326,22 @@
      Assets created from these render in the HTML layer of SceneRenderer (they are React DOM, not SVG).
      --------------------------------------------------------------- */
   function starPoints(cx, cy, outer, inner, n) { const pts = []; for (let i = 0; i < n * 2; i++) { const r = i % 2 ? inner : outer; const a = -Math.PI / 2 + i * Math.PI / n; pts.push((cx + r * Math.cos(a)).toFixed(1) + ',' + (cy + r * Math.sin(a)).toFixed(1)); } return pts.join(' '); }
+  /** Where a wrapper component (remocn Backdrop / Drift / Stage / ChatToPreviewLayout) draws its wrapped layers in the preview:
+   *  { slot: { transform, clip?: {w,h,r}, inner?, opacity? } } in the wrapper's box coordinates. Mirrors SceneRenderer's canvas fits. */
+  function wrapGeometry(cp, ctx) {
+    const entry = ctx.entry || {}, kind = (entry.preview || {}).kind, W = num(cp.width, 1920), H = num(cp.height, 1080), f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v)), expo = t => 1 - Math.pow(1 - t, 4);
+    if (kind === 'backdrop') { const pad = num(cp.padding, 4) / 100 * W, fw = W - 2 * pad, fh = H - 2 * pad, sc = Math.max(fw / W, fh / H);
+      return { children: { transform: `translate(${pad} ${pad})`, clip: { w: fw, h: fh, r: num(cp.radius, 1) / 100 * W }, inner: `translate(${((fw - W * sc) / 2).toFixed(2)} ${((fh - H * sc) / 2).toFixed(2)}) scale(${sc.toFixed(4)})` } }; }
+    if (kind === 'drift') { const D = Math.max(1, num(ctx.layerDuration, 90)), sc = 1 + num(cp.grow, 0.035) * cl(f / D); return { children: { transform: `translate(${W / 2} ${H / 2}) scale(${sc.toFixed(5)}) translate(${-W / 2} ${-H / 2})` } }; }
+    if (kind === 'stage') { const cs = cp.contentSize && cp.contentSize.width > 0 ? cp.contentSize : { width: W, height: H }, pw = W * 0.84, ph = pw * cs.height / cs.width;
+      const keys = (Array.isArray(cp.moves) ? cp.moves : []).slice().sort((a, b) => a.at - b.at), pose = k => ({ x: cl(k.x ?? 0.5), y: cl(k.y ?? 0.5), zoom: k.zoom ?? 1 }); let P = { x: 0.5, y: 0.5, zoom: 1 };
+      if (keys.length) { if (f <= keys[0].at) P = pose(keys[0]); else if (f >= keys[keys.length - 1].at) P = pose(keys[keys.length - 1]); else { const i = keys.findIndex(k => f <= k.at), A = pose(keys[i - 1]), B = pose(keys[i]), t = expo(cl((f - keys[i - 1].at) / Math.max(1, keys[i].at - keys[i - 1].at))); P = { x: A.x + (B.x - A.x) * t, y: A.y + (B.y - A.y) * t, zoom: A.zoom + (B.zoom - A.zoom) * t }; } }
+      const settle = expo(cl(f / 24)), S = num(cp.scale, 0.86) * (0.94 + 0.06 * settle) * P.zoom, tx = P.x * pw, ty = P.y * ph;
+      return { children: { transform: `translate(${(W / 2).toFixed(2)} ${(H / 2 + 64 * (1 - settle)).toFixed(2)}) scale(${S.toFixed(4)}) translate(${(-tx).toFixed(2)} ${(-ty).toFixed(2)})`, clip: { w: pw, h: ph, r: num(cp.radius, 1.4) / 100 * W }, inner: 'scale(0.84)', opacity: cl(f / 9) } }; }
+    if (kind === 'chatpreview') { const D = Math.max(1, num(ctx.layerDuration, 120)), fr = f * num(cp.speed, 1), a0 = D * 0.1, a1 = D * 0.7, t = expo(cl((fr - a0) / Math.max(1, a1 - a0))), r0 = num(cp.startChatRatio, 0.5), ratio = r0 + (num(cp.endChatRatio, 0.25) - r0) * t, inner = W - 64, cw = ratio * inner, pw = (1 - ratio) * inner, h = H - 64;
+      return { chat: { transform: 'translate(32 32)', clip: { w: cw, h, r: 16 } }, preview: { transform: `translate(${(32 + cw + 16 + 40 * (1 - t)).toFixed(2)} 32)`, clip: { w: pw, h, r: 16 }, opacity: t } }; }
+    return { children: { transform: '' } };
+  }
   function renderExternal(cp, ctx) {
     const entry = ctx.entry || {}; const pv = entry.preview || { kind: 'card' };
     const W = num(cp.width, 480), H = num(cp.height, 270);
@@ -471,6 +487,26 @@
           <rect x="440" y="89" width="200" height="62" rx="14" fill="${subbed ? '#2a2b31' : '#ff1744'}" ${subbed ? 'stroke="rgba(255,255,255,.1)"' : ''}/><text x="${subbed ? 558 : 540}" y="129" fill="#fff" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="26">${subbed ? 'Subscribed' : 'Subscribe'}</text>${subbed ? `<path d="m4 12.5 5 4.8L20 7" transform="translate(452 107) scale(1.08)" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
           <circle cx="688" cy="120" r="32" fill="${f >= 81 ? '#303137' : '#24252b'}" stroke="rgba(255,255,255,.12)"/><g transform="translate(670 102) rotate(${bellRot.toFixed(1)} 18 7) scale(1.5)"><path d="M5.5 17h13c-1.7-1.9-2.2-3.9-2.2-7 0-2.8-1.7-5-4.3-5s-4.3 2.2-4.3 5c0 3.1-.5 5.1-2.2 7Z" fill="${f >= 84 ? '#f4f4f5' : 'none'}" stroke="#f4f4f5" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.8 20c.5 1 1.2 1.5 2.2 1.5s1.7-.5 2.2-1.5" fill="none" stroke="#f4f4f5" stroke-width="1.8" stroke-linecap="round"/></g>
           <path d="M5 3 39 35l-16 2 9 13-8 5-9-14L5 50Z" transform="translate(${cx.toFixed(1)} ${cy.toFixed(1)})" opacity="${cop.toFixed(3)}" fill="#fff" stroke="#111217" stroke-width="3" stroke-linejoin="round"/></g></g>`; }
+      case 'backdrop': { // remocn Backdrop: full-bleed color / gradient / image fill; with wrapped children, a padded rounded shadowed frame (children drawn by wrapGeometry)
+        const fl = cp.fill && typeof cp.fill === 'object' ? cp.fill : { type: 'color', value: '#0a0a0a' }, pad = num(cp.padding, 4) / 100 * W, r = num(cp.radius, 1) / 100 * W;
+        let out = fl.type === 'image' ? `<image href="${esc(fl.src || '')}" width="${W}" height="${H}" preserveAspectRatio="${fl.fit === 'contain' ? 'xMidYMid meet' : 'xMidYMid slice'}"/>` : fl.type === 'gradient' ? `<foreignObject width="${W}" height="${H}"><div xmlns="http://www.w3.org/1999/xhtml" style="width:${W}px;height:${H}px;background:${esc(fl.value || '')}"></div></foreignObject>` : `<rect width="${W}" height="${H}" fill="${esc(fl.value || '#0a0a0a')}"/>`;
+        if (ctx.hasChildren && cp.shadow !== '') out += `<rect x="${pad}" y="${pad}" width="${W - 2 * pad}" height="${H - 2 * pad}" rx="${r}" fill="#000" style="filter:drop-shadow(0 20px 30px rgba(0,0,0,.4))"/>`;
+        return out; }
+      case 'drift': return `<rect width="${W}" height="${H}" fill="none"/>`; // remocn Drift draws nothing itself: it slowly scales its wrapped children (wrapGeometry)
+      case 'stage': { // remocn Stage: studio backdrop, contact shadow and a plane; the preview draws the plane flat (no 3D tilt) with the camera moves applied
+        const g = wrapGeometry(cp, ctx).children; let out = `<foreignObject width="${W}" height="${H}"><div xmlns="http://www.w3.org/1999/xhtml" style="width:${W}px;height:${H}px;background:${esc(cp.backdrop || 'linear-gradient(145deg, #17181d 0%, #09090b 72%)')}"></div></foreignObject>`;
+        out += `<ellipse cx="${W / 2}" cy="${H * 0.755}" rx="${W * 0.34}" ry="${H * 0.055}" fill="rgba(0,0,0,${(0.52 * Math.min(1, Math.max(0, num(cp.shadow, 0.7)))).toFixed(3)})" style="filter:blur(24px)"/>`;
+        if (!ctx.hasChildren) out += `<g transform="${g.transform}"><rect width="${g.clip.w}" height="${g.clip.h}" rx="${g.clip.r}" fill="#26262c" stroke="#3a3a44"/><text x="${g.clip.w / 2}" y="${g.clip.h / 2}" fill="#8a8aa0" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="${Math.round(W / 40)}">wrap a screenshot, video or scene layer</text></g>`;
+        return out; }
+      case 'chatpreview': { // remocn ChatToPreviewLayout: chat column (0.5 → 0.25 of the width) hands the frame to the preview column; built-in placeholders when a slot is empty
+        const g = wrapGeometry(cp, ctx), font = 'Inter, -apple-system, sans-serif', filled = ctx.slotFilled || {}; let out = '';
+        const col = (sl, fill) => `<g transform="${sl.transform}" opacity="${sl.opacity ?? 1}"><rect width="${sl.clip.w}" height="${sl.clip.h}" rx="16" fill="${fill}" stroke="rgba(255,255,255,.08)"/></g>`;
+        out += col(g.chat, '#111') + col(g.preview, '#fff');
+        if (!filled.chat) { const msgs = [['user', 'Build me a landing page'], ['ai', 'Sure — what should it feature?'], ['user', 'Hero, pricing, footer.'], ['ai', 'On it. Generating now...']]; let y = 56, m = '';
+          msgs.forEach(([who, t]) => { const w = t.length * 7.4 + 28, x = who === 'user' ? Math.max(24, 496 - w) : 24; m += `<rect x="${x}" y="${y}" width="${w}" height="38" rx="14" fill="${who === 'user' ? '#0ea5e9' : '#262626'}"/><text x="${x + 14}" y="${y + 24}" fill="#fff" font-family="${font}" font-size="14">${esc(t)}</text>`; y += 50; });
+          out += `<g transform="${g.chat.transform}"><clipPath id="cp_${ctx.uid}c"><rect width="${g.chat.clip.w}" height="${g.chat.clip.h}" rx="16"/></clipPath><g clip-path="url(#cp_${ctx.uid}c)"><text x="24" y="40" fill="#888" font-family="${font}" font-size="12" font-weight="600" letter-spacing="1">CHAT</text>${m}</g></g>`; }
+        if (!filled.preview) out += `<g transform="${g.preview.transform}" opacity="${g.preview.opacity}"><clipPath id="cp_${ctx.uid}p"><rect width="${g.preview.clip.w}" height="${g.preview.clip.h}" rx="16"/></clipPath><g clip-path="url(#cp_${ctx.uid}p)"><rect width="720" height="36" fill="#f4f4f5"/><circle cx="17" cy="18" r="5" fill="#ef4444"/><circle cx="33" cy="18" r="5" fill="#f59e0b"/><circle cx="49" cy="18" r="5" fill="#22c55e"/><text x="32" y="104" fill="#0a0a0a" font-family="${font}" font-size="36" font-weight="700" letter-spacing="-1">Ship faster.</text><text x="32" y="140" fill="#71717a" font-family="${font}" font-size="16">The fastest way to launch your idea. Built with Remotion.</text><rect x="32" y="164" width="116" height="40" rx="10" fill="#0a0a0a"/><text x="50" y="189" fill="#fff" font-family="${font}" font-size="14" font-weight="600">Get started</text></g></g>`;
+        return out; }
       case 'safezones': { // Social Safe Zones element: fixed 1080×1920 sample background + TikTok / Instagram Reels interface overlay
         const sx = W / 1080, sy = H / 1920, ui = cp.platform === 'tiktok' ? 'https://remotion.media/elements/social-safe-zones/tiktok-interface.png' : 'https://remotion.media/elements/social-safe-zones/instagram-reels-interface-v3.png';
         return `<g transform="scale(${sx.toFixed(4)} ${sy.toFixed(4)})"><image href="https://remotion.media/elements/commerce-tear-a-graphic.png" width="1080" height="1920" preserveAspectRatio="xMidYMid slice"/><image href="${ui}" width="1080" height="1920" preserveAspectRatio="xMidYMid meet"/></g>`; }
@@ -765,5 +801,5 @@
     ]
   };
 
-  global.StudioCatalog = { CATALOG, CATALOG_BY_ID, PRESETS, MODIFIERS, GUARD, JOINT_KEYS, SEG, ASPECT_PRESETS, calcRig, presetFromPrompt, buildExternalEntry, renderExternal, esc };
+  global.StudioCatalog = { CATALOG, CATALOG_BY_ID, PRESETS, MODIFIERS, GUARD, JOINT_KEYS, SEG, ASPECT_PRESETS, calcRig, presetFromPrompt, buildExternalEntry, renderExternal, wrapGeometry, esc };
 })(window);
