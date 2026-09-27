@@ -22,6 +22,11 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Transform props:** Elements expose `Interactive.transformSchema` props such as `style.translate` and `style.scale`. They are not mapped, because the scene layer already positions, scales and rotates each asset.
 - **Base props:** `Interactive.baseSchema` props such as `from`, `durationInFrames` and `trimBefore` are not mapped either. Timing comes from our keyframes. Voice Note is the exception, see below.
 - **Keyframe interpolation:** colours and other strings switch at the next keyframe instead of fading. Numbers interpolate.
+- **Descriptor fields added 2026-09-27 (remocn paper batch):**
+  - `external.children.fit: 'window'` with `window: {w, h}`: wrapped layers cover-fit into a media window of w × h, both fractions of the layer's `width`. Remocn Polaroid uses 620/652 × 349/652.
+  - `external.textChildren: {prop, styleMap}`: for containers whose children are text. Children become `<span style>{customProperties[prop]}</span>`; `styleMap` sends layer props to the span's CSS and doesn't forward them. Remocn Paper Sticker uses it.
+  - `external.renameProps: {from: to}`: forwards a prop under another name after box sizing, so a component's own `width`/`height` no longer clash with the layer box. Remocn Reel uses `cardWidth/cardHeight`; Animated Bar Chart uses `chartWidth/chartHeight`. Older entries that hide those props (Glass Code Block/Walk, Animated Line Chart) could adopt it.
+  - The studio preview ctx now carries `compW`/`compH`, which `wrapGeometry` needs for the window fit.
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
@@ -1114,6 +1119,36 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Terminal: the build log streaming.
   - Cursor zoom riding "npx shadcn add @remocn/…"; custom "npm i remotion".
   - Chart drawing on; custom hockey-stick data in #f97316.
+
+### Animated Bar Chart, Paper Sticker, Polaroid, Check List and Reel (remocn)
+
+- **Catalog ids:** `remocn_animated_bar_chart`, `remocn_paper_sticker`, `remocn_polaroid`, `remocn_check_list`, `remocn_reel`
+- **Files:** the matching kebab-case `.tsx` files, plus the registry dependency `handwrite.tsx` (Caveat via `@remotion/google-fonts`, imported by Polaroid and Check List as `@/components/remocn/handwrite`; not a catalog entry). The existing `stop-motion.ts` is byte-identical to the registry's copy. All are verbatim from the remocn registry, MIT.
+- **Size:**
+  - **Animated Bar Chart is a 1280×720 box at scale 1.5**, like the line chart, with the chart centred in it. Its viewBox is exposed as `chartWidth`/`chartHeight` (default 1000×500) through `renameProps`. The padding, 6px corner radius and 16px labels are 720p constants.
+  - **Paper Sticker is a 480×140 box at scale 1.5** with flex centring. The chip is inline-block, and its jitter (±0.7px) and 1px pencil border are 720p constants. The label is text: `label`, `fontFamily`, `fontSize`, `color` and `fontWeight` become the child span through `textChildren`. For a group, add one layer per tag with staggered `at` and different `seed`s; the render test lays out four in a row.
+  - **Polaroid sizes from the box, at scale 1** (`sizeMode: props`): box width = card width, 978 by default (the 652px print × 1.5). Everything scales from that width, including the caption size. The card height is 0.655 × width, so keep the box height matching (641 by default). `captionSize` isn't exposed because a 0 would hide the caption; it follows the width.
+  - **Check List is an 820×480 box at scale 1.5** (`sizeMode: props`). Box width = list width, which the component requires. The list is centred vertically in the box.
+  - **Reel is full frame.** It centres its card on the composition through `useVideoConfig`. The card is exposed as `cardWidth`/`cardHeight` (1770×1014, 1180×676 × 1.5) with radius 24.
+- **Polaroid is a wrapper:** wrap an image, a video, or several layers (a whole mini-scene) with `update_asset { wraps }`. They cover-fit the 620:349 window and keep composition time, which gives the "living photograph". An unwrapped Polaroid shows its dark empty window. It has no tilt or jitter of its own, and there's no `<Freeze>` control.
+- **Backgrounds:** all five are transparent. Reel's card surface is `background`. Pair the paper pieces with a `#f1eee7` desk, as in the tests: a Backdrop fill or `community_paper_texture`.
+- **Timing, all component frames:**
+  - Bars: spring (damping 12, stiffness 100, mass 0.8), bar i delayed by `staggerFrames` (6). Layer 90.
+  - Sticker: hidden until the pose after `at`, lands at 1.12×, and settles one pose later. The default `at` 6 with step 3 appears on frame 9 and settles on frame 12. Layer 120.
+  - Polaroid caption: `captionAt`, 1.4 letters per pose. Layer 150.
+  - Check List: rows start `itemGap` apart (default step × 6 = 18). Ticks and strikes begin only after the whole list is written, `closeGap` apart (step × 3 = 9). The default list ends on frame 123, and the layer is 150 for a hold. `itemGap` and `closeGap` are stored as numbers, so changing `step` doesn't rescale them.
+  - Reel: image i opens at i × `step` over `reveal` frames, easing out cubic with a centre-out inset mask; the image settles from 1.08×. Layer 160.
+- **Preview:** kind `paperkit`. It ports the stop-motion hashes (`hash01`, `hashRange`, poses) so tilts, wobble, box corners and strike lifts match the render. Handwriting is drawn per letter with the same hashed slant and lift, and hidden letters keep their space. Differences: sticker chip width is estimated from the character count, and the bar drop-shadow is an SVG filter.
+- **Verified:** 2026-09-27, [remocn-paper-contact.png](renders/remocn-paper-contact.png), 26 stills plus 2 re-renders:
+  - Bars cascade in (default and custom labelled purple data).
+  - Sticker hidden on frame 7, oversized on 9, settled on 12; a four-tag group lands 6 frames apart with its own tilts.
+  - Polaroid with a wrapped image, caption writing "firs" → "first light" (identical to the preview letter count), plus a smaller live card playing an image and title card.
+  - Check List at frames 30, 70, 100 and 140: written in full, then three ticks and strikes, with "Ships as source" left open.
+  - Reel blooming three images.
+- **Quirks found in the render (upstream, kept verbatim):**
+  - **Bars mid-spring:** the bars use `scale` with `transformBox: fill-box` and an absolute pixel origin, so while springing they grow from a point below the baseline and overshoot past it. They settle exactly on it. The preview grows them from the baseline.
+  - **Staggered stickers:** `check_scene` warns `simultaneous_entrances` for sticker groups, because the stagger lives in each layer's `at` prop, not its start frame. It's safe to ignore.
+- **Network note:** Reel frame 50 once timed out loading the 790 KB `commerce-tear-a-graphic.png` on a slow connection (Remotion's `<Img>` delayRender). A re-render passed. For client work, prefer local `staticFile()` images.
 
 ### Typewriter Text
 

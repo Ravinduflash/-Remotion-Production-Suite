@@ -37,9 +37,16 @@ export interface ExternalDescriptor {
   /** Wrapper components (remocn Backdrop / Drift / Stage / ChatToPreviewLayout): the layers listed in the asset's
    *  `wraps` are rendered as this component's children, on a canvas the size of the composition.
    *  fit: 'full' (1:1) | 'backdrop' (cover the inset frame; inset = customProperties.padding % of width) |
-   *       'stage' (0.84 × width plane; height from customProperties.contentSize) | 'slot' (unscaled, slot-relative).
+   *       'stage' (0.84 × width plane; height from customProperties.contentSize) | 'slot' (unscaled, slot-relative) |
+   *       'window' (cover a media window of window.w × window.h, as fractions of customProperties.width — remocn Polaroid).
    *  slots: named props (e.g. ['chat','preview']); then `wraps` is { slot: ids[] } instead of ids[]. */
-  children?: { prop?: string; fit?: 'full' | 'backdrop' | 'stage' | 'slot'; slots?: string[] };
+  children?: { prop?: string; fit?: 'full' | 'backdrop' | 'stage' | 'slot' | 'window'; slots?: string[]; window?: { w: number; h: number } };
+  /** Containers whose children are plain text (remocn PaperSticker): children = <span style>{customProperties[prop]}</span>;
+   *  styleMap maps customProperties keys to the span's CSS (e.g. { fontSize: 'fontSize' }); those keys are not forwarded. */
+  textChildren?: { prop: string; styleMap?: Record<string, string> };
+  /** Forward customProperties under another prop name after the layer-box sizing, e.g. { cardWidth: 'width' } when the
+   *  component's own width/height props mean something else than the layer box (remocn Reel card, chart viewBox). */
+  renameProps?: Record<string, string>;
   /** CSS custom properties set on this layer only, e.g. { '--font-geist-sans': 'Segoe UI, sans-serif' } so a component renders in the font it measures with. */
   cssVars?: Record<string, string>;
   /** Constant style on the layer box, e.g. { display: 'flex', alignItems: 'center', justifyContent: 'center' } to centre an inline component (remocn RolodexFlip / ValueSwap). */
@@ -147,6 +154,13 @@ export function externalProps(asset: SceneAsset, p: Sampled): Record<string, any
   (ext.omitProps || []).forEach(k => delete cp[k]);
   if (ext.sizeMode === 'style' || !ext.sizeMode) { style.width = cp.width; style.height = cp.height; delete cp.width; delete cp.height; }
   else if (ext.sizeMode === 'none') { delete cp.width; delete cp.height; }
+  if (ext.textChildren) {
+    const ts: Record<string, any> = {};
+    for (const [k, css] of Object.entries(ext.textChildren.styleMap || {})) { if (cp[k] !== undefined) ts[css] = cp[k]; delete cp[k]; }
+    cp.children = <span style={ts}>{String(cp[ext.textChildren.prop] ?? '')}</span>;
+    delete cp[ext.textChildren.prop];
+  }
+  if (ext.renameProps) for (const [from, to] of Object.entries(ext.renameProps)) { if (from in cp) { cp[to] = cp[from]; delete cp[from]; } }
   delete cp.facing;
   return Object.keys(style).length ? { ...cp, style } : cp;
 }
@@ -212,6 +226,7 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
         const canvas = (ids: string[], fit: string) => {
           let left = 0, top = 0, scale = 1, w = W, h = H;
           if (fit === 'backdrop') { const pad = ((typeof cp.padding === 'number' ? cp.padding : 4) / 100) * W, fw = W - 2 * pad, fh = H - 2 * pad; scale = Math.max(fw / W, fh / H); left = (fw - W * scale) / 2; top = (fh - H * scale) / 2; }
+          else if (fit === 'window') { const win = spec.window || { w: 1, h: 1 }, cw = typeof cp.width === 'number' ? cp.width : W, ww = win.w * cw, wh = win.h * cw; scale = Math.max(ww / W, wh / H); left = (ww - W * scale) / 2; top = (wh - H * scale) / 2; }
           else if (fit === 'stage') { const cs = cp.contentSize; h = cs && cs.width > 0 && cs.height > 0 ? W * (cs.height / cs.width) : H; scale = 0.84; }
           const body = <div style={{ position: 'absolute', left, top, width: w, height: h, transform: `scale(${scale})`, transformOrigin: '0 0' }}>{renderLayers(kidsOf(ids), w, h, inner)}</div>;
           // children keep composition time even though the wrapper itself sits inside <Sequence from={startFrame}>

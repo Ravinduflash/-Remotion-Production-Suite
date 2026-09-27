@@ -10736,5 +10736,641 @@ window.CommunityManifest = [
       "style": "chart"
     },
     "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_animated_bar_chart",
+    "componentName": "AnimatedBarChart",
+    "name": "Animated Bar Chart (remocn)",
+    "desc": "remocn • bars spring up from the baseline in a staggered cascade (optional labels) • transparent",
+    "icon": "📊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/animated-bar-chart",
+      "exportName": "AnimatedBarChart",
+      "sizeMode": "none",
+      "renameProps": {
+        "chartWidth": "width",
+        "chartHeight": "height"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "data": [
+          35,
+          60,
+          45,
+          80,
+          55,
+          70,
+          90,
+          65
+        ],
+        "labels": null,
+        "chartWidth": 1000,
+        "chartHeight": 500,
+        "barColor": "#0ea5e9",
+        "gap": 16,
+        "staggerFrames": 6,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Animated Bar Chart (remocn) (whole clip) • 1280×720 layout at scale 1.5; chart centred in the box",
+        "items": [
+          {
+            "key": "data",
+            "label": "DATA (JSON array of numbers)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "labels",
+            "label": "LABELS (JSON array of strings, or null)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "chartWidth",
+            "label": "CHART WIDTH (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 200,
+            "max": 1280,
+            "step": 1
+          },
+          {
+            "key": "chartHeight",
+            "label": "CHART HEIGHT (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 150,
+            "max": 720,
+            "step": 1
+          },
+          {
+            "key": "barColor",
+            "label": "BAR COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "gap",
+            "label": "GAP px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 80,
+            "step": 1
+          },
+          {
+            "key": "staggerFrames",
+            "label": "STAGGER (frames per bar)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperkit",
+      "style": "bars"
+    },
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_paper_sticker",
+    "componentName": "PaperSticker",
+    "name": "Paper Sticker (remocn)",
+    "desc": "remocn • a paper chip with your label slaps down over two stop-motion poses (oversized, then settled), hand-placed tilt per seed • transparent, centred in its box",
+    "icon": "🏷️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/paper-sticker",
+      "exportName": "PaperSticker",
+      "sizeMode": "none",
+      "layerStyle": {
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center"
+      },
+      "textChildren": {
+        "prop": "label",
+        "styleMap": {
+          "fontFamily": "fontFamily",
+          "fontSize": "fontSize",
+          "color": "color",
+          "fontWeight": "fontWeight"
+        }
+      }
+    },
+    "defaults": {
+      "baseX": 600,
+      "baseY": 435,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 480,
+        "height": 140,
+        "label": "remotion",
+        "fontFamily": "monospace",
+        "fontSize": 28,
+        "color": "#26242c",
+        "fontWeight": 400,
+        "at": 6,
+        "seed": "sticker",
+        "padding": "10px 16px",
+        "background": "#fbfaf6",
+        "borderColor": "rgba(38,36,44,0.55)",
+        "maxTilt": 2.6,
+        "step": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Paper Sticker (remocn) (whole clip) • box at scale 1.5 centres the chip; appears one pose after AT, settles one pose later; stagger a group with AT + SEED",
+        "items": [
+          {
+            "key": "label",
+            "label": "LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontFamily",
+            "label": "LABEL FONT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "LABEL SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 8,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "LABEL COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "LABEL WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "at",
+            "label": "SLAP AT (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "seed",
+            "label": "SEED (tilt + wobble)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "padding",
+            "label": "PADDING (CSS)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "background",
+            "label": "PAPER",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "borderColor",
+            "label": "PENCIL BORDER (CSS color)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "maxTilt",
+            "label": "MAX TILT° (0 = tidy)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 15,
+            "step": 0.1
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperkit",
+      "style": "sticker"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_polaroid",
+    "componentName": "Polaroid",
+    "name": "Polaroid (remocn)",
+    "desc": "remocn • instant-photo card with a handwritten caption; WRAPPER: wrap layers (image, video, a whole scene) to play inside the photo window • box width = card width",
+    "icon": "📷",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/polaroid",
+      "exportName": "Polaroid",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "props",
+      "children": {
+        "fit": "window",
+        "window": {
+          "w": 0.950920245398773,
+          "h": 0.5352760736196319
+        }
+      }
+    },
+    "defaults": {
+      "baseX": 471,
+      "baseY": 220,
+      "customProperties": {
+        "width": 978,
+        "height": 641,
+        "caption": "first light",
+        "captionAt": 0,
+        "frameColor": "#fdfcf8",
+        "captionColor": "#26242c",
+        "step": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Polaroid (remocn) (whole clip) • box width = card width (height ≈ 0.655 × width); everything incl. caption size scales from it; wrapped layers keep composition time",
+        "items": [
+          {
+            "key": "caption",
+            "label": "CAPTION (empty = blank band)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "captionAt",
+            "label": "CAPTION STARTS (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "frameColor",
+            "label": "CARD STOCK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "captionColor",
+            "label": "CAPTION INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperkit",
+      "style": "polaroid"
+    },
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_check_list",
+    "componentName": "CheckList",
+    "name": "Check List (remocn)",
+    "desc": "remocn • handwritten checklist writes itself out, then ticks and strikes through each done item ({text, checked:false} stays open) • transparent",
+    "icon": "✅",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/check-list",
+      "exportName": "CheckList",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "props",
+      "layerStyle": {
+        "display": "flex",
+        "alignItems": "center"
+      }
+    },
+    "defaults": {
+      "baseX": 345,
+      "baseY": 180,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 820,
+        "height": 480,
+        "items": [
+          "Render on your own machine",
+          "No watermark, ever",
+          "Every component MIT",
+          {
+            "text": "Ships as source",
+            "checked": false
+          }
+        ],
+        "fontSize": 40,
+        "color": "#26242c",
+        "boxColor": "#26242c",
+        "tickColor": "#6f7f35",
+        "delay": 0,
+        "itemGap": 18,
+        "closeGap": 9,
+        "rowGap": 22,
+        "strokeWidth": 3,
+        "perStep": 1.6,
+        "weight": 600,
+        "seed": "checklist",
+        "step": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Check List (remocn) (whole clip) • box width = list width, at scale 1.5, list centred vertically; default list takes 123 frames",
+        "items": [
+          {
+            "key": "items",
+            "label": "ITEMS (JSON: \"text\" or {text, checked:false})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "LABEL INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "boxColor",
+            "label": "BOX INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "tickColor",
+            "label": "TICK / STRIKE INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "delay",
+            "label": "DELAY (frames)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "itemGap",
+            "label": "ITEM GAP (frames between rows writing)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "closeGap",
+            "label": "CLOSE GAP (frames between ticks)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "rowGap",
+            "label": "ROW GAP px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "strokeWidth",
+            "label": "PEN WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 0.5
+          },
+          {
+            "key": "perStep",
+            "label": "LETTERS PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.2,
+            "max": 8,
+            "step": 0.1
+          },
+          {
+            "key": "weight",
+            "label": "WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 400,
+            "max": 700,
+            "step": 100
+          },
+          {
+            "key": "seed",
+            "label": "SEED",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperkit",
+      "style": "checklist"
+    },
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_reel",
+    "componentName": "Reel",
+    "name": "Reel (remocn)",
+    "desc": "remocn • fixed centred card; each image blooms open over the last with a centre-out mask • transparent around the card",
+    "icon": "🎴",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/reel",
+      "exportName": "Reel",
+      "sizeMode": "none",
+      "renameProps": {
+        "cardWidth": "width",
+        "cardHeight": "height"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "images": [
+          "https://remotion.media/transition-bg-blue.jpg",
+          "https://remotion.media/transition-bg-pink.jpg",
+          "https://remotion.media/elements/commerce-tear-a-graphic.png"
+        ],
+        "cardWidth": 1770,
+        "cardHeight": 1014,
+        "radius": 24,
+        "step": 20,
+        "reveal": 13,
+        "objectPosition": "top",
+        "background": "#050506"
+      }
+    },
+    "controls": [
+      {
+        "group": "Reel (remocn) (whole clip) • card centred on the composition; image i starts at i × STEP",
+        "items": [
+          {
+            "key": "images",
+            "label": "IMAGES (JSON array of URLs)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "cardWidth",
+            "label": "CARD WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "cardHeight",
+            "label": "CARD HEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 2160,
+            "step": 1
+          },
+          {
+            "key": "radius",
+            "label": "RADIUS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "step",
+            "label": "STEP (frames between images)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "reveal",
+            "label": "REVEAL (frames to open)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "objectPosition",
+            "label": "OBJECT POSITION (CSS)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "background",
+            "label": "CARD SURFACE",
+            "kind": "color",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperkit",
+      "style": "reel"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 160
   }
 ];
