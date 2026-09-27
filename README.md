@@ -135,7 +135,7 @@ Start the MCP client, then open `index.html`. If several studio pages are open, 
 3. `apply_preset` / `apply_modifier` / `set_keyframe` to choreograph; `set_frame` + `studio_status` to inspect.
 4. `export_remotion` → files for the Remotion project.
 
-Other tools: `set_aspect`, `list_aspect_ratios`, `check_scene`, `render_scene`, `render_still`, `render_status`, `write_component_file`, `read_component_file`, `list_component_files`, `register_component`, `unregister_component`. `call_studio {method, params}` reaches any StudioAPI method; the `studio://scene` resource exposes the live state. `get_scene` falls back to the last pushed state if the browser is closed.
+Other tools: `build_captions` (script text or SRT → `Caption[]` for the caption components), `select_studio`, `set_aspect`, `list_aspect_ratios`, `check_scene`, `render_scene`, `render_still`, `render_status`, `write_component_file`, `read_component_file`, `list_component_files`, `register_component`, `unregister_component`. `call_studio {method, params}` reaches any StudioAPI method; the `studio://scene` resource exposes the live state. `get_scene` falls back to the last pushed state if the browser is closed.
 
 ## Adding your own asset
 

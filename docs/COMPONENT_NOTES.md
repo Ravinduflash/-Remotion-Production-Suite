@@ -28,6 +28,10 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Isolated testing:** open the studio as `index.html?bridge=ws://localhost:7778` and start the server with `STUDIO_WS_PORT=7778`. Tests then never touch a studio on the default port 7777.
 - **`clear_scene` keeps the canvas size,** as well as fps and duration. Call `set_aspect` and `set_timeline` again when the next scene needs different ones. This mis-framed the first Liquid Contours test scene.
 - **Composition-length loops:** Moving Waves and Moving Zigzags tie their motion to `durationInFrames`. They flow exactly one loop per composition, whatever its length. A longer video means slower motion, not more loops.
+- **Non-keyframable controls, 2026-09-27:** controls marked `keyframable: false` in the manifest write their value to every keyframe of the asset, and the inspector labels them "WHOLE CLIP". This matches Remotion's own schemas: caption lists, bar counts and clip lengths should not change mid-clip. Before this, a caption edit at frame 25 created a new keyframe, so frames 0 to 24 kept the old captions. Agents get the same behaviour with `set_property { allKeyframes: true }`. `list_catalog` reports the flag on each control.
+- **JSON control kind:** `kind: "json"` is a text box for structured props such as `captions`. Invalid JSON gets a red border and is not written until it parses.
+- **`build_captions` tool:** turns script text into timed words, evenly spaced at a words-per-minute rate with a pause after each sentence. It also accepts an SRT file and spreads each cue's words across the cue. It returns `@remotion/captions` `Caption[]`, with a leading space on every word but the first, which is the format the caption components expect. For real speech, word timings from a transcriber are more accurate.
+- **Pinned installs:** captions brought in `@remotion/google-fonts`, `@remotion/layout-utils` and `@remotion/rounded-text-box`. All were installed at 4.0.526 by the version-pinning render step, and the first render took 117 seconds including the installs.
 - **TypeScript target:** `render-project/tsconfig.json` targets ES2021, because Elements use `String.replaceAll`.
 
 ## Components
@@ -146,6 +150,57 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Notes:**
   - The phase drifts from 3.23 to 4.23 over 240 frames, which is slow and calm.
   - The `interpolate` is not clamped, so the drift keeps going past frame 240 and never stops.
+
+### Basic Captions
+
+- **Catalog id:** `community_basic_captions`
+- **File:** `BasicCaptions.tsx`, from Remotion Elements `captions/basic-captions`, saved verbatim
+- **Packages:** `@remotion/captions`
+- **Size:** `sizeMode: props`, so the component receives `width` and `height` and sizes its caption area from them.
+- **Controls:**
+  - `captions` is a JSON list for the whole clip. Build it with `build_captions`.
+  - The time between caption pages, in ms, is also whole-clip.
+  - Width and height are keyframable.
+- **Preview:** `captions` with style `basic`. It uses Remotion's page rule and balanced two-line wrapping, and matched the render's line breaks.
+- **Verified:** 2026-09-27, [captions-f25.png](renders/captions-f25.png) and [captions-f70.png](renders/captions-f70.png), top row. Pages are 2 seconds long, grey box, Arial.
+- **Notes:**
+  - It shows at most 2 lines and clips the rest.
+  - A new page starts only when a word begins more than `combineTokensWithinMilliseconds` after the page start.
+
+### Rounded Captions
+
+- **Catalog id:** `community_rounded_captions`
+- **File:** `RoundedCaptions.tsx`, from Remotion Elements `captions/rounded-captions`. It is verbatim except for one line marked `LOCAL FIX`.
+- **Packages:** `@remotion/captions`, `@remotion/google-fonts` for Figtree, `@remotion/layout-utils`, `@remotion/rounded-text-box`
+- **Size:** `sizeMode: props`, so the component receives `width` and `height` and sizes its caption area from them.
+- **Controls:**
+  - `captions` is a JSON list for the whole clip. Build it with `build_captions`.
+  - The time between caption pages, in ms, is also whole-clip.
+  - Width and height are keyframable.
+- **Preview:** `captions` with style `rounded`. The real component fits the text to the box with `fitTextOnNLines`, so its line breaks can differ from the preview.
+- **Verified:** 2026-09-27, middle row of the same renders
+- **Local fix:**
+  - The source passes `lineHeight` as a number to `measureText`, whose type expects strings. That fails `tsc`.
+  - It is now passed as `String(lineHeight)`. The browser converts the number to the same string anyway.
+  - Frame 25 rendered byte-identical before and after the fix.
+- **Notes:** it downloads the Figtree font from Google Fonts on every render, so renders need network access.
+
+### Moving Pill Captions
+
+- **Catalog id:** `community_moving_pill_captions`
+- **File:** `MovingPillCaptions.tsx`, from Remotion Elements `captions/moving-pill-captions`, saved verbatim
+- **Packages:** `@remotion/captions`, `@remotion/google-fonts` for Montserrat, `@remotion/layout-utils`
+- **Size:** `sizeMode: props`, so the component receives `width` and `height` and sizes its caption area from them.
+- **Controls:**
+  - `captions` is a JSON list for the whole clip. Build it with `build_captions`.
+  - The time between caption pages, in ms, is also whole-clip.
+  - Width and height are keyframable.
+- **Preview:** `captions` with style `pill`, which highlights the latest spoken word
+- **Verified:** 2026-09-27, bottom row. The pill sat on "starts" at frame 25 and on "single" at frame 70, matching the word timings. Default area is 682×252 with 0.8-second pages.
+- **Notes:**
+  - The pill glides between words over 5 frames.
+  - It needs network access for Montserrat.
+  - The white text has a heavy black stroke, so it reads on any background.
 
 ### Typewriter Text
 

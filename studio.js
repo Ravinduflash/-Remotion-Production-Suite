@@ -75,6 +75,11 @@
     const e = (EASE[easing] || EASE.linear)(t);
     return lerpValue(fillDefaults(asset, prev.properties), fillDefaults(asset, next.properties), e);
   }
+  /** Non-keyframable values (Remotion schema keyframable:false, e.g. captions, bar counts): same value on every keyframe. */
+  function writeAllKeyframes(asset, partial) {
+    if (!asset.keyframes.length) { writeKeyframe(asset, store.currentFrame, partial); return; }
+    asset.keyframes.forEach(k => { const cp = Object.assign({}, k.properties.customProperties || {}, partial.customProperties || {}); Object.assign(k.properties, partial); k.properties.customProperties = cp; });
+  }
   function sortKfs(asset) { asset.keyframes.sort((a, b) => a.frame - b.frame); }
   function writeKeyframe(asset, frame, partial, opts) {
     frame = Math.max(0, Math.round(frame));
@@ -116,7 +121,7 @@
     getState() { return clone(store); },
     setState(p) { const s = p && p.state ? p.state : p; if (!s || !Array.isArray(s.assets)) throw new Error('state.assets[] required'); store = Object.assign({ version: 1, name: 'Imported', width: 1920, height: 1080, fps: 60, totalFrames: 120, currentFrame: 0, background: '#0a0a0f', selectedAssetId: null }, clone(s)); store.assets.forEach(a => { a.keyframes = a.keyframes || []; sortKfs(a); if (!a.catalogId) { const c = CATALOG.find(c => c.componentName === a.componentName); if (c) a.catalogId = c.id; } if (a.visible === undefined) a.visible = true; if (a.locked === undefined) a.locked = false; }); if (!getAsset(store.selectedAssetId)) store.selectedAssetId = null; ui.selectedKeyframe = null; commit({ structure: true }); return { ok: true, assets: store.assets.length }; },
     clearScene() { store.assets = []; store.selectedAssetId = null; ui.selectedKeyframe = null; store.currentFrame = 0; commit({ structure: true }); return { ok: true }; },
-    listCatalog() { return CATALOG.map(c => ({ catalogId: c.id, tab: c.tab, type: c.type, componentName: c.componentName, name: c.name, description: c.desc, defaults: clone(c.defaults), controls: clone(c.controls).map(g => ({ group: g.group, items: g.items.map(({ key, label, kind, min, max, step, options }) => ({ key, label, kind, min, max, step, options })) })), presets: c.type === 'character' ? Object.keys(PRESETS) : [], modifiers: (MODIFIERS[c.type] || []).filter(m => !m.only || m.only === c.componentName).map(m => ({ id: m.id, label: m.label, description: m.desc })) })); },
+    listCatalog() { return CATALOG.map(c => ({ catalogId: c.id, tab: c.tab, type: c.type, componentName: c.componentName, name: c.name, description: c.desc, defaults: clone(c.defaults), controls: clone(c.controls).map(g => ({ group: g.group, items: g.items.map(({ key, label, kind, min, max, step, options, keyframable }) => ({ key, label, kind, min, max, step, options, keyframable })) })), presets: c.type === 'character' ? Object.keys(PRESETS) : [], modifiers: (MODIFIERS[c.type] || []).filter(m => !m.only || m.only === c.componentName).map(m => ({ id: m.id, label: m.label, description: m.desc })) })); },
     listPresets() { return Object.entries(PRESETS).map(([k, p]) => ({ preset: k, label: p.label, description: p.desc, frames: p.kf[p.kf.length - 1].frame })); },
     listModifiers(p) { const a = p && p.assetId ? getAsset(p.assetId) : selected(); if (!a) return []; return (MODIFIERS[a.type] || []).filter(m => !m.only || m.only === a.componentName).map(m => ({ id: m.id, label: m.label, description: m.desc })); },
 
@@ -168,7 +173,7 @@
     },
     setProperty(p) { // convenience: set one property (or customProperties.key) on the keyframe at frame (auto-key)
       const a = getAsset(p.assetId || store.selectedAssetId); if (!a) throw new Error('No asset'); const frame = p.frame === undefined ? store.currentFrame : p.frame;
-      const partial = p.custom ? { customProperties: { [p.key]: p.value } } : { [p.key]: p.value }; writeKeyframe(a, frame, partial); commit({ structure: p.structure !== false, history: p.history !== false }); return { ok: true };
+      const partial = p.custom ? { customProperties: { [p.key]: p.value } } : { [p.key]: p.value }; if (p.allKeyframes) writeAllKeyframes(a, partial); else writeKeyframe(a, frame, partial); commit({ structure: p.structure !== false, history: p.history !== false }); return { ok: true };
     },
 
     changeCurrentFrame(p) { const f = typeof p === 'number' ? p : p.frame; store.currentFrame = clamp(Number(f) || 0, 0, store.totalFrames); ui.selectedKeyframe = null; commit({ history: false }); return { currentFrame: store.currentFrame }; },
@@ -207,7 +212,7 @@
     getState: 'Full RemotionWorkspaceState JSON.', setState: '{state} replace the whole scene.', clearScene: 'Remove all assets.', listCatalog: 'All addable assets with control schemas, presets and modifiers.', listPresets: 'Martial-arts choreography presets for characters.', listModifiers: '{assetId?} context-aware motion generators.',
     addAsset: '{catalogId, id?, name?, properties?, keyframes?, frame?, index?}', duplicateAsset: '{assetId}', deleteAsset: '{assetId}', updateAsset: '{assetId, name?, visible?, locked?, easing?}', selectAsset: '{assetId|null}', reorderAsset: '{assetId, direction: up|down|top|bottom | index}',
     updateAssetKeyframe: '{assetId, frame, properties (partial, merged), easing?, merge?}', setKeyframes: '{assetId, keyframes[]} replace track.', removeKeyframe: '{assetId, frame}', moveKeyframe: '{assetId, frame, toFrame}', addKeyframeAtCurrent: '{assetId?}',
-    applyPreset: '{assetId, preset, startFrame?, mirror?, play?}', generateFromPrompt: '{prompt, assetId?, startFrame?}', applyModifier: '{assetId, modifier, startFrame?, duration?}', setProperty: '{assetId, key, value, custom?, frame?}',
+    applyPreset: '{assetId, preset, startFrame?, mirror?, play?}', generateFromPrompt: '{prompt, assetId?, startFrame?}', applyModifier: '{assetId, modifier, startFrame?, duration?}', setProperty: '{assetId, key, value, custom?, frame?, allKeyframes?}',
     setAspect: '{preset: 16:9|9:16|1:1|4:5|4:3|3:4|21:9|2:3|4K|9:16-4K | width,height, refit?=true}', listAspectRatios: '', registerComponent: '{entry:{id, componentName, external:{importPath, exportName, package?, sizeMode}, defaults, controls, preview}}', validateScene: '→ {ok, score, errors[], warnings[], info[]}',
     changeCurrentFrame: '{frame}', setTimeline: '{totalFrames?, fps?, width?, height?, background?, name?}', play: '', pause: '', togglePlay: '', exportJSON: 'scene.json string', exportRemotion: '{files:{name:code}}', describe: 'This list.'
   };
@@ -234,7 +239,7 @@
     store.assets.forEach(asset => {
       if (asset.visible === false) return; const cat = catalogOf(asset); if (!cat) return; const p = sampleAsset(asset, f); samples[asset.id] = p;
       if (asset.type === 'three') { threeLayers.push({ asset, p }); const sz = (p.customProperties.size || 200) * (p.scale || 1) / 2; hits += `<rect class="asset hit ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" x="${p.baseX - sz}" y="${p.baseY - sz}" width="${sz * 2}" height="${sz * 2}" fill="transparent"/>`; if (!ThreeBridge.ready) svg += `<g class="asset three-placeholder" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${p.opacity}">${cat.render(p.customProperties, { uid: asset.id })}</g>`; return; }
-      svg += `<g class="asset ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${round2(p.opacity ?? 1)}">${cat.render(p.customProperties, { uid: asset.id, entry: cat, frame: f, totalFrames: store.totalFrames })}</g>`;
+      svg += `<g class="asset ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${round2(p.opacity ?? 1)}">${cat.render(p.customProperties, { uid: asset.id, entry: cat, frame: f, totalFrames: store.totalFrames, fps: store.fps })}</g>`;
     });
     $('assetsLayer').innerHTML = svg; $('hitLayer').innerHTML = hits;
     ThreeBridge.sync(threeLayers);
@@ -330,11 +335,12 @@
     let html = `<div class="slider-row inline"><span class="mono" style="font-size:9.5px;color:var(--muted)">TRACK EASING</span><select data-asset-field="easing" style="width:120px">${['linear', 'easeInOut', 'easeOut', 'spring'].map(e => `<option value="${e}" ${a.easing === e ? 'selected' : ''}>${e}</option>`).join('')}</select></div>`;
     groups.forEach(g => {
       html += `<div class="ctrl-group"><div class="g-title">${esc(g.group)}</div>`;
-      g.items.forEach(c => {
-        const path = c.top ? 'top' : 'cp'; const attrs = `data-key="${c.key}" data-path="${path}" data-kind="${c.kind}"`;
+      g.items.forEach(c0 => { const c = c0.keyframable === false ? Object.assign({}, c0, { label: c0.label + ' • WHOLE CLIP' }) : c0;
+        const path = c.top ? 'top' : 'cp'; const attrs = `data-key="${c.key}" data-path="${path}" data-kind="${c.kind}"${c.keyframable === false ? ' data-static="1"' : ''}`;
         if (c.kind === 'range') html += `<div class="slider-row ${c.left ? 'left-limb' : ''}"><div class="slider-header"><span>${esc(c.label)}</span><span class="val" data-val="${c.key}">0</span></div><input type="range" ${attrs} min="${c.min}" max="${c.max}" step="${c.step || 1}"></div>`;
         else if (c.kind === 'checkbox') html += `<div class="slider-row inline"><span class="mono" style="font-size:9.5px;color:var(--muted)">${esc(c.label)}</span><input type="checkbox" ${attrs}></div>`;
         else if (c.kind === 'select') html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span></div><select ${attrs}>${c.options.map(o => `<option value="${esc(o[0])}">${esc(o[1])}</option>`).join('')}</select></div>`;
+        else if (c.kind === 'json') html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span><span class="val" data-val="${c.key}">JSON</span></div><textarea ${attrs} rows="7" spellcheck="false" style="width:100%;background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 7px;font-family:'JetBrains Mono',monospace;font-size:10px;outline:none;resize:vertical"></textarea></div>`;
         else if (c.kind === 'color') html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span><span class="val" data-val="${c.key}"></span></div><input type="color" ${attrs}></div>`;
         else html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span></div><input type="${c.kind === 'number' ? 'number' : 'text'}" ${attrs} ${c.kind === 'number' ? 'step="any"' : ''}></div>`;
       });
@@ -349,21 +355,23 @@
     const a = selected(); if (!a || ui.inspectorAsset !== a.id) return; const p = sampleAsset(a, store.currentFrame); const body = $('inspBody');
     body.querySelectorAll('[data-key]').forEach(el => {
       const key = el.dataset.key; const v = el.dataset.path === 'top' ? p[key] : p.customProperties[key]; const kind = el.dataset.kind;
-      if (document.activeElement === el && (kind === 'text' || kind === 'number' || kind === 'numlist')) return;
+      if (document.activeElement === el && (kind === 'text' || kind === 'number' || kind === 'numlist' || kind === 'json')) return;
       if (kind === 'range') { el.value = isNum(v) ? v : 0; const out = body.querySelector(`[data-val="${key}"]`); if (out) out.textContent = isNum(v) ? (Number.isInteger(+el.step) || el.step === '1' ? Math.round(v) : (+v).toFixed(2)) : '—'; }
       else if (kind === 'checkbox') el.checked = !!v;
       else if (kind === 'select') el.value = String(v);
       else if (kind === 'color') { const hex = /^#[0-9a-f]{6}$/i.test(String(v)) ? v : '#000000'; el.value = hex; const out = body.querySelector(`[data-val="${key}"]`); if (out) out.textContent = String(v ?? ''); }
       else if (kind === 'numlist') el.value = Array.isArray(v) ? v.map(x => round2(x)).join(', ') : '';
+      else if (kind === 'json') { el.value = v === undefined ? '' : JSON.stringify(v, null, 1); el.style.borderColor = ''; const out = body.querySelector(`[data-val="${key}"]`); if (out) out.textContent = Array.isArray(v) ? v.length + ' items' : 'JSON'; }
       else el.value = v ?? '';
     });
   }
   function readControl(el) {
     const kind = el.dataset.kind; if (kind === 'range' || kind === 'number') return parseFloat(el.value); if (kind === 'checkbox') return el.checked;
     if (kind === 'numlist') return el.value.split(/[,\s]+/).map(Number).filter(n => !isNaN(n));
+    if (kind === 'json') { try { const v = JSON.parse(el.value); el.style.borderColor = ''; return v; } catch (e) { el.style.borderColor = 'var(--accent)'; return undefined; } }
     if (kind === 'select') { const v = el.value; return /^-?\d+(\.\d+)?$/.test(v) ? Number(v) : v; } return el.value;
   }
-  $('inspBody').addEventListener('input', e => { const el = e.target; if (!el.dataset.key) return; const a = selected(); if (!a || a.locked) return; const v = readControl(el); if (el.dataset.kind === 'number' && isNaN(v)) return; writeKeyframe(a, store.currentFrame, el.dataset.path === 'top' ? { [el.dataset.key]: v } : { customProperties: { [el.dataset.key]: v } }); frameUpdate(); if (el.dataset.kind === 'range') { const out = $('inspBody').querySelector(`[data-val="${el.dataset.key}"]`); if (out) out.textContent = el.step === '1' ? Math.round(v) : v.toFixed(2); } });
+  $('inspBody').addEventListener('input', e => { const el = e.target; if (!el.dataset.key) return; const a = selected(); if (!a || a.locked) return; const v = readControl(el); if (el.dataset.kind === 'number' && isNaN(v)) return; if (el.dataset.kind === 'json' && v === undefined) return; const partial = el.dataset.path === 'top' ? { [el.dataset.key]: v } : { customProperties: { [el.dataset.key]: v } }; if (el.dataset.static) writeAllKeyframes(a, partial); else writeKeyframe(a, store.currentFrame, partial); frameUpdate(); if (el.dataset.kind === 'range') { const out = $('inspBody').querySelector(`[data-val="${el.dataset.key}"]`); if (out) out.textContent = el.step === '1' ? Math.round(v) : v.toFixed(2); } });
   $('inspBody').addEventListener('change', e => { const el = e.target; if (el.dataset.assetField) { const a = selected(); if (a) StudioAPI.updateAsset({ assetId: a.id, [el.dataset.assetField]: el.value }); return; } if (!el.dataset.key) return; const a = selected(); if (!a || a.locked) return; commit({ structure: true }); });
   $('inspHead').addEventListener('click', () => $('inspector').classList.toggle('collapsed'));
 

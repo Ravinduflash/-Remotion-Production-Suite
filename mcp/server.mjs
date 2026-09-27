@@ -220,7 +220,7 @@ tool('set_keyframe', 'Create or update the keyframe of an asset at a frame. prop
 tool('set_keyframes', 'Replace the entire keyframe track of an asset.', { assetId: z.string(), keyframes: z.array(keyframe) }, (a) => call('setKeyframes', a));
 tool('remove_keyframe', 'Delete the keyframe at a frame.', { assetId: z.string(), frame: z.number() }, (a) => call('removeKeyframe', a));
 tool('move_keyframe', 'Retime a keyframe.', { assetId: z.string(), frame: z.number(), toFrame: z.number() }, (a) => call('moveKeyframe', a));
-tool('set_property', 'Set one property (or one customProperties key with custom:true) on the keyframe at a frame (auto-keys).', { assetId: z.string(), key: z.string(), value: z.any(), custom: z.boolean().optional(), frame: z.number().optional() }, (a) => call('setProperty', a));
+tool('set_property', 'Set one property (or one customProperties key with custom:true) on the keyframe at a frame (auto-keys). allKeyframes:true writes it to every keyframe instead: use it for non-keyframable values such as captions or bar counts (controls with keyframable:false in list_catalog).', { assetId: z.string(), key: z.string(), value: z.any(), custom: z.boolean().optional(), frame: z.number().optional(), allKeyframes: z.boolean().optional() }, (a) => call('setProperty', a));
 tool('apply_preset', 'Apply a martial-arts preset to a character starting at startFrame (relative motion, keeps position/colours). mirror flips facing.', { assetId: z.string(), preset: z.string(), startFrame: z.number().optional(), mirror: z.boolean().optional(), play: z.boolean().optional() }, (a) => call('applyPreset', { ...a, play: a.play ?? false }));
 tool('apply_modifier', 'Apply a context-aware motion generator (see list_modifiers) to an asset starting at startFrame; duration rescales it.', { assetId: z.string(), modifier: z.string(), startFrame: z.number().optional(), duration: z.number().optional() }, (a) => call('applyModifier', a));
 tool('generate_from_prompt', 'Keyword choreography: "crouching low sweep kick, arms flare" → preset + modifiers on a character.', { prompt: z.string(), assetId: z.string().optional(), startFrame: z.number().optional() }, (a) => call('generateFromPrompt', { ...a, play: false }));
@@ -248,6 +248,27 @@ tool('register_component', 'Register an external/community Remotion component as
   persist: z.boolean().optional(),
 }, async (a) => { const b = await broadcast('registerComponent', { entry: a.entry }); const r = { ...b.result, alsoAppliedTo: b.alsoApplied }; if (a.persist) { const m = readManifest(); const i = m.findIndex(x => x.id === a.entry.id); if (i >= 0) m[i] = a.entry; else m.push(a.entry); writeManifest(m); r.persisted = MANIFEST; } return r; });
 tool('unregister_component', 'Remove a community component from remotion/community/manifest.js (takes effect after the studio reloads).', { id: z.string() }, (a) => { const m = readManifest(); const n = m.filter(x => x.id !== a.id); writeManifest(n); return { removed: m.length - n.length }; });
+/* --- captions: script text or SRT → @remotion/captions Caption[] (word tokens, TikTok style: leading space on every word but the first) --- */
+function wordsToCaptions(words, startMs, endMs) { const n = words.length, span = Math.max(1, endMs - startMs); return words.map((w, i) => { const s = Math.round(startMs + span * i / n), e = Math.round(startMs + span * (i + 1) / n); return { text: (i === 0 ? '' : ' ') + w, startMs: s, endMs: e, timestampMs: Math.round((s + e) / 2), confidence: 1 }; }); }
+function captionsFromText(text, { startMs = 0, wordsPerMinute = 160, sentencePauseMs = 250 }) {
+  const out = []; let t = startMs; const msPerWord = 60000 / wordsPerMinute;
+  for (const sentence of String(text).split(/(?<=[.!?])\s+/).map(x => x.trim()).filter(Boolean)) {
+    const words = sentence.split(/\s+/); words.forEach((w, i) => { const s = Math.round(t), e = Math.round(t + msPerWord); out.push({ text: (out.length === 0 ? '' : ' ') + w, startMs: s, endMs: e, timestampMs: Math.round((s + e) / 2), confidence: 1 }); t += msPerWord; }); t += sentencePauseMs; }
+  return out;
+}
+function captionsFromSrt(srt, offsetMs = 0) {
+  const ms = (h, m, s, f) => ((+h * 60 + +m) * 60 + +s) * 1000 + +f; const out = [];
+  for (const block of String(srt).replace(/\r/g, '').split(/\n\s*\n/)) {
+    const m = block.match(/(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)/); if (!m) continue;
+    const body = block.slice(block.indexOf(m[0]) + m[0].length).trim().replace(/<[^>]+>/g, ''); const words = body.split(/\s+/).filter(Boolean); if (!words.length) continue;
+    const caps = wordsToCaptions(words, ms(m[1], m[2], m[3], m[4]) + offsetMs, ms(m[5], m[6], m[7], m[8]) + offsetMs); if (out.length) caps[0].text = ' ' + caps[0].text; out.push(...caps);
+  }
+  return out;
+}
+tool('build_captions', 'Build a Caption[] array (the @remotion/captions format used by caption components) from plain script text (evenly timed at wordsPerMinute, with a pause after each sentence) or from an SRT file (words spread evenly inside each cue). Returns { captions, count, startMs, endMs, endFrame }. Pass the captions array as customProperties.captions of a caption asset; for real speech, prefer word timings from a transcriber (e.g. @remotion/install-whisper-cpp).', {
+  text: z.string().optional(), srt: z.string().optional(), startMs: z.number().optional(), wordsPerMinute: z.number().optional(), sentencePauseMs: z.number().optional(), fps: z.number().optional().describe('to report endFrame; default 30'),
+}, (a) => { if (!a.text && !a.srt) throw new Error('Pass text or srt'); const captions = a.srt ? captionsFromSrt(a.srt, a.startMs || 0) : captionsFromText(a.text, a); const endMs = captions.length ? captions[captions.length - 1].endMs : 0; return { count: captions.length, startMs: captions.length ? captions[0].startMs : 0, endMs, endFrame: Math.ceil(endMs / 1000 * (a.fps || 30)), captions }; });
+
 tool('call_studio', 'Escape hatch: call any StudioAPI method by name (see studio_status.methods).', { method: z.string(), params: z.record(z.any()).optional() }, (a) => call(a.method, a.params || {}));
 
 server.registerResource('scene', 'studio://scene', { description: 'Live RemotionWorkspaceState pushed by the studio UI', mimeType: 'application/json' }, async (uri) => ({ contents: [{ uri: uri.href, mimeType: 'application/json', text: JSON.stringify(lastState || { note: 'studio not connected yet' }, null, 2) }] }));
