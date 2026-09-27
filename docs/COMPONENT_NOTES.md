@@ -981,6 +981,34 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Center build "Words push left." and custom "Build ship repeat", spacing correct after the `cssVars` fix.
   - Morph: letters flying into "Hello", then morphing to "Make it move" and "Shape what's next".
 
+### Kinetic Warp, Staggered Fade Up, Mask Reveal Up, Tracking In, Inline Highlight and Marker Highlight (remocn)
+
+- **Catalog ids:** `remocn_kinetic_warp`, `remocn_staggered_fade_up`, `remocn_mask_reveal_up`, `remocn_tracking_in`, `remocn_inline_highlight`, `remocn_marker_highlight`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT. Kinetic Warp and Mask Reveal Up were pasted more than once; each is registered once.
+- **Size:** all full frame.
+  - Kinetic Warp draws a canvas at `compWidth` × `compHeight` (1920×1080 by default, which matches 1080p natively). **Set both to the composition size on other aspect ratios**, and move `positionX`/`positionY` and the mesh lines to match.
+  - The others have fonts and distances scaled 1.5×: 108, Tracking In 144, Inline Highlight 72, rises 30 and 45.
+- **Backgrounds:** **Staggered Fade Up, Tracking In, Inline Highlight and Marker Highlight hard-code `background: white`**, so they cover what's below them. Mask Reveal Up and Kinetic Warp are transparent.
+- **Controls, all whole clip:** every documented prop, plus `speed`.
+  - Kinetic Warp exposes all 24: text as multiline, font and `fontUrl`, layer scale, mesh lines, keyframe stride, the easing bezier (numlist) and the resample step. `renderTimeoutMs: 120000`, since it waits for the webfont.
+- **Preview:** one shared kind, `kinetic4`. It ports the frame math, including Tracking In's and Marker Highlight's springs through `springAt()`.
+  - Kinetic Warp's separable spline mesh warp is approximated by a four-quadrant piecewise-linear warp driven by the same keyframed column and row lines.
+  - The preview loads `fontUrl` once, as a `<link>`, so it uses the webfont.
+- **Timing:**
+  - **Kinetic Warp:** six keyframes, `keyframeStride` (20) apart, with the motion ending at 5 × stride (frame 100). The word is fully visible from frame 0; it is a distortion, not an entrance. Layer 120.
+  - **Staggered Fade Up:** 12 frames per word, `staggerDelay` apart. Layer 60.
+  - **Mask Reveal Up:** lines enter over 23 frames, 3 frames apart, and **exit over the layer's last frames**, since it reads the duration. Layer 90.
+  - **Tracking In:** a spring with damping 18 and stiffness 90, settling in about 40 frames. Layer 60.
+  - **Inline Highlight:** the colour shifts over **20 to 70 % of the layer**. Layer 90.
+  - **Marker Highlight:** the marker springs in from frame 15, with damping 14. Layer 60.
+- **Verified:** 2026-09-27, [remocn-kinetic4-contact.png](renders/remocn-kinetic4-contact.png):
+  - Kinetic Warp "REM / OCN" in Passion One through the keyframes at frames 0, 30, 50, 70 and 90; custom "BIG / NEWS" in #facc15 on blue.
+  - "Ship videos faster" cascading in.
+  - Mask Reveal Up entering, holding and exiting.
+  - "REMOCN" tracking in from wide and blurred.
+  - "remocn" shifting to #ff5e3a.
+  - Yellow marker behind "fast"; custom "Render in one click" with a #86efac marker.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

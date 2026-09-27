@@ -7270,5 +7270,759 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 288
+  },
+  {
+    "id": "remocn_kinetic_warp",
+    "componentName": "KineticWarp",
+    "name": "Kinetic Warp (remocn)",
+    "desc": "remocn • canvas mesh warp bends a huge display word in staccato beats, one axis per keyframe (motion ends at 5 × keyframeStride) • transparent",
+    "icon": "🌀",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/kinetic-warp",
+      "exportName": "KineticWarp",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "REM\nOCN",
+        "textColor": "#FFFFFF",
+        "fontFamily": "Passion One",
+        "fontUrl": "https://fonts.googleapis.com/css2?family=Passion+One:wght@700&display=block",
+        "fontWeight": 700,
+        "fontSize": 107.1,
+        "leading": 70,
+        "tracking": -21,
+        "layerScale": 480,
+        "positionX": 960,
+        "positionY": 540,
+        "compWidth": 1920,
+        "compHeight": 1080,
+        "meshRows": 2,
+        "meshColumns": 4,
+        "colRestX": 960,
+        "colRightX": 1255,
+        "colLeftX": 678,
+        "rowRestY": 540,
+        "rowDownY": 850,
+        "rowUpY": 387,
+        "keyframeStride": 20,
+        "easingBezier": [
+          0.3,
+          0.74,
+          0.09,
+          1
+        ],
+        "resampleStep": 4
+      }
+    },
+    "controls": [
+      {
+        "group": "Kinetic Warp (remocn) (whole clip) • set compWidth/compHeight to the composition size (1920×1080 default)",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT (new line = next row)",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "textColor",
+            "label": "TEXT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY (canvas)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontUrl",
+            "label": "FONT CSS URL (blank = local font)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "fontSize",
+            "label": "LAYER FONT SIZE (before layerScale)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 400,
+            "step": 0.1
+          },
+          {
+            "key": "leading",
+            "label": "LEADING",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "tracking",
+            "label": "TRACKING (1/1000 em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -200,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "layerScale",
+            "label": "LAYER SCALE %",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 1200,
+            "step": 1
+          },
+          {
+            "key": "positionX",
+            "label": "CENTRE X",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "positionY",
+            "label": "CENTRE Y",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "compWidth",
+            "label": "CANVAS WIDTH (= composition)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "compHeight",
+            "label": "CANVAS HEIGHT (= composition)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "meshRows",
+            "label": "MESH ROWS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "meshColumns",
+            "label": "MESH COLUMNS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "colRestX",
+            "label": "COLUMN REST X",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "colRightX",
+            "label": "COLUMN RIGHT X (kf 2–3)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "colLeftX",
+            "label": "COLUMN LEFT X (kf 4–5)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "rowRestY",
+            "label": "ROW REST Y",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "rowDownY",
+            "label": "ROW DOWN Y (kf 3–4)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "rowUpY",
+            "label": "ROW UP Y (kf 5)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "keyframeStride",
+            "label": "FRAMES BETWEEN KEYFRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "easingBezier",
+            "label": "EASING BEZIER [x1,y1,x2,y2]",
+            "kind": "numlist",
+            "keyframable": false
+          },
+          {
+            "key": "resampleStep",
+            "label": "RESAMPLE STEP px (lower = smoother, slower)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 32,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic4",
+      "style": "warp"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 120,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_staggered_fade_up",
+    "componentName": "StaggeredFadeUp",
+    "name": "Staggered Fade Up (remocn)",
+    "desc": "remocn • words slide up and fade in sequentially (12 frames each, staggerDelay apart) • paints a white background",
+    "icon": "🌊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/staggered-fade-up",
+      "exportName": "StaggeredFadeUp",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "Ship videos faster",
+        "staggerDelay": 4,
+        "distance": 30,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Staggered Fade Up (remocn) (whole clip) • entrance only; paints its own white background",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "staggerDelay",
+            "label": "STAGGER (frames per word)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "distance",
+            "label": "RISE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic4",
+      "style": "sfu"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_mask_reveal_up",
+    "componentName": "MaskRevealUp",
+    "name": "Mask Reveal Up (remocn)",
+    "desc": "remocn • lines rise in with a soft blur (3f stagger), hold, then rise and blur out at the end of the layer • transparent",
+    "icon": "🆙",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/mask-reveal-up",
+      "exportName": "MaskRevealUp",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "Designed to move.\nBuilt to focus.",
+        "distance": 45,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Mask Reveal Up (remocn) (whole clip) • exit timed from the layer duration; dark text, transparent",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT (one line per row)",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "distance",
+            "label": "RISE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic4",
+      "style": "mask"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_tracking_in",
+    "componentName": "TrackingIn",
+    "name": "Tracking In (remocn)",
+    "desc": "remocn • wide letter-spacing collapses and blur clears on a spring (single bold word) • paints a white background",
+    "icon": "↔️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/tracking-in",
+      "exportName": "TrackingIn",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "REMOCN",
+        "startTracking": 0.5,
+        "startBlur": 12,
+        "fontSize": 144,
+        "fontWeight": 700,
+        "color": "#171717",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Tracking In (remocn) (whole clip) • entrance only; paints its own white background",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "startTracking",
+            "label": "START TRACKING (em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "startBlur",
+            "label": "START BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic4",
+      "style": "track"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_inline_highlight",
+    "componentName": "InlineHighlight",
+    "name": "Inline Highlight (remocn)",
+    "desc": "remocn • one word inside a sentence shifts from the base colour to a brand colour (20–70% of the layer) • paints a white background",
+    "icon": "🟠",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/inline-highlight",
+      "exportName": "InlineHighlight",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "before": "Ship faster with ",
+        "highlight": "remocn",
+        "after": "",
+        "baseColor": "#171717",
+        "highlightColor": "#ff5e3a",
+        "fontSize": 72,
+        "fontWeight": 600,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Inline Highlight (remocn) (whole clip) • colour shift timed from the layer duration; paints its own white background",
+        "items": [
+          {
+            "key": "before",
+            "label": "BEFORE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "highlight",
+            "label": "HIGHLIGHTED WORD",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "after",
+            "label": "AFTER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "baseColor",
+            "label": "BASE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "highlightColor",
+            "label": "HIGHLIGHT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic4",
+      "style": "inline"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_marker_highlight",
+    "componentName": "MarkerHighlight",
+    "name": "Marker Highlight (remocn)",
+    "desc": "remocn • a marker block springs in behind a phrase from frame 15 while its text colour shifts • paints a white background",
+    "icon": "🖍️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/marker-highlight",
+      "exportName": "MarkerHighlight",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "before": "Ship it ",
+        "highlight": "fast",
+        "after": ".",
+        "markerColor": "#facc15",
+        "baseColor": "#171717",
+        "highlightedTextColor": "#171717",
+        "fontSize": 108,
+        "fontWeight": 600,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Marker Highlight (remocn) (whole clip) • paints its own white background",
+        "items": [
+          {
+            "key": "before",
+            "label": "BEFORE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "highlight",
+            "label": "HIGHLIGHTED PHRASE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "after",
+            "label": "AFTER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "markerColor",
+            "label": "MARKER COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "baseColor",
+            "label": "BASE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "highlightedTextColor",
+            "label": "HIGHLIGHTED TEXT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic4",
+      "style": "marker"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
   }
 ];
