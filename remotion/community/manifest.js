@@ -2481,5 +2481,275 @@ window.CommunityManifest = [
       "kind": "polaroids"
     },
     "defaultDurationInFrames": 150
+  },
+  {
+    "id": "community_circle_marker",
+    "componentName": "CircleMarker",
+    "name": "Circle Marker",
+    "desc": "Remotion Elements • hand-drawn blue circle scribbles around \"circular\" (frames 0–43, jittering) • dark text",
+    "icon": "⭕",
+    "external": {
+      "importPath": "./community/CircleMarker",
+      "exportName": "CircleMarker",
+      "packages": [
+        "@remotion/rough-notation",
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 560,
+      "baseY": 390,
+      "customProperties": {
+        "width": 800,
+        "height": 300
+      }
+    },
+    "controls": [
+      {
+        "group": "Circle Marker • 800 px wide text block, text hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "annotate",
+      "style": "circle"
+    },
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "community_crossed_off",
+    "componentName": "CrossedOffText",
+    "name": "Crossed Off",
+    "desc": "Remotion Elements • red hand-drawn X over \"remove\" (frames 18–39) • dark text",
+    "icon": "❌",
+    "external": {
+      "importPath": "./community/CrossedOffText",
+      "exportName": "CrossedOffText",
+      "packages": [
+        "@remotion/rough-notation",
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 560,
+      "baseY": 440,
+      "customProperties": {
+        "width": 800,
+        "height": 200
+      }
+    },
+    "controls": [
+      {
+        "group": "Crossed Off • centred in its box, text hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "annotate",
+      "style": "crossed"
+    },
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "community_spinning_text_wheel",
+    "componentName": "SpinningTextWheel",
+    "name": "Spinning Text Wheel",
+    "desc": "Remotion Elements • 3D word drum spins one turn and lands on the first item (≈90 frames) • dark text",
+    "icon": "🎡",
+    "external": {
+      "importPath": "./community/SpinningTextWheel",
+      "exportName": "SpinningTextWheel",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 760,
+      "baseY": 440,
+      "customProperties": {
+        "width": 400,
+        "height": 200,
+        "items": "Friday\nSaturday\nSunday\nMonday\nTuesday\nWednesday\nThursday"
+      }
+    },
+    "controls": [
+      {
+        "group": "Wheel (whole clip)",
+        "items": [
+          {
+            "key": "items",
+            "label": "ITEMS (one per line, FIRST = landing item)",
+            "kind": "multiline",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Spinning Text Wheel • fixed 400×200 drum",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "wheel"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "community_strike_through",
+    "componentName": "StrikeThroughText",
+    "name": "Strike Through",
+    "desc": "Remotion Elements • thick red hand-drawn line through \"forbidden\" (frames 10–25) • dark text",
+    "icon": "➖",
+    "external": {
+      "importPath": "./community/StrikeThroughText",
+      "exportName": "StrikeThroughText",
+      "packages": [
+        "@remotion/rough-notation",
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 560,
+      "baseY": 440,
+      "customProperties": {
+        "width": 800,
+        "height": 200
+      }
+    },
+    "controls": [
+      {
+        "group": "Strike Through • centred in its box, text hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "annotate",
+      "style": "strike"
+    },
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "community_text_marker",
+    "componentName": "TextMarker",
+    "name": "Text Marker",
+    "desc": "Remotion Elements • yellow highlighter sweeps over \"remarkable\" (frames 0–25) • dark text",
+    "icon": "🖍️",
+    "external": {
+      "importPath": "./community/TextMarker",
+      "exportName": "TextMarker",
+      "packages": [
+        "@remotion/rough-notation",
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 560,
+      "baseY": 390,
+      "customProperties": {
+        "width": 800,
+        "height": 300
+      }
+    },
+    "controls": [
+      {
+        "group": "Text Marker • 800 px wide text block, text hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "annotate",
+      "style": "marker"
+    },
+    "defaultDurationInFrames": 60
   }
 ];

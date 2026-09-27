@@ -33,6 +33,8 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Isolated testing:** open the studio as `index.html?bridge=ws://localhost:7778` and start the server with `STUDIO_WS_PORT=7778`. Tests then never touch a studio on the default port 7777.
 - **`clear_scene` keeps the canvas size,** as well as fps and duration. Call `set_aspect` and `set_timeline` again when the next scene needs different ones. This mis-framed the first Liquid Contours test scene.
 - **Layer-length timing:** since 2026-09-27 the preview context carries `layerDuration`, meaning the layer's `durationInFrames`, or the rest of the composition when it is unset. Inside the render's `<Sequence>`, `useVideoConfig().durationInFrames` returns that same value, so components that time their exit from it, such as Polaroid Pictures, preview correctly.
+- **Multiline control:** since 2026-09-27 the inspector has a `multiline` control kind, a textarea whose value is a plain string with newlines. It was added for Spinning Text Wheel's `items`.
+- **Preview fonts:** since 2026-09-27 `index.html` loads the Google Fonts the Elements use: Inter, Cormorant Garamond, Caveat and Mona Sans. Studio previews then wrap text like the render does. Before this, Georgia fallbacks made the annotation previews wider.
 - **Composition-length loops:** Moving Waves and Moving Zigzags tie their motion to `durationInFrames`. They flow exactly one loop per composition, whatever its length. A longer video means slower motion, not more loops.
 - **Non-keyframable controls, 2026-09-27:** controls marked `keyframable: false` in the manifest write their value to every keyframe of the asset, and the inspector labels them "WHOLE CLIP". This matches Remotion's own schemas: caption lists, bar counts and clip lengths should not change mid-clip. Before this, a caption edit at frame 25 created a new keyframe, so frames 0 to 24 kept the old captions. Agents get the same behaviour with `set_property { allKeyframes: true }`. `list_catalog` reports the flag on each control.
 - **JSON control kind:** `kind: "json"` is a text box for structured props such as `captions`. Invalid JSON gets a red border and is not written until it parses.
@@ -546,6 +548,72 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - So set `durationInFrames` on the layer to choose when they leave. `defaultDurationInFrames: 150`. Without a layer duration, they leave at the end of the composition.
   - The cards fly in over frames 8 to 34, 20 to 46 and 32 to 58, overshooting the box from off-screen. The layer must not be clipped.
   - The images come from `remotion.media`.
+
+### Circle Marker
+
+- **Catalog id:** `community_circle_marker`
+- **File:** `CircleMarker.tsx`, from Remotion Elements `text/circle-marker`, saved verbatim
+- **Packages:** `@remotion/rough-notation`, and `@remotion/google-fonts` for Cormorant Garamond 700
+- **Size:** an 800 px-wide text block, `sizeMode: none`. The default box is 800×300 at (560, 390). The text wraps to two lines, about 176 px.
+- **Controls:** box size only. "How much *circular* financing is in AI?" is hard-coded.
+- **Preview:** `annotate` with style `circle`
+- **Verified:** 2026-09-27, [text-contact.png](renders/text-contact.png) row 1: the circle is half-drawn at frame 20 and closed at frame 60.
+- **Notes:**
+  - The circle draws over frames 0 to 43 in steps of 4 frames (`posterize: 4`).
+  - Its `seed` changes every 4 frames up to frame 89, so the stroke keeps jittering like hand animation, even after it closes.
+  - `defaultDurationInFrames: 90`.
+
+### Crossed Off
+
+- **Catalog id:** `community_crossed_off`
+- **File:** `CrossedOffText.tsx`, from Remotion Elements `text/crossed-off`, saved verbatim. The export is `CrossedOffText`.
+- **Packages:** `@remotion/rough-notation` and `@remotion/google-fonts`
+- **Size:** the text centres itself in its box with `height: 100%`. The default box is 800×200 at (560, 440).
+- **Controls:** box size only. "Please ~~remove~~ this" is hard-coded.
+- **Preview:** `annotate` with style `crossed`
+- **Verified:** 2026-09-27, row 2: one stroke at frame 28, the full X at frame 50
+- **Notes:** the red X draws over frames 18 to 39, first one stroke, then the other. `defaultDurationInFrames: 60`.
+
+### Strike Through
+
+- **Catalog id:** `community_strike_through`
+- **File:** `StrikeThroughText.tsx`, from Remotion Elements `text/strike-through`, saved verbatim. The export is `StrikeThroughText`.
+- **Packages:** `@remotion/rough-notation` and `@remotion/google-fonts`
+- **Size:** centred in its box, like Crossed Off. The default box is 800×200 at (560, 440).
+- **Controls:** box size only. "The ~~forbidden~~ fruit" is hard-coded.
+- **Preview:** `annotate` with style `strike`
+- **Verified:** 2026-09-27, row 3: partway through at frame 16, complete at frame 40
+- **Notes:** a 14 px red line draws over frames 10 to 25. `defaultDurationInFrames: 60`.
+
+### Text Marker
+
+- **Catalog id:** `community_text_marker`
+- **File:** `TextMarker.tsx`, from Remotion Elements `text/text-marker`, saved verbatim
+- **Packages:** `@remotion/rough-notation` and `@remotion/google-fonts`
+- **Size:** an 800 px-wide text block that wraps to two lines. The default box is 800×300 at (560, 390).
+- **Controls:** box size only. "A truly *remarkable* end to the World cup" is hard-coded.
+- **Preview:** `annotate` with style `marker`. The bar extends 20 px on each side, matching the component's padding.
+- **Verified:** 2026-09-27, row 4: mostly covered at frame 12, complete at frame 40
+- **Notes:** the yellow highlighter sweeps over frames 0 to 25 with a spring easing. `defaultDurationInFrames: 60`.
+
+**All four annotations use dark text (#171717) with no background,** so put a light background or light footage under them. The tests used Paper Texture.
+
+### Spinning Text Wheel
+
+- **Catalog id:** `community_spinning_text_wheel`
+- **File:** `SpinningTextWheel.tsx`, from Remotion Elements `text/spinning-text-wheel`, saved verbatim
+- **Packages:** `@remotion/google-fonts`, for Mona Sans 700
+- **Size:** a fixed 400×200 drum with faded top and bottom edges, `sizeMode: none`. The default box is at (760, 440).
+- **Controls:** `items`, a whole-clip `multiline` control with one option per line. **The first line is where the wheel lands.** It is a real prop on the component.
+- **Preview:** `wheel`. It uses the same overdamped spring (mass 10, damping 200, stiffness 200), stretched to 90 frames. It draws flat text with the fade mask, without the 3D tilt.
+- **Verified:** 2026-09-27, rows 5 and 6:
+  - Frame 30: spinning, between Thursday and Friday.
+  - Frame 110: settled on a solid "Friday".
+  - A custom list starting with "Sushi" settles on a solid "Sushi" at frame 110.
+- **Notes:**
+  - The wheel spins one full turn and settles by frame 90. The landing item then fades from 0.28 to full opacity. `defaultDurationInFrames: 120`.
+  - The text is dark (#182033), so it needs a light background.
+  - A long list packs the items closer together on the drum, and items wider than 400 px are clipped.
 
 ### Typewriter Text
 

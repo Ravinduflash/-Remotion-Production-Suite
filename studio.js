@@ -346,6 +346,7 @@
         else if (c.kind === 'checkbox') html += `<div class="slider-row inline"><span class="mono" style="font-size:9.5px;color:var(--muted)">${esc(c.label)}</span><input type="checkbox" ${attrs}></div>`;
         else if (c.kind === 'select') html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span></div><select ${attrs}>${c.options.map(o => `<option value="${esc(o[0])}">${esc(o[1])}</option>`).join('')}</select></div>`;
         else if (c.kind === 'json') html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span><span class="val" data-val="${c.key}">JSON</span></div><textarea ${attrs} rows="7" spellcheck="false" style="width:100%;background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 7px;font-family:'JetBrains Mono',monospace;font-size:10px;outline:none;resize:vertical"></textarea></div>`;
+        else if (c.kind === 'multiline') html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span></div><textarea ${attrs} rows="6" spellcheck="false" style="width:100%;background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 7px;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;resize:vertical"></textarea></div>`; // one item per line
         else if (c.kind === 'color') html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span><span class="val" data-val="${c.key}"></span></div><input type="color" ${attrs}></div>`;
         else html += `<div class="slider-row"><div class="slider-header"><span>${esc(c.label)}</span></div><input type="${c.kind === 'number' ? 'number' : 'text'}" ${attrs} ${c.kind === 'number' ? 'step="any"' : ''}></div>`;
       });
@@ -360,12 +361,13 @@
     const a = selected(); if (!a || ui.inspectorAsset !== a.id) return; const p = sampleAsset(a, store.currentFrame); const body = $('inspBody');
     body.querySelectorAll('[data-key]').forEach(el => {
       const key = el.dataset.key; const v = el.dataset.path === 'top' ? p[key] : p.customProperties[key]; const kind = el.dataset.kind;
-      if (document.activeElement === el && (kind === 'text' || kind === 'number' || kind === 'numlist' || kind === 'json')) return;
+      if (document.activeElement === el && (kind === 'text' || kind === 'multiline' || kind === 'number' || kind === 'numlist' || kind === 'json')) return;
       if (kind === 'range') { el.value = isNum(v) ? v : 0; const out = body.querySelector(`[data-val="${key}"]`); if (out) out.textContent = isNum(v) ? (Number.isInteger(+el.step) || el.step === '1' ? Math.round(v) : (+v).toFixed(2)) : '—'; }
       else if (kind === 'checkbox') el.checked = !!v;
       else if (kind === 'select') el.value = String(v);
       else if (kind === 'color') { const hex = /^#[0-9a-f]{6}$/i.test(String(v)) ? v : '#000000'; el.value = hex; const out = body.querySelector(`[data-val="${key}"]`); if (out) out.textContent = String(v ?? ''); }
       else if (kind === 'numlist') el.value = Array.isArray(v) ? v.map(x => round2(x)).join(', ') : '';
+      else if (kind === 'multiline') el.value = v === undefined || v === null ? '' : String(v);
       else if (kind === 'json') { el.value = v === undefined ? '' : JSON.stringify(v, null, 1); el.style.borderColor = ''; const out = body.querySelector(`[data-val="${key}"]`); if (out) out.textContent = Array.isArray(v) ? v.length + ' items' : 'JSON'; }
       else el.value = v ?? '';
     });
