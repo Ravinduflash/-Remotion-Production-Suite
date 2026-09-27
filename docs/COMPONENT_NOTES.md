@@ -37,6 +37,13 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **JSON control kind:** `kind: "json"` is a text box for structured props such as `captions`. Invalid JSON gets a red border and is not written until it parses.
 - **`build_captions` tool:** turns script text into timed words, evenly spaced at a words-per-minute rate with a pause after each sentence. It also accepts an SRT file and spreads each cue's words across the cue. It returns `@remotion/captions` `Caption[]`, with a leading space on every word but the first, which is the format the caption components expect. For real speech, word timings from a transcriber are more accurate.
 - **Pinned installs:** captions brought in `@remotion/google-fonts`, `@remotion/layout-utils` and `@remotion/rounded-text-box`. All were installed at 4.0.526 by the version-pinning render step, and the first render took 117 seconds including the installs.
+- **Layer timing, added 2026-09-27:** external components can have `startFrame` and `durationInFrames`, set with `update_asset` or the inspector's Layer Timing fields. Pass `null` to clear either one.
+  - In the render the component sits inside `<Sequence from={startFrame} durationInFrames={…} layout="none">`. Its own `useCurrentFrame()` is therefore 0 at the layer's start, and the component is not shown before or after its span.
+  - Before this, every external component animated from frame 0 of the whole video. A chart placed at second 20 would have finished its animation long before appearing.
+  - The studio preview uses the same local frame, and the timeline draws each timed layer's span.
+  - `check_scene` reports `layer_starts_after_end` as an error and `layer_cut_off` as a warning.
+  - **Verified** on the Number Counter with start 60 and duration 120: hidden at frames 59 and 181, finished at frame 150. See [data-contact.png](renders/data-contact.png).
+  - **Scope:** built-in assets such as stickmen and widgets still use keyframes for timing. Layer timing applies only to external components.
 - **TypeScript target:** `render-project/tsconfig.json` targets ES2021, because Elements use `String.replaceAll`.
 
 ## Components
@@ -233,6 +240,47 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Notes:**
   - It is the same as Popping Word Captions without the scale.
   - Between words, during a pause, no word is blue. Moving Pill differs here: its pill stays on the last spoken word.
+
+### Horizontal Bar Chart
+
+- **Catalog id:** `community_horizontal_bar_chart`
+- **File:** `HorizontalBarChart.tsx`, from Remotion Elements `data/horizontal-bar-chart`, saved verbatim
+- **Packages:** `@remotion/google-fonts` for Inter
+- **Size:** it fills the layer box, `sizeMode: none`. It is registered full-frame, so aspect refit resizes it.
+- **Controls:** box width and height only. The data is hard-coded: Jonny 18 highlighted, Igor 17, Mehmet 10.
+- **Preview:** `hbars`, which reproduces the bar wipe, label fade and value fade timings
+- **Verified:** 2026-09-27, [data-bars-f90.png](renders/data-bars-f90.png) with start 30. Nothing shows at frame 20.
+- **Notes:**
+  - The bars start at local frames 8, 14 and 20. Each wipes in over frames 14 to 47 of its own time.
+  - The whole chart settles about 67 frames after the layer starts. At local frame 60, Mehmet's value is still being revealed.
+  - To change the data, edit the `data` array in the source. It is not a prop.
+
+### Line Chart
+
+- **Catalog id:** `community_line_chart`
+- **File:** `LineChart.tsx`, from Remotion Elements `data/line-chart`, saved verbatim
+- **Packages:** `@remotion/google-fonts` for Inter
+- **Size:** it fills the layer box and is full-frame. The plot is a fixed 640 px tall with 160 px padding on every side, so it is designed for 1920×1080. In 9:16 the plot is stretched narrow but still works.
+- **Controls:** box size only. The data, Mar to Sep and 24 to 74K, is hard-coded.
+- **Preview:** `linechart`, which covers the line draw, dot pops and badge
+- **Verified:** 2026-09-27, [data-line-f80.png](renders/data-line-f80.png) at 9:16
+- **Notes:**
+  - The line draws over local frames 14 to 58.
+  - The "74K" badge springs in over frames 58 to 70.
+  - The badge's `scale` is passed as a string, so it would have worked on React 18 too.
+
+### Number Counter
+
+- **Catalog id:** `community_number_counter`
+- **File:** `NumberCounter.tsx`, from Remotion Elements `data/number-counter`, saved verbatim
+- **Packages:** `@remotion/google-fonts` for Inter
+- **Size:** it centres in the layer box, 1000×260 by default. The text is dark #171717, so it needs a light background.
+- **Controls:** box size only. The target 24,813 and the 90-frame duration are hard-coded.
+- **Preview:** `numcounter`, which uses the same curve as the real component
+- **Verified:** 2026-09-27, [data-counter-f150.png](renders/data-counter-f150.png): start 60, duration 120, over Paper Texture
+- **Notes:**
+  - **It ends at 24,789, not 24,813.** `Easing.out(Easing.exp)` tops out at 1 − 2⁻¹⁰ ≈ 0.99902, and 24,813 × 0.99902 rounds to 24,789. This is upstream behaviour, not a timing error: frame 150 is exactly local frame 90.
+  - A different easing in the source, such as `Easing.out(Easing.cubic)`, would land exactly on the target.
 
 ### Typewriter Text
 

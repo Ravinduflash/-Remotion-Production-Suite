@@ -120,6 +120,8 @@ Any Remotion component can become a catalog asset. Built-in wrappers cover remot
 
 The preview in the studio is an approximation drawn from the schema. The Remotion render uses the real component.
 
+**Layer timing.** External components animate on their own clock. Set `startFrame` and optionally `durationInFrames` on the layer, with `update_asset` or in the inspector. The component then starts its animation at that frame inside a `<Sequence>`, and is hidden outside its span.
+
 **Example: Remotion Elements.** `remotion/community/AudioOscilloscope.tsx` is the Oscilloscope element from remotion.dev saved verbatim. Its manifest entry maps the element's schema (`audioSrc`, `lineColor`, `lineWidth`, `amplitude`, `windowInSeconds`) to inspector controls, uses `sizeMode: "none"` because the element sizes itself at 900×300, and lists two npm packages with `packages: ["@remotion/media", "@remotion/media-utils"]`. Elements built on `Interactive.withSchema` need remotion 4.0.5xx or newer. Their `transformSchema` props (`style.translate`, `style.scale`…) are not needed, because the scene layer already positions, scales and rotates the component.
 
 ## MCP server

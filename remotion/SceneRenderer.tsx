@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Sequence, useCurrentFrame } from 'remotion';
 import { ThreeCanvas } from '@remotion/three';
 import { AdvancedStickman, StickmanAngles } from './AdvancedStickman';
 import { SkyGradient, FloorLine, House, StreetBlock, IndoorRoom, Tree } from './Environments';
@@ -46,6 +46,10 @@ export interface SceneAsset {
   locked?: boolean;
   easing?: Easing;
   renderTarget?: 'svg' | 'html';
+  /** External layers only: the component's own frame 0 happens at this composition frame (wrapped in <Sequence from>). */
+  startFrame?: number;
+  /** External layers only: unmount after this many frames. */
+  durationInFrames?: number;
   external?: ExternalDescriptor;
   preview?: Record<string, any>;
   keyframes: Keyframe[];
@@ -187,7 +191,13 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
         const cp = p.customProperties;
         return (
           <div key={asset.id} style={{ position: 'absolute', left: p.baseX, top: p.baseY, width: cp.width, height: cp.height, opacity: p.opacity, transform: `rotate(${p.rotation}deg) scale(${p.scale})`, transformOrigin: '0 0' }}>
-            <C {...externalProps(asset, p)} />
+            {asset.startFrame || asset.durationInFrames ? (
+              <Sequence from={asset.startFrame || 0} durationInFrames={asset.durationInFrames} layout="none" name={asset.name}>
+                <C {...externalProps(asset, p)} />
+              </Sequence>
+            ) : (
+              <C {...externalProps(asset, p)} />
+            )}
           </div>
         );
       })}

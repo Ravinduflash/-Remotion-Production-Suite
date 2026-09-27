@@ -1433,5 +1433,155 @@ window.CommunityManifest = [
       "kind": "captions",
       "style": "highlight"
     }
+  },
+  {
+    "id": "community_horizontal_bar_chart",
+    "componentName": "HorizontalBarChart",
+    "name": "Horizontal Bar Chart",
+    "desc": "Remotion Elements • 3 labelled bars wipe in (~65 frames), light card",
+    "icon": "📊",
+    "external": {
+      "importPath": "./community/HorizontalBarChart",
+      "exportName": "HorizontalBarChart",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Horizontal Bar Chart • data is hard-coded in the source; animation starts at the layer's start frame",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "hbars"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "community_line_chart",
+    "componentName": "LineChart",
+    "name": "Line Chart",
+    "desc": "Remotion Elements • trend line draws in, dots pop, 74K badge (~70 frames)",
+    "icon": "📈",
+    "external": {
+      "importPath": "./community/LineChart",
+      "exportName": "LineChart",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Line Chart • data is hard-coded in the source; animation starts at the layer's start frame",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "linechart"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "community_number_counter",
+    "componentName": "NumberCounter",
+    "name": "Number Counter",
+    "desc": "Remotion Elements • counts 0 → 24,813 over 90 frames, dark text",
+    "icon": "🔢",
+    "external": {
+      "importPath": "./community/NumberCounter",
+      "exportName": "NumberCounter",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 460,
+      "baseY": 410,
+      "customProperties": {
+        "width": 1000,
+        "height": 260
+      }
+    },
+    "controls": [
+      {
+        "group": "Number Counter • data is hard-coded in the source; animation starts at the layer's start frame",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "numcounter"
+    },
+    "fullFrame": false
   }
 ];

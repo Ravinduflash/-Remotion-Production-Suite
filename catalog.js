@@ -338,6 +338,30 @@
         if (g >= 4) for (let x = 0; x <= W; x += g) lines += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${lc}" stroke-width="${lw}"/>`;
         if (g >= 4) for (let y = 0; y <= H; y += g) lines += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${lc}" stroke-width="${lw}"/>`;
         return `<rect x="0" y="0" width="${W}" height="${H}" fill="${cp.color || '#ffffff'}"/><rect x="0" y="0" width="${W}" height="${H}" fill="#f3efe6" opacity="0.35"/>${lines}`; }
+      case 'hbars': { // Horizontal Bar Chart element: 3 bars reveal (cropRight 1→0, frames 14–47 of each bar, bars start at 8 + i*6)
+        const f = num(ctx.frame, 0), data = [['Jonny', 18, true], ['Igor', 17, false], ['Mehmet', 10, false]], pad = 56, gap = 32, bh = Math.round(500 / 3);
+        const cl = (v) => Math.max(0, Math.min(1, v)), ease = t => 1 - Math.pow(1 - t, 2.2); let out = `<rect width="${W}" height="${H}" fill="#f5f6f7"/>`;
+        const top = H / 2 - (3 * bh + 2 * gap) / 2;
+        data.forEach(([label, v, hi], i) => { const lf = f - (8 + i * 6); const reveal = ease(cl((lf - 14) / 33)); const full = (W - pad * 2) * v / 18, w = full * reveal, y = top + i * (bh + gap);
+          if (w > 0) out += `<rect x="${pad}" y="${y}" width="${w.toFixed(1)}" height="${bh}" rx="12" fill="${hi ? '#2563eb' : '#d1d5db'}"/>`;
+          const la = cl((lf - 26) / 6), va = cl((lf - 32) / 6), col = hi ? '#ffffff' : '#111827';
+          out += `<svg x="${pad}" y="${y}" width="${Math.max(0, w).toFixed(1)}" height="${bh}" overflow="hidden"><text x="34" y="${bh / 2 + 14}" fill="${col}" opacity="${la}" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="40">${label}</text><text x="${(full - 34).toFixed(1)}" y="${bh / 2 + 17}" fill="${col}" opacity="${va}" text-anchor="end" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="48">${v}</text></svg>`; });
+        return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+      case 'linechart': { // Line Chart element: line draws frames 14–58, dots pop in, "74K" badge after 58
+        const f = num(ctx.frame, 0), data = [['Mar', 24], ['Apr', 32], ['May', 29], ['Jun', 45], ['Jul', 51], ['Aug', 63], ['Sep', 74]], P = 160, cw = W - P * 2, ch = Math.min(640, H - P * 2 - 112), side = 16;
+        const x0 = P, y0 = H / 2 - (ch + 112) / 2, pts = data.map(([l, v], i) => [x0 + side + i / (data.length - 1) * (cw - side * 2), y0 + (80 - v) / 60 * ch]);
+        const cl = v => Math.max(0, Math.min(1, v)), draw = 1 - Math.pow(1 - cl((f - 14) / 44), 2); let out = `<rect width="${W}" height="${H}" fill="#f5f6f7"/>`;
+        [80, 60, 40, 20].forEach(v => { const y = y0 + (80 - v) / 60 * ch; out += `<line x1="${x0 + side}" x2="${x0 + cw - side}" y1="${y}" y2="${y}" stroke="#d1d5db" stroke-width="2"/>`; });
+        let len = 0; const segs = pts.slice(1).map((p, i) => { const d = Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]); len += d; return d; }); let left = len * draw, d = `M${pts[0][0]} ${pts[0][1]}`;
+        for (let i = 0; i < segs.length && left > 0; i++) { const t = Math.min(1, left / segs[i]); d += ` L${(pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t).toFixed(1)} ${(pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t).toFixed(1)}`; left -= segs[i]; }
+        if (draw > 0) out += `<path d="${d}" fill="none" stroke="#2563eb" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`;
+        pts.forEach(([x, y], i) => { const a = i === 0 ? 7 : 14 + i * 7, r = 11 * cl((f - a) / 8); if (r > 0) out += `<circle cx="${x}" cy="${y}" r="${r.toFixed(1)}" fill="#fff" stroke="#2563eb" stroke-width="8"/>`; });
+        data.forEach(([l], i) => { if (i % 2 === 0) out += `<text x="${pts[i][0]}" y="${y0 + ch + 104}" fill="#4b5563" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="40">${l}</text>`; });
+        if (f > 58) { const k = cl((f - 58) / 12), [lx, ly] = pts[pts.length - 1]; out += `<g transform="translate(${lx} ${ly - 30}) scale(${k.toFixed(3)})"><rect x="-68" y="-80" width="136" height="80" rx="12" fill="#2563eb"/><text x="0" y="-24" fill="#fff" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="44">74K</text></g>`; }
+        return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+      case 'numcounter': { // Number Counter element: 0 → 24,813 over 90 frames, ease-out-expo
+        const t = Math.max(0, Math.min(1, num(ctx.frame, 0) / 90)), e = 1 - Math.pow(2, -10 * t) /* same as Easing.out(Easing.exp): tops out at 0.99902, so the real counter ends at 24,789 */, v = Math.round(e * 24813).toLocaleString('en-US');
+        return `<text x="${W / 2}" y="${H / 2 + 52}" fill="#171717" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="150" letter-spacing="-4.5">${v}</text>`; }
       case 'captions': { // style: basic | rounded | pill — shows the caption page active at the playhead
         const style = pv.style || 'basic', caps = Array.isArray(cp.captions) ? cp.captions : [], tMs = num(ctx.frame, 0) / Math.max(1, num(ctx.fps, 30)) * 1000;
         const wordStyle = style === 'pill' || style === 'highlight' || style === 'pop'; const combine = num(cp.combineTokensWithinMilliseconds, wordStyle ? 800 : 2000), pages = [];

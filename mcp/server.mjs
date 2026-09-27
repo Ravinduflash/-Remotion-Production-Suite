@@ -209,7 +209,7 @@ tool('add_asset', 'Add a catalog asset to the scene as a new layer. properties o
   id: z.string().optional().describe('stable id you choose, e.g. "hero"'), name: z.string().optional(), frame: z.number().optional().describe('frame of the first keyframe (default 0)'),
   properties: props.optional(), keyframes: z.array(keyframe).optional(), index: z.number().optional().describe('layer index, 0 = back'),
 }, (a) => call('addAsset', a));
-tool('update_asset', 'Rename, hide/show, lock/unlock or change the default easing of a layer.', { assetId: z.string(), name: z.string().optional(), visible: z.boolean().optional(), locked: z.boolean().optional(), easing }, (a) => call('updateAsset', a));
+tool('update_asset', 'Rename, hide/show, lock/unlock or change the default easing of a layer. For external/community components, startFrame makes the component\'s own animation begin at that composition frame (it is hidden before), and durationInFrames hides it afterwards; pass null to clear.', { assetId: z.string(), name: z.string().optional(), visible: z.boolean().optional(), locked: z.boolean().optional(), easing, startFrame: z.number().nullable().optional(), durationInFrames: z.number().nullable().optional() }, (a) => call('updateAsset', a));
 tool('delete_asset', 'Remove a layer.', { assetId: z.string() }, (a) => call('deleteAsset', a));
 tool('duplicate_asset', 'Duplicate a layer (offset 60px).', { assetId: z.string() }, (a) => call('duplicateAsset', a));
 tool('reorder_asset', 'Change z-order. direction up = towards the front.', { assetId: z.string(), direction: z.enum(['up', 'down', 'top', 'bottom']).optional(), index: z.number().optional() }, (a) => call('reorderAsset', a));
