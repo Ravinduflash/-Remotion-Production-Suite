@@ -18,6 +18,10 @@ All timings are at 30 fps and 1920×1080 (`set_aspect 16:9`). Put a background l
 | Text with a matching exit | `remocn_scale_down_fade`, `remocn_focus_blur_resolve`, `remocn_blur_out_up` | Exit timed from the layer duration |
 | Phrase A → B → C swaps | `remocn_per_word_crossfade`, chained with startFrame | Keynote-style swaps |
 | Quiet label entrance | `remocn_micro_scale_fade` | |
+| Voiceover-paced phrases | `remocn_word_stream` (phrases with `|`, `wordGap` = pace), `remocn_word_push` | |
+| Replace one phrase with another | `remocn_caret_swap` (caret eats and types), `remocn_per_word_crossfade` | |
+| Cold open or big display word | `remocn_zoom_words`, `remocn_fog_rise`, `remocn_sheen_slide_in` | These exit or hard-cut on their own; cut to the next beat |
+| Wordmark reveal | `remocn_squeeze_in` | |
 | Premium headline entrances | `remocn_soft_blur_in` (per-character blur-in), `remocn_shader_text_reveal` (shader-filled words), `remocn_type_fossil` (drafts → final word), `remocn_per_character_rise` (crisp), `remocn_bottom_up_letters` / `remocn_top_down_letters` (staircase, short words), `remocn_spring_scale_in` (playful word pop) | remocn; see the notes for backgrounds and durations |
 | Prefix + rotating word ("Looking for leads / customers / …") | `remocn_inline_word_roll` | A good fit for the hook's "three moments" or the breadth beat |
 | Headline or single line | `text_card` | `text` + `subtitle`, font size, colour and alignment. Keyframe opacity and scale for the entrance. |
@@ -233,7 +237,7 @@ These are remocn's house rules, adapted to this project. Sources: [Craft](https:
 
 ## Gaps: remocn components not in the catalog
 
-**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`), `chat-to-preview-layout`, `inline-word-roll`, `soft-blur-in`, `type-fossil`, `shader-text-reveal`, `per-character-rise`, `bottom-up-letters`, `top-down-letters`, `spring-scale-in`, `micro-scale-fade`, `scale-down-fade`, `blur-out-up`, `focus-blur-resolve`, `line-by-line-slide` and `per-word-crossfade`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
+**Now registered:** `backdrop`, `drift`, `stage` (with `scene-motion`), `chat-to-preview-layout`, `inline-word-roll`, `soft-blur-in`, `type-fossil`, `shader-text-reveal`, `per-character-rise`, `bottom-up-letters`, `top-down-letters`, `spring-scale-in`, `micro-scale-fade`, `scale-down-fade`, `blur-out-up`, `focus-blur-resolve`, `line-by-line-slide`, `per-word-crossfade`, `word-stream`, `word-push`, `sheen-slide-in`, `squeeze-in`, `fog-rise`, `caret-swap` and `zoom-words`, as `remocn_*` catalog ids. To add more, paste a remocn page and its source is fetched from `https://remocn.dev/r/<name>.json`.
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
 

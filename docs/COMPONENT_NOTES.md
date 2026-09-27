@@ -893,6 +893,35 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Per-Word Crossfade chain: "Beautifully simple." → "Designed for focus." (frames 12 and 40) on layer 1, then "Designed for focus." → "Built for people." (frames 62 and 95) on layer 2, which starts at frame 50.
   - The studio previews match.
 
+### Word Stream, Word Push, Sheen Slide In, Squeeze In, Fog Rise, Caret Swap and Zoom Words (remocn)
+
+- **Catalog ids:** `remocn_word_stream`, `remocn_word_push`, `remocn_sheen_slide_in`, `remocn_squeeze_in`, `remocn_fog_rise`, `remocn_caret_swap`, `remocn_zoom_words`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT. All are deterministic, with no measurement, fonts or assets.
+- **Size:** full frame and transparent. Font sizes are scaled 1.5× from remocn's 1280×720 defaults: 108 for most, 456 for Fog Rise (from 304), 96 for Zoom Words (from 64).
+- **Controls, all whole clip:** every documented prop, plus `speed`. The text props are:
+  - Word Stream: phrases separated by `|`.
+  - Caret Swap: `fromText` and `toText`.
+  - The others: `text`.
+- **Preview:** one shared kind, `kinetic`, with styles `stream`, `push`, `sheen`, `squeeze`, `fog`, `caret` and `zoom`.
+  - It ports each component's own HTML and frame math into template strings, using the shared `bezierEase()` plus a new `springAt()` for Fog Rise's spring.
+  - The previews match the renders at every tested frame.
+- **Timing and defaults:**
+  - **Word Stream:** each phrase takes (words − 1) × `wordGap` + 3, then holds for `hold`, runs out left and hard-cuts. The last phrase stays. The default three phrases finish at frame 63; `defaultDurationInFrames` is 90. Set `wordGap` to the voiceover pace: 6 frames is 5 words per second.
+  - **Word Push:** the word gaps shrink by `accel`. The default 5 words settle at frame 42; the default layer is 60.
+  - **Sheen Slide In:** the sheen sweeps over frames 0 to 48, and **the title shrinks and hard-cuts at `exitAt` + 4** (64 by default). The default layer is 70.
+  - **Squeeze In:** the wipe lasts characters × `stagger`, then a 16-frame squeeze. "Remocn" takes 34 frames; the default layer is 50.
+  - **Fog Rise:** it resolves centre-out over about 27 frames, drifts, then **accelerates up and off the frame from `exitAt`** (60). The frame is empty a few frames later, so the next scene is meant to hard-cut in. The default layer is 75.
+  - **Caret Swap:** the caret appears at `swapAt` − 7, eats the text over `swapAt` to +13, then types the new text, accelerating, and blinks. The default layer is 80.
+  - **Zoom Words:** words × `wordGap` frames, meant to hard-cut after. The default layer is 75.
+- **Verified:** 2026-09-27, [remocn-kinetic-contact.png](renders/remocn-kinetic-contact.png), each on remocn's documented backdrop:
+  - Word Stream "introducing | one-tap checkout | for your store" at frames 10, 30 and 70; custom "meet | the new dashboard" at 40.
+  - Word Push building to "move at your own pace".
+  - Sheen: a blue sheen at frame 24, shrinking at 62.
+  - Squeeze "Rem…" at frame 9, then "Remocn".
+  - Fog Rise: blurred at frame 8, sharp at 40, and gone upward at 70.
+  - Caret Swap: caret, block eating the text, typing, then "That's where everyone quits"; custom "Manual reports?" → "Automate them".
+  - Zoom Words: defocused "Still", the camera riding "piecing", then "…gether tools".
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

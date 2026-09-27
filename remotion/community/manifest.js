@@ -4602,5 +4602,879 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 50
+  },
+  {
+    "id": "remocn_word_stream",
+    "componentName": "WordStream",
+    "name": "Word Stream (remocn)",
+    "desc": "remocn • voiceover-paced phrases (| separated) build word by word while drifting left, run out left and hard-cut to the next; last phrase stays",
+    "icon": "🌊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/word-stream",
+      "exportName": "WordStream",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "introducing | one-tap checkout | for your store",
+        "fontSize": 108,
+        "fontWeight": 400,
+        "color": "#171717",
+        "wordGap": 6,
+        "hold": 18,
+        "drift": 2
+      }
+    },
+    "controls": [
+      {
+        "group": "Word Stream (remocn) (whole clip) • transparent; sync wordGap to the voiceover",
+        "items": [
+          {
+            "key": "text",
+            "label": "PHRASES (separate with |)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "wordGap",
+            "label": "FRAMES BETWEEN WORDS (6 = 5 words/s)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "hold",
+            "label": "HOLD (frames after a phrase)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 90,
+            "step": 1
+          },
+          {
+            "key": "drift",
+            "label": "DRIFT px/frame",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 10,
+            "step": 0.1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic",
+      "style": "stream"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_word_push",
+    "componentName": "WordPush",
+    "name": "Word Push (remocn)",
+    "desc": "remocn • words drive in from the right and push the line left so it always settles centred; gaps accelerate",
+    "icon": "👉",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/word-push",
+      "exportName": "WordPush",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "move at your own pace",
+        "fontSize": 108,
+        "fontWeight": 400,
+        "color": "#171717",
+        "wordGap": 10,
+        "accel": 0.8
+      }
+    },
+    "controls": [
+      {
+        "group": "Word Push (remocn) (whole clip) • transparent",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "wordGap",
+            "label": "FIRST GAP (frames)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "accel",
+            "label": "ACCEL (next gap ×, 1 = even)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.3,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic",
+      "style": "push"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_sheen_slide_in",
+    "componentName": "SheenSlideIn",
+    "name": "Sheen Slide In (remocn)",
+    "desc": "remocn • title glides in from the right with a long exponential settle while a gradient sheen sweeps through; shrinks and hard-cuts at exitAt",
+    "icon": "💫",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/sheen-slide-in",
+      "exportName": "SheenSlideIn",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "Introducing",
+        "fontSize": 108,
+        "fontWeight": 400,
+        "baseColor": "#18181b",
+        "sheenColor": "#4f8ef7",
+        "exitAt": 60
+      }
+    },
+    "controls": [
+      {
+        "group": "Sheen Slide In (remocn) (whole clip) • transparent; vanishes at exitAt + 4",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "baseColor",
+            "label": "BASE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "sheenColor",
+            "label": "SHEEN COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "exitAt",
+            "label": "EXIT AT (frame, hard cut +4)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic",
+      "style": "sheen"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 70
+  },
+  {
+    "id": "remocn_squeeze_in",
+    "componentName": "SqueezeIn",
+    "name": "Squeeze In (remocn)",
+    "desc": "remocn • a wipe uncovers the word left to right, then every letter gap squeezes tighter as the last one lands",
+    "icon": "🤏",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/squeeze-in",
+      "exportName": "SqueezeIn",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "Remocn",
+        "fontSize": 108,
+        "fontWeight": 400,
+        "color": "#171717",
+        "stagger": 3,
+        "squeeze": 0.03
+      }
+    },
+    "controls": [
+      {
+        "group": "Squeeze In (remocn) (whole clip) • transparent",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "stagger",
+            "label": "WIPE FRAMES PER CHARACTER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "squeeze",
+            "label": "EXTRA GAP (em) that collapses",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.2,
+            "step": 0.005
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic",
+      "style": "squeeze"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 50
+  },
+  {
+    "id": "remocn_fog_rise",
+    "componentName": "FogRise",
+    "name": "Fog Rise (remocn)",
+    "desc": "remocn • big display word stands up from face-down on a spring, resolving out of blur centre-out; drifts, then accelerates up at exitAt",
+    "icon": "🌫️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/fog-rise",
+      "exportName": "FogRise",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "Remocn",
+        "fontSize": 456,
+        "fontWeight": 400,
+        "color": "#004CFF",
+        "stagger": 5,
+        "blur": 0.17,
+        "tilt": 55,
+        "depth": 5,
+        "lift": 0.85,
+        "drift": 0.005,
+        "exitAt": 60,
+        "exitAccel": 0.04,
+        "mass": 1.3,
+        "stiffness": 60,
+        "damping": 13,
+        "spreadGap": 0.07,
+        "tracking": -0.07,
+        "resolveFrames": 22,
+        "fadeFrames": 18
+      }
+    },
+    "controls": [
+      {
+        "group": "Fog Rise (remocn) (whole clip) • transparent; exits upward at exitAt",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "stagger",
+            "label": "CENTRE-OUT STAGGER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 15,
+            "step": 1
+          },
+          {
+            "key": "blur",
+            "label": "START BLUR (em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.01
+          },
+          {
+            "key": "tilt",
+            "label": "START TILT°",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 90,
+            "step": 1
+          },
+          {
+            "key": "depth",
+            "label": "PERSPECTIVE (× font size)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "lift",
+            "label": "LIFT (em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.05
+          },
+          {
+            "key": "drift",
+            "label": "DRIFT (em/frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.05,
+            "step": 0.001
+          },
+          {
+            "key": "exitAt",
+            "label": "EXIT AT (frame, 0 = none)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "exitAccel",
+            "label": "EXIT ACCEL",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.2,
+            "step": 0.005
+          },
+          {
+            "key": "mass",
+            "label": "SPRING MASS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.2,
+            "max": 5,
+            "step": 0.1
+          },
+          {
+            "key": "stiffness",
+            "label": "SPRING STIFFNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "damping",
+            "label": "SPRING DAMPING",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "spreadGap",
+            "label": "START SPREAD (em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.01
+          },
+          {
+            "key": "tracking",
+            "label": "TRACKING (em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -0.2,
+            "max": 0.2,
+            "step": 0.01
+          },
+          {
+            "key": "resolveFrames",
+            "label": "BLUR RESOLVE FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "fadeFrames",
+            "label": "FADE FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 800,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic",
+      "style": "fog"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 75
+  },
+  {
+    "id": "remocn_caret_swap",
+    "componentName": "CaretSwap",
+    "name": "Caret Swap (remocn)",
+    "desc": "remocn • a gradient caret swells into a block that eats the first phrase, then types the second and blinks",
+    "icon": "⌨️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/caret-swap",
+      "exportName": "CaretSwap",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "fromText": "Executing it?",
+        "toText": "That's where everyone quits",
+        "fontSize": 108,
+        "fontWeight": 400,
+        "color": "#171717",
+        "caretColor": "#FF4DAA",
+        "caretColorEnd": "#8A5CF6",
+        "swapAt": 20,
+        "typeSpeed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Caret Swap (remocn) (whole clip) • transparent",
+        "items": [
+          {
+            "key": "fromText",
+            "label": "FROM TEXT (eaten by the caret)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toText",
+            "label": "TO TEXT (typed)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "caretColor",
+            "label": "CARET TOP",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "caretColorEnd",
+            "label": "CARET BOTTOM",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "swapAt",
+            "label": "SWAP AT (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 7,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "typeSpeed",
+            "label": "FIRST CHAR FRAMES (accelerates)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.2,
+            "max": 10,
+            "step": 0.1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic",
+      "style": "caret"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 80
+  },
+  {
+    "id": "remocn_zoom_words",
+    "componentName": "ZoomWords",
+    "name": "Zoom Words (remocn)",
+    "desc": "remocn • huge words fade into a long line while the camera rides the write head; starts defocused, meant to hard-cut out",
+    "icon": "🔍",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/zoom-words",
+      "exportName": "ZoomWords",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "Still piecing together tools",
+        "fontSize": 96,
+        "fontWeight": 400,
+        "color": "#cfc2ff",
+        "wordGap": 12,
+        "zoom": 2.2,
+        "anchor": 0.5,
+        "blur": 0.04,
+        "blurFrames": 60
+      }
+    },
+    "controls": [
+      {
+        "group": "Zoom Words (remocn) (whole clip) • transparent; hard-cut after the last word",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "wordGap",
+            "label": "FRAMES PER WORD",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "zoom",
+            "label": "CAMERA ZOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "anchor",
+            "label": "ANCHOR (0–1 of width)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "blur",
+            "label": "START DEFOCUS (em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.2,
+            "step": 0.005
+          },
+          {
+            "key": "blurFrames",
+            "label": "FOCUS PULL FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic",
+      "style": "zoom"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 75
   }
 ];
