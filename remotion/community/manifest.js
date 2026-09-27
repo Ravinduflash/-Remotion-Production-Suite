@@ -1683,5 +1683,155 @@ window.CommunityManifest = [
       "kind": "vbars"
     },
     "fullFrame": true
+  },
+  {
+    "id": "community_wiggling_callout",
+    "componentName": "ProductDiscountCallout",
+    "name": "Wiggling Callout",
+    "desc": "Remotion Elements • blue \"-20%\" speech bubble that wiggles in (26 frames)",
+    "icon": "🗯️",
+    "external": {
+      "importPath": "./community/ProductDiscountCallout",
+      "exportName": "ProductDiscountCallout",
+      "packages": [
+        "@remotion/shapes",
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 580,
+      "baseY": 220,
+      "customProperties": {
+        "width": 760,
+        "height": 640
+      }
+    },
+    "controls": [
+      {
+        "group": "Wiggling Callout • fixed 760×640 layout; scale the layer to resize",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "callout"
+    }
+  },
+  {
+    "id": "community_shine",
+    "componentName": "Shine",
+    "name": "Shine",
+    "desc": "Remotion Elements • diagonal shine sweeps across an image (44 frames) • HtmlInCanvas",
+    "icon": "✨",
+    "external": {
+      "importPath": "./community/Shine",
+      "exportName": "Shine",
+      "packages": [
+        "@remotion/effects"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 320,
+      "baseY": 180,
+      "customProperties": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    "controls": [
+      {
+        "group": "Shine • fixed 1280×720 canvas, image URL hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfx",
+      "style": "shine"
+    }
+  },
+  {
+    "id": "community_tear",
+    "componentName": "Tear",
+    "name": "Tear Apart",
+    "desc": "Remotion Elements • image tears in two with a jagged edge (frames 15–25) • HtmlInCanvas",
+    "icon": "💥",
+    "external": {
+      "importPath": "./community/Tear",
+      "exportName": "Tear",
+      "packages": [
+        "@remotion/effects"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 320,
+      "baseY": 180,
+      "customProperties": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    "controls": [
+      {
+        "group": "Tear Apart • fixed 1280×720 canvas, image URL hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfx",
+      "style": "tear"
+    }
   }
 ];

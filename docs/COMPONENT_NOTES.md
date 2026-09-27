@@ -45,6 +45,10 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Verified** on the Number Counter with start 60 and duration 120: hidden at frames 59 and 181, finished at frame 150. See [data-contact.png](renders/data-contact.png).
   - **Scope:** built-in assets such as stickmen and widgets still use keyframes for timing. Layer timing applies only to external components.
 - **Fixed-size Elements on other aspect ratios:** many Remotion Elements are laid out in fixed pixels for 1920×1080, for example a 680 px pie or a 1080 px bar plot. For narrower frames, keep the layer box at 1920×1080 and scale the whole layer instead of shrinking the box: `scale = frameWidth / 1920`, with `baseY` centring it. This was verified with the Pie Chart at 1:1, see [pie-1x1-scaled-f75.png](renders/pie-1x1-scaled-f75.png).
+- **HtmlInCanvas, from 2026-09-27:** Shine and Tear draw their content into a canvas through Remotion's `<HtmlInCanvas>`. It needs Chrome 148 or newer with the `CanvasDrawElement` feature.
+  - Remotion's renderer switches that feature on for every render, in `@remotion/renderer/dist/open-browser.js`, and its headless Chrome is 149.0.7790.0. So real renders work.
+  - An ordinary browser or Remotion Studio shows `HTML_IN_CANVAS_UNSUPPORTED_MESSAGE` unless `chrome://flags/#canvas-draw-element` is enabled.
+  - The studio preview here does not need the feature, because it draws its own SVG approximation.
 - **TypeScript target:** `render-project/tsconfig.json` targets ES2021, because Elements use `String.replaceAll`.
 
 ## Components
@@ -311,6 +315,49 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Bar *i* starts growing at local frame 22 + 24*i*.
   - Mehmet, the last bar, finishes around frame 94.
   - In 9:16 the 1080 px plot exactly fills a 1080 px-wide frame, ignoring the 56 px padding. It works, but has no side margin, so scale the layer down slightly if you want one.
+
+### Wiggling Callout
+
+- **Catalog id:** `community_wiggling_callout`
+- **File:** `ProductDiscountCallout.tsx`, from Remotion Elements `commerce/product-discount-callout`, saved verbatim
+- **Packages:** `@remotion/shapes` for `makeCallout`, and `@remotion/google-fonts` for Inter
+- **Size:** it is laid out in absolute pixels. The 600×370 bubble sits at 80, 195 inside the layer box, which defaults to 760×640. To make it bigger or smaller, scale the layer rather than resizing the box.
+- **Controls:** box size only. The "-20%" text and blue colour are hard-coded.
+- **Preview:** `callout`, with the same wiggle keyframes and easing
+- **Verified:** 2026-09-27, [commerce-contact.png](renders/commerce-contact.png): tilted about 10° at frame 7, level at frame 40
+- **Notes:**
+  - It rotates 0 → 10° → −7° → 3° → 0° over frames 0 to 26, pivoting at the bottom centre.
+  - It uses `interpolate` with string output such as `'10deg'`, which Remotion 4.0.5xx supports.
+  - Use layer timing, `startFrame`, to wiggle it in at a chosen moment.
+
+### Shine
+
+- **Catalog id:** `community_shine`
+- **File:** `Shine.tsx`, from Remotion Elements `commerce/shine`, saved verbatim
+- **Packages:** `@remotion/effects` for the `scale` and `shine` effects
+- **Size:** a fixed 1280×720 canvas, with the image drawn at 0.75 scale inside it
+- **Controls:** box size only
+- **Preview:** `canvasfx` with style `shine`, a white diagonal band crossing the image
+- **Verified:** 2026-09-27, contact sheet row 2 middle. Frames 0 and 22 differ.
+- **Notes:**
+  - The shine sweeps once over frames 0 to 44 at a 30° angle.
+  - **The image URL is hard-coded** to `remotion.media/elements/commerce-tear-a-graphic.png`, so renders need network access.
+  - To shine your own content, replace the `<CanvasImage src=…>` or put any HTML inside `<HtmlInCanvas>`. That is a deliberate edit to the source.
+  - It needs HtmlInCanvas; see the pipeline notes.
+
+### Tear Apart
+
+- **Catalog id:** `community_tear`
+- **File:** `Tear.tsx`, from Remotion Elements `commerce/tear`, saved verbatim
+- **Packages:** `@remotion/effects` for the `scale` and `tear` effects
+- **Size:** a fixed 1280×720 canvas, with the image at 0.75 scale
+- **Controls:** box size only
+- **Preview:** `canvasfx` with style `tear`, two halves with a narrow jagged gap. It was tuned to match the render.
+- **Verified:** 2026-09-27: intact at frame 10, torn with about 5° of rotation at frame 30
+- **Notes:**
+  - The tear springs over frames 15 to 25, with jaggedness 24 and 5° rotation, then holds.
+  - The image URL is hard-coded, as in Shine.
+  - It needs HtmlInCanvas.
 
 ### Typewriter Text
 

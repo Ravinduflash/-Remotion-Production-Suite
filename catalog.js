@@ -359,6 +359,25 @@
         data.forEach(([l], i) => { if (i % 2 === 0) out += `<text x="${pts[i][0]}" y="${y0 + ch + 104}" fill="#4b5563" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="40">${l}</text>`; });
         if (f > 58) { const k = cl((f - 58) / 12), [lx, ly] = pts[pts.length - 1]; out += `<g transform="translate(${lx} ${ly - 30}) scale(${k.toFixed(3)})"><rect x="-68" y="-80" width="136" height="80" rx="12" fill="#2563eb"/><text x="0" y="-24" fill="#fff" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="44">74K</text></g>`; }
         return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+      case 'callout': { // Wiggling Callout element: blue speech bubble at (80,195) 600×370, rotates 0→10→-7→3→0° over frames 0–26 around its bottom centre
+        const f = Math.max(0, Math.min(26, num(ctx.frame, 0))), keys = [[0, 0], [7, 10], [14, -7], [20, 3], [26, 0]], eq = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; let rot = 0;
+        for (let i = 0; i < keys.length - 1; i++) if (f >= keys[i][0] && f <= keys[i + 1][0]) { const t = (f - keys[i][0]) / (keys[i + 1][0] - keys[i][0]); rot = keys[i][1] + (keys[i + 1][1] - keys[i][1]) * eq(t); break; }
+        const sx = W / 760, sy = H / 640; // component is laid out in absolute px inside its box; scale the preview with the box
+        return `<g transform="scale(${sx.toFixed(4)} ${sy.toFixed(4)})"><g transform="rotate(${rot.toFixed(2)} ${80 + 300} ${195 + 370})"><path d="M${80 + 45} 195 H${80 + 555} Q${80 + 600} 195 ${80 + 600} 240 V${195 + 255} Q${80 + 600} ${195 + 300} ${80 + 555} ${195 + 300} H${80 + 365} L${80 + 300} ${195 + 370} L${80 + 235} ${195 + 300} H${80 + 45} Q80 ${195 + 300} 80 ${195 + 255} V240 Q80 195 ${80 + 45} 195 Z" fill="#2563eb"/><text x="${80 + 300}" y="${195 + 150 + 63}" fill="#fff" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="180" letter-spacing="-7">-20%</text></g></g>`; }
+      case 'canvasfx': { // Shine / Tear elements: HtmlInCanvas image scaled 0.75 with a shine sweep (0–44) or a tear (15–25)
+        const f = num(ctx.frame, 0), style = pv.style || 'shine', src = cp.src || 'https://remotion.media/elements/commerce-tear-a-graphic.png', iw = W * 0.75, ih = H * 0.75, ix = (W - iw) / 2, iy = (H - ih) / 2, id = 'cfx_' + (ctx.uid || 'x');
+        let out = `<defs><clipPath id="${id}c"><rect x="${ix}" y="${iy}" width="${iw}" height="${ih}"/></clipPath></defs>`;
+        if (style === 'tear') { const p = Math.max(0, Math.min(1, (f - 15) / 10)), e = 1 - Math.pow(1 - p, 3), gapX = e * iw * 0.018, rotd = e * 5, mid = ix + iw / 2; let jag = ''; for (let y = 0, i = 0; y <= ih; y += ih / 9, i++) jag += `${(mid + (i % 2 ? 1 : -1) * iw * 0.035).toFixed(1)},${(iy + y).toFixed(1)} `; // narrow gap, deep zigzag like the real tear
+          const pts = jag.trim().split(' '), leftPoly = `${ix},${iy} ${pts.join(' ')} ${ix},${iy + ih}`, rightPoly = `${ix + iw},${iy} ${pts.join(' ')} ${ix + iw},${iy + ih}`;
+          out += `<clipPath id="${id}l"><polygon points="${leftPoly}"/></clipPath><clipPath id="${id}r"><polygon points="${rightPoly}"/></clipPath>`;
+          out += `<g transform="translate(${-gapX} 0) rotate(${-rotd} ${mid} ${iy + ih})"><image href="${esc(src)}" x="${ix}" y="${iy}" width="${iw}" height="${ih}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id}l)"/></g>`;
+          out += `<g transform="translate(${gapX} 0) rotate(${rotd} ${mid} ${iy + ih})"><image href="${esc(src)}" x="${ix}" y="${iy}" width="${iw}" height="${ih}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id}r)"/></g>`;
+          return out; }
+        const p = Math.max(0, Math.min(1, f / 44)), bx = ix - iw * 0.4 + p * iw * 1.8;
+        out += `<linearGradient id="${id}g" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
+        out += `<image href="${esc(src)}" x="${ix}" y="${iy}" width="${iw}" height="${ih}" preserveAspectRatio="xMidYMid slice"/>`;
+        if (p > 0 && p < 1) out += `<g clip-path="url(#${id}c)"><rect x="${bx.toFixed(1)}" y="${iy - ih}" width="${(iw * 0.25).toFixed(1)}" height="${ih * 3}" fill="url(#${id}g)" transform="rotate(30 ${bx.toFixed(1)} ${iy + ih / 2})"/></g>`;
+        return out; }
       case 'pie': { // Pie Chart element: slices sweep 0→360° over frames 8–60, legend rows wipe in from frame 8
         const f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v)), eio = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         const data = [['#2563eb', '#fff', 'Focused work', 42], ['#6b7280', '#fff', 'Meetings', 26], ['#9ca3af', '#111827', 'Planning', 18], ['#d1d5db', '#111827', 'Admin', 14]];
