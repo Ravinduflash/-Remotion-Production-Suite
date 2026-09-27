@@ -33,6 +33,9 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
   - **Paint gate:** `transition: { waitFor: '<css selector>' }` holds each transition frame until that selector matches inside the layer, plus four animation frames. It's there for shaders that paint asynchronously; paper-design mounts only after an image `decode()` and applies each frame's uniforms asynchronously. remocn's wrappers release `delayRender` after two animation frames regardless.
   - **Registry typing:** `EXTERNAL_REGISTRY` / `SceneRendererProps.registry` now also hold factories.
+  - **Render timeout, raised 2026-09-28:** `render-project/remotion.config.ts` sets `Config.setDelayRenderTimeoutInMilliseconds(120000)`, instead of Remotion's default of 30 s.
+    - **Why:** on this GPU-less machine SwiftShader compiles and draws Smoke Dissolve's smoke-ring shader for more than 30 s per still, at paper's minimum pixel ratio of 2, which is 3840×2160.
+    - **Gate:** the paint gate also has a 90 s wall-clock fallback, so it can never hold a render on its own.
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
@@ -1217,6 +1220,36 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Warp:** A melts into the folding warp field, and B sharpens out of it.
   - **Swirl:** a wound solid field at p = 0.2, open bands at 0.5, winding shut with B resolving at 0.85, and B alone after.
 - **Render cost:** software WebGL makes these the slowest stills here, 55–145 s each.
+
+### Dither Dissolve, Perlin Dissolve, Smoke Dissolve, Whip Pan, Push Through, Focus Pull and Zoom Blur (remocn transitions)
+
+- **Catalog ids:** `remocn_dither_dissolve`, `remocn_perlin_dissolve`, `remocn_smoke_dissolve`, `remocn_whip_pan`, `remocn_push_through`, `remocn_focus_pull`, `remocn_zoom_blur`. These are transition layers, like the first batch: wrap scene A as `from` and B as `to`.
+- **Files:** the matching kebab-case `.tsx` files, verbatim, MIT, plus three paper-design wrappers (dependencies, not catalog entries): `shader-dithering.tsx`, `shader-perlin-noise.tsx` and `shader-smoke-ring.tsx`. Whip, Push, Focus and Zoom Blur are pure CSS (translate, scale, blur, brightness), with no WebGL.
+- **Paint gate:** dither, perlin and smoke use the `waitFor: '[data-paper-shader] canvas'` gate.
+- **Natural lengths:** dither 40, perlin 104, smoke 104, whip 26, push 40, focus 46, zoom blur 18. Each layer defaults to `30 + T + 30`.
+- **Controls:**
+  - dither: back/ink colours, pattern (simplex, warp, dots, wave, ripple, swirl, sphere), speed;
+  - perlin: back/front, edge softness, speed;
+  - smoke: back, colours (JSON), speed;
+  - whip: direction (left, right, up, down), peak blur;
+  - push: zoom, blur;
+  - focus: blur;
+  - zoom blur: blur, rise in px.
+- **Timing:** Zoom Blur applies no internal easing, so remocn suggests `springTiming` for a springier feel. Transition layers always use linear timing, which is its recommended default.
+- **Preview:** kind `transition`, with the same curve port as the first batch; `transitionState()` gained these seven.
+  - Slot geometry now also moves on x, for Whip Pan left and right.
+  - Dither's field covers both scenes, as it does in the component.
+  - The field stand-ins are a checker dither, perlin blobs and a blurred ring.
+- **Verified:** 2026-09-28, [remocn-transitions2-contact.png](renders/remocn-transitions2-contact.png), 21 stills plus 2 re-renders, 0 errors after the timeout fix:
+  - **Dither:** a two-colour pixel field over A, opaque at the swap, thinning over B.
+  - **Perlin:** specks grow into a full front-colour field, then B resolves through it.
+  - **Smoke:** the ring expands from the centre, and B is born in the middle at 0.75.
+  - **Whip:** both scenes travel left with motion blur and the 10% gap; an `up` variant too.
+  - **Push:** A grows past the lens while B scales up from 0.68 with an overshoot.
+  - **Focus:** A defocuses and brightens, and B resolves from the blur.
+  - **Zoom Blur:** a crossfade punch-in, plus a `rise: 80` variant.
+  - **Smoke first attempt:** frames 56 and 82 failed at first on the 30 s timeout, which led to the fix above.
+- **Software-GL note:** all three paper fields drew correctly here; unlike GrainGradient's blob, no empty shapes.
 
 ### Typewriter Text
 

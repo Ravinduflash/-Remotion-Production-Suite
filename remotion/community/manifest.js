@@ -12693,5 +12693,672 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 164
+  },
+  {
+    "id": "remocn_dither_dissolve",
+    "componentName": "ditherDissolve",
+    "name": "Dither Dissolve (remocn)",
+    "desc": "remocn transition • a drifting two-colour dither-pixel field covers the cut: the outgoing scene fades under it, the next fades in beneath it (WebGL)",
+    "icon": "👾",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/dither-dissolve",
+      "exportName": "ditherDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 40,
+        "colorBack": "#141318",
+        "colorFront": "#8f88ae",
+        "shape": "simplex",
+        "speed": 1.5
+      }
+    },
+    "controls": [
+      {
+        "group": "Dither Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; quick textured cut",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 40)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colorBack",
+            "label": "FIELD BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorFront",
+            "label": "DITHER INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "shape",
+            "label": "PATTERN",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "simplex",
+                "simplex"
+              ],
+              [
+                "warp",
+                "warp"
+              ],
+              [
+                "dots",
+                "dots"
+              ],
+              [
+                "wave",
+                "wave"
+              ],
+              [
+                "ripple",
+                "ripple"
+              ],
+              [
+                "swirl",
+                "swirl"
+              ],
+              [
+                "sphere",
+                "sphere"
+              ]
+            ]
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "dither"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 100
+  },
+  {
+    "id": "remocn_perlin_dissolve",
+    "componentName": "perlinDissolve",
+    "name": "Perlin Dissolve (remocn)",
+    "desc": "remocn transition • a perlin-noise threshold sweeps from back to front colour, then the next scene resolves through it (WebGL)",
+    "icon": "☁️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/perlin-dissolve",
+      "exportName": "perlinDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 104,
+        "colorBack": "#141318",
+        "colorFront": "#8f88ae",
+        "softness": 0.1,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Perlin Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; needs ~100 frames",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 104)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorFront",
+            "label": "FRONT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "softness",
+            "label": "EDGE SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "perlin"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 164
+  },
+  {
+    "id": "remocn_smoke_dissolve",
+    "componentName": "smokeDissolve",
+    "name": "Smoke Dissolve (remocn)",
+    "desc": "remocn transition • a smoke ring expands out from the centre and the next scene is born in the middle of it (WebGL)",
+    "icon": "💨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/smoke-dissolve",
+      "exportName": "smokeDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 104,
+        "colorBack": "#141318",
+        "colors": [
+          "#8f88ae"
+        ],
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Smoke Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; needs ~100 frames; dark palettes",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 104)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colors",
+            "label": "SMOKE COLORS (JSON array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SHADER SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "smoke"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 164
+  },
+  {
+    "id": "remocn_whip_pan",
+    "componentName": "whipPan",
+    "name": "Whip Pan (remocn)",
+    "desc": "remocn transition • one continuous camera whip: both scenes fly through the frame with motion blur and smear peaking mid-move (CSS)",
+    "icon": "💫",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/whip-pan",
+      "exportName": "whipPan",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 26,
+        "direction": "left",
+        "blur": 24
+      }
+    },
+    "controls": [
+      {
+        "group": "Whip Pan (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; keep it ~26 frames",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 26)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "direction",
+            "label": "DIRECTION",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "left",
+                "Left"
+              ],
+              [
+                "right",
+                "Right"
+              ],
+              [
+                "up",
+                "Up"
+              ],
+              [
+                "down",
+                "Down"
+              ]
+            ]
+          },
+          {
+            "key": "blur",
+            "label": "PEAK BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 80,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "whip"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 86
+  },
+  {
+    "id": "remocn_push_through",
+    "componentName": "pushThrough",
+    "name": "Push Through (remocn)",
+    "desc": "remocn transition • the camera dollies through the outgoing scene (it grows past the lens and blurs) as the next scales up from the depth with an overshoot settle (CSS)",
+    "icon": "🔭",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/push-through",
+      "exportName": "pushThrough",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 40,
+        "zoom": 2.4,
+        "blur": 14
+      }
+    },
+    "controls": [
+      {
+        "group": "Push Through (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; implies outer → inner",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 40)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "zoom",
+            "label": "PUSH ZOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 8,
+            "step": 0.05
+          },
+          {
+            "key": "blur",
+            "label": "PEAK BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 60,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "push"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 100
+  },
+  {
+    "id": "remocn_focus_pull",
+    "componentName": "focusPull",
+    "name": "Focus Pull (remocn)",
+    "desc": "remocn transition • rack focus: the outgoing scene defocuses and brightens like bokeh, the next resolves from the same blur with a lens breath (CSS)",
+    "icon": "🎞️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/focus-pull",
+      "exportName": "focusPull",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 46,
+        "blur": 16
+      }
+    },
+    "controls": [
+      {
+        "group": "Focus Pull (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; calm, editorial",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 46)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "blur",
+            "label": "MAX DEFOCUS px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 60,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "focus"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 106
+  },
+  {
+    "id": "remocn_zoom_blur",
+    "componentName": "zoomBlur",
+    "name": "Zoom Blur (remocn)",
+    "desc": "remocn transition • depth punch-in: the outgoing scene scales past the viewer into blur while the next resolves out of blur on a crossfade (CSS; character comes from the timing)",
+    "icon": "🎯",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/zoom-blur",
+      "exportName": "zoomBlur",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 18,
+        "blur": 16,
+        "rise": 0
+      }
+    },
+    "controls": [
+      {
+        "group": "Zoom Blur (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; the workhorse cut; linear timing",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 18)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "blur",
+            "label": "PEAK BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "rise",
+            "label": "RISE px (vertical pickup)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "zoomblur"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 78
   }
 ];

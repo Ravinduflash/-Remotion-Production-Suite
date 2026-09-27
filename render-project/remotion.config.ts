@@ -3,6 +3,9 @@ import { Config } from '@remotion/cli/config';
 
 Config.setVideoImageFormat('jpeg');
 Config.setOverwriteOutput(true);
+// Software WebGL (SwiftShader, no GPU here) compiles some remocn/paper-design shaders synchronously for well over
+// Remotion's default 30 s delayRender budget (Smoke Dissolve's smoke ring), so allow more.
+Config.setDelayRenderTimeoutInMilliseconds(120000);
 // remocn (remocn.dev) registry files import each other through shadcn-style aliases. They are saved verbatim,
 // flat, into remotion/community/ (synced to src/remotion/community/), so both aliases resolve there.
 const COMMUNITY = path.resolve(process.cwd(), 'src', 'remotion', 'community');

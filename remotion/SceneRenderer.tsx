@@ -184,7 +184,7 @@ const TransitionLayer: React.FC<{ factory: (props: Record<string, any>) => { com
   // remocn's wrappers only hold the first render for two frames, so the capture could miss the field. Hold every frame.
   React.useLayoutEffect(() => {
     if (!during || !waitFor) return;
-    const handle = delayRender(`transition paint ${frame}`, { timeoutInMilliseconds: 60000 });
+    const handle = delayRender(`transition paint ${frame}`, { timeoutInMilliseconds: 110000 });
     let raf = 0, done = false, settle = -1; const t0 = performance.now();
     const finish = () => { if (!done) { done = true; continueRender(handle); } };
     const tick = () => {
@@ -195,7 +195,8 @@ const TransitionLayer: React.FC<{ factory: (props: Record<string, any>) => { com
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); finish(); };
+    const fallback = setTimeout(finish, 90000); // never outlive the render's delayRender budget, even if the shader never mounts
+    return () => { cancelAnimationFrame(raf); clearTimeout(fallback); finish(); };
   }, [frame, during, waitFor]);
   if (frame < at) return <AbsoluteFill>{from}</AbsoluteFill>;
   if (frame >= at + T) return <AbsoluteFill>{to}</AbsoluteFill>;
