@@ -57,6 +57,9 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Scaling only the font props would leave those at 720p proportions, so these components are registered in a 1280×720 box with layer `scale: 1.5`. Every pixel then scales together, and the render matches remocn's reference exactly. This is how Chat to Preview was already registered.
   - Components that read `useVideoConfig().width/height` (Outline Fill Track, Rush Type, Backdrop, Stage, Inline Word Roll…) stay full-frame instead, with their pixel props scaled 1.5×.
   - `check_scene` treats an external layer whose box covers the frame as a background, like `fullFrame`. Before, scaled 1280 boxes that paint their own field falsely warned `no_background`.
+- **Per-layer CSS variables (`external.cssVars`), from 2026-09-27:** a manifest entry can set CSS custom properties on its own layer only.
+  - **Why:** Kinetic Center Build measures word widths with `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto` but renders with `var(--font-geist-sans)`. Our global Geist stack resolves to Inter here, which is wider than the measured Segoe UI, so the fixed 10 px gaps vanished ("Wordspushleft.").
+  - **The fix:** its entry sets `--font-geist-sans` to the measuring stack, so it renders in the font it measured with. The source file is untouched, and the global Geist mapping is unchanged for everything else.
 - **Wrapper layers, from 2026-09-27:** a registered component whose `external.children` is set can render other layers inside it.
   - **How to use it:** call `update_asset { assetId, wraps: [ids] }`, or `{ slot: ids[] }` for slotted layouts. Pass `null` to clear. The Inspector's Layer timing group has a WRAPS LAYERS field.
   - **What the renderer does:** wrapped layers are skipped at top level and drawn on a composition-sized canvas passed as the prop (default `children`).
@@ -953,6 +956,30 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Giant "Intro…" cutting to a blurred, then sharp, compact "Introducing".
   - Rush: "gone" sharp, "before" smeared into RGB trails, "before" resolved, "you" blasting.
   - `check_scene` found no errors after the background fix.
+
+### Fade Through, Shared Axis Y, Shared Axis Z, Strikethrough Replace, Short Slide Right, Kinetic Center Build and Kinetic Morph Text (remocn)
+
+- **Catalog ids:** `remocn_fade_through`, `remocn_shared_axis_y`, `remocn_shared_axis_z`, `remocn_strikethrough_replace`, `remocn_short_slide_right`, `remocn_kinetic_center_build`, `remocn_kinetic_morph_text`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT. The first registry fetch came back truncated and was re-fetched with JSON validation.
+- **Size:**
+  - Full frame, with fonts ×1.5 (108; Strikethrough 72, from 48): Fade Through, Shared Axis Y and Z, Strikethrough, Short Slide Right (distance 36).
+  - Kinetic Morph Text: full frame; it fits within 82 % of the width. Font 150, spread 270.
+  - **Kinetic Center Build is a 1280×720 box at scale 1.5**, because its 10 px word gap is a hidden constant. It also sets `cssVars`; see the pipeline note.
+- **Backgrounds:** **Strikethrough Replace hard-codes a white background.** Kinetic Morph Text paints its own (#a800b7 by default). The rest are transparent with dark text, so pair them with a light Backdrop.
+- **Controls, all whole clip:** every documented prop, plus `speed`. Kinetic Morph Text also has `loop`, a checkbox, and `text` as a multiline control (phrases separated by `|` or new lines).
+- **Preview:** one shared kind, `kinetic3`. It ports the frame math of the first six. Kinetic Morph Text's letter flight and glyph morph are approximated by a scattered crossfade on the same timeline.
+- **Timing:**
+  - **Fade Through, Shared Axis Y and Z are quick swaps** of about 13 to 25 frames that then hold the new text. `defaultDurationInFrames` is 40. **Chain A→B→C** with `startFrame` and `durationInFrames` layers, as remocn's docs do with Sequences.
+  - Shared Axis Y hard-cuts: the old words snap off 2 frames apart, then the new ones snap on. It is blank for a frame or two between them, by design.
+  - **Strikethrough Replace is timed from the layer duration:** the strike runs over the first 40 %, the swap over 40 to 60 %, then it holds. Layer 120.
+  - Short Slide Right and Kinetic Center Build are entrances only. Layer 60 each.
+  - **Kinetic Morph Text:** a 54-frame entrance, then (42 hold + 54 transition) per phrase. The default three phrases come to 288 frames (`defaultDurationInFrames`).
+- **Verified:** 2026-09-27, [remocn-kinetic3-contact.png](renders/remocn-kinetic3-contact.png):
+  - Fade Through, Shared Axis Y and Shared Axis Z each as a two-layer chain, for example "Calm transitions." → "Fade through content." → "Focus shifts smoothly.".
+  - Strike across "Manual video editing" → "One-click export"; custom "$99 / month" → "$29 / month".
+  - Slide "Move with intent.".
+  - Center build "Words push left." and custom "Build ship repeat", spacing correct after the `cssVars` fix.
+  - Morph: letters flying into "Hello", then morphing to "Make it move" and "Shape what's next".
 
 ### Typewriter Text
 

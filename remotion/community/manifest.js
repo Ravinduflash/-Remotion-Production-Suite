@@ -6582,5 +6582,693 @@ window.CommunityManifest = [
     "defaultDurationInFrames": 104,
     "fullFrame": true,
     "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_fade_through",
+    "componentName": "FadeThrough",
+    "name": "Fade Through (remocn)",
+    "desc": "remocn • Material fade-through: old phrase fades and lifts away, new one fades up with a soft scale/blur settle (≈22 frames)",
+    "icon": "🔄",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/fade-through",
+      "exportName": "FadeThrough",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "fromText": "Calm transitions.",
+        "toText": "Fade through content.",
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717"
+      }
+    },
+    "controls": [
+      {
+        "group": "Fade Through (remocn) (whole clip) • chain layers A→B, B→C with startFrame; dark text, transparent",
+        "items": [
+          {
+            "key": "fromText",
+            "label": "FROM TEXT (outgoing)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toText",
+            "label": "TO TEXT (incoming)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic3",
+      "style": "fade"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 40
+  },
+  {
+    "id": "remocn_shared_axis_y",
+    "componentName": "SharedAxisY",
+    "name": "Shared Axis Y (remocn)",
+    "desc": "remocn • per-word hard-cut staircase swap — old words snap off, new words snap on, no fade",
+    "icon": "📶",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shared-axis-y",
+      "exportName": "SharedAxisY",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "fromText": "Layered navigation.",
+        "toText": "Hierarchy made clear.",
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717"
+      }
+    },
+    "controls": [
+      {
+        "group": "Shared Axis Y (remocn) (whole clip) • chain layers A→B, B→C with startFrame; dark text, transparent",
+        "items": [
+          {
+            "key": "fromText",
+            "label": "FROM TEXT (outgoing)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toText",
+            "label": "TO TEXT (incoming)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic3",
+      "style": "axisy"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 40
+  },
+  {
+    "id": "remocn_shared_axis_z",
+    "componentName": "SharedAxisZ",
+    "name": "Shared Axis Z (remocn)",
+    "desc": "remocn • depth swap: old phrase scales up and blurs away, new one rises from a smaller scale into focus",
+    "icon": "🔭",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shared-axis-z",
+      "exportName": "SharedAxisZ",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "fromText": "Zooming between states.",
+        "toText": "Elevate and settle.",
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717"
+      }
+    },
+    "controls": [
+      {
+        "group": "Shared Axis Z (remocn) (whole clip) • chain layers A→B, B→C with startFrame; dark text, transparent",
+        "items": [
+          {
+            "key": "fromText",
+            "label": "FROM TEXT (outgoing)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toText",
+            "label": "TO TEXT (incoming)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic3",
+      "style": "axisz"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 40
+  },
+  {
+    "id": "remocn_strikethrough_replace",
+    "componentName": "StrikethroughReplace",
+    "name": "Strikethrough Replace (remocn)",
+    "desc": "remocn • a line strikes through the old text (first 40% of the layer), then the new text fades in beneath it • paints a white background",
+    "icon": "✏️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/strikethrough-replace",
+      "exportName": "StrikethroughReplace",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "from": "Manual video editing",
+        "to": "One-click export",
+        "lineColor": "#ff5e3a",
+        "fontSize": 72,
+        "fontWeight": 600,
+        "color": "#171717"
+      }
+    },
+    "controls": [
+      {
+        "group": "Strikethrough Replace (remocn) (whole clip) • phases timed from the layer duration; owns a white background",
+        "items": [
+          {
+            "key": "from",
+            "label": "OLD TEXT (struck)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "to",
+            "label": "NEW TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "lineColor",
+            "label": "STRIKE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic3",
+      "style": "strike"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_short_slide_right",
+    "componentName": "ShortSlideRight",
+    "name": "Short Slide Right (remocn)",
+    "desc": "remocn • the phrase glides in from the left while words reveal in an opacity cascade",
+    "icon": "➡️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/short-slide-right",
+      "exportName": "ShortSlideRight",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "Move with intent.",
+        "distance": 36,
+        "staggerDelay": 3,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717"
+      }
+    },
+    "controls": [
+      {
+        "group": "Short Slide Right (remocn) (whole clip) • entrance only; dark text, transparent",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "distance",
+            "label": "SLIDE DISTANCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "staggerDelay",
+            "label": "STAGGER (frames per word)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic3",
+      "style": "slide"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_kinetic_center_build",
+    "componentName": "KineticCenterBuild",
+    "name": "Kinetic Center Build (remocn)",
+    "desc": "remocn • words enter from the right and push the line so the growing phrase stays centred (3–6 words)",
+    "icon": "🎯",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/kinetic-center-build",
+      "exportName": "KineticCenterBuild",
+      "sizeMode": "none",
+      "cssVars": {
+        "--font-geist-sans": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "text": "Words push left.",
+        "entryOffset": 88,
+        "fontSize": 72,
+        "fontWeight": 600,
+        "color": "#171717"
+      }
+    },
+    "controls": [
+      {
+        "group": "Kinetic Center Build (remocn) (whole clip) • 1280×720 layout at scale 1.5 (fixed 10px word gap); entrance only, dark text",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT (3–6 words)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "entryOffset",
+            "label": "ENTRY OFFSET px (720p)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic3",
+      "style": "center"
+    },
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_kinetic_morph_text",
+    "componentName": "KineticMorphText",
+    "name": "Kinetic Morph Text (remocn)",
+    "desc": "remocn • letters lift, rotate and reshape into the next phrase with outline trails; phrases split on | • paints its own background",
+    "icon": "🔀",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/kinetic-morph-text",
+      "exportName": "KineticMorphText",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "Hello | Make it move | Shape what's next",
+        "fontSize": 150,
+        "fontWeight": 600,
+        "color": "#b4f4d9",
+        "backgroundColor": "#a800b7",
+        "spread": 270,
+        "rotation": 110,
+        "morph": 0.75,
+        "trails": 0.45,
+        "transitionFrames": 54,
+        "holdFrames": 42,
+        "loop": false
+      }
+    },
+    "controls": [
+      {
+        "group": "Kinetic Morph Text (remocn) (whole clip) • 54f entrance + (42 hold + 54 transition) per phrase; owns its background",
+        "items": [
+          {
+            "key": "text",
+            "label": "PHRASES (separate with | or new lines)",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "MAX FONT SIZE (fits 82% width)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "spread",
+            "label": "FLIGHT SPREAD px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "rotation",
+            "label": "MAX ROTATION°",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 360,
+            "step": 1
+          },
+          {
+            "key": "morph",
+            "label": "MORPH (0 = crossfade)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "trails",
+            "label": "TRAILS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (30 fps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 6,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "holdFrames",
+            "label": "HOLD FRAMES (30 fps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "loop",
+            "label": "LOOP back to phrase 1",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic3",
+      "style": "morph"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 288
   }
 ];
