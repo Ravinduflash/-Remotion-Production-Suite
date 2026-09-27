@@ -3705,5 +3705,387 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_per_character_rise",
+    "componentName": "PerCharacterRise",
+    "name": "Per Character Rise (remocn)",
+    "desc": "remocn • letters slide up from below with no blur, even 1-frame stagger — crisp and kinetic",
+    "icon": "⬆️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/per-character-rise",
+      "exportName": "PerCharacterRise",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "One more thing.",
+        "distance": 48
+      }
+    },
+    "controls": [
+      {
+        "group": "Per Character Rise (remocn) (whole clip) • dark text, transparent — pair with Backdrop",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "distance",
+            "label": "RISE DISTANCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "charanim",
+      "style": "rise"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_bottom_up_letters",
+    "componentName": "BottomUpLetters",
+    "name": "Bottom-Up Letters (remocn)",
+    "desc": "remocn • letters rise from below in a pronounced staircase (short words, acronyms)",
+    "icon": "🔼",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/bottom-up-letters",
+      "exportName": "BottomUpLetters",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Shift",
+        "staggerDelay": 3,
+        "distance": 69
+      }
+    },
+    "controls": [
+      {
+        "group": "Bottom-Up Letters (remocn) (whole clip) • dark text, transparent — pair with Backdrop",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "staggerDelay",
+            "label": "STAGGER (frames per letter)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "distance",
+            "label": "RISE DISTANCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "charanim",
+      "style": "bottomup"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_top_down_letters",
+    "componentName": "TopDownLetters",
+    "name": "Top-Down Letters (remocn)",
+    "desc": "remocn • letters drop from above in a pronounced staircase, landing like stamps (≤ ~8 letters)",
+    "icon": "🔽",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/top-down-letters",
+      "exportName": "TopDownLetters",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Signal",
+        "staggerDelay": 3,
+        "distance": 69
+      }
+    },
+    "controls": [
+      {
+        "group": "Top-Down Letters (remocn) (whole clip) • dark text, transparent — pair with Backdrop",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "staggerDelay",
+            "label": "STAGGER (frames per letter)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "distance",
+            "label": "DROP DISTANCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "charanim",
+      "style": "topdown"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_spring_scale_in",
+    "componentName": "SpringScaleIn",
+    "name": "Spring Scale In (remocn)",
+    "desc": "remocn • words pop in with a soft overshoot scale, staggered per word — playful",
+    "icon": "🫧",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/spring-scale-in",
+      "exportName": "SpringScaleIn",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "fontSize": 108,
+        "fontWeight": 600,
+        "color": "#171717",
+        "speed": 1,
+        "text": "Fast. Crisp. Fluid.",
+        "staggerDelay": 3,
+        "scaleFrom": 0.7
+      }
+    },
+    "controls": [
+      {
+        "group": "Spring Scale In (remocn) (whole clip) • dark text, transparent — pair with Backdrop",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "staggerDelay",
+            "label": "STAGGER (frames per word)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "scaleFrom",
+            "label": "SCALE FROM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "charanim",
+      "style": "spring"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
   }
 ];

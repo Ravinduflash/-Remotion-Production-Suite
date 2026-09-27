@@ -841,6 +841,29 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - A frame took about 40 to 55 seconds. `renderTimeoutMs: 120000`.
 - **Notes:** it requires WebGL2; shader or font errors fail the render explicitly with `cancelRender`.
 
+### Per Character Rise, Bottom-Up Letters, Top-Down Letters and Spring Scale In (remocn)
+
+- **Catalog ids:** `remocn_per_character_rise`, `remocn_bottom_up_letters`, `remocn_top_down_letters`, `remocn_spring_scale_in`
+- **Files:** `per-character-rise.tsx`, `bottom-up-letters.tsx`, `top-down-letters.tsx` and `spring-scale-in.tsx`, from the remocn registry, verbatim, MIT
+- **Size:** full frame, transparent, with the text centred. **The text is dark (#171717) by default**, so pair it with a light Backdrop. The tests wrapped each one in a white `remocn_backdrop`.
+- **Controls, all whole clip:**
+  - `text`, `fontSize` (108 here; remocn's 72 is scaled 1.5×), `fontWeight`, `color` and `speed`.
+  - Per Character Rise: `distance` (48, from remocn's 32).
+  - Bottom-Up and Top-Down: `staggerDelay` (3 frames per letter) and `distance` (69, from 46).
+  - Spring Scale In: `staggerDelay` (3 frames per word) and `scaleFrom` (0.7).
+- **Preview:** one shared kind, `charanim`, with style `rise`, `bottomup`, `topdown` or `spring`. It uses the sources' exact timings and cubic-bezier easings, including Spring Scale In's overshoot (0.34, 1.56, 0.64, 1).
+- **Timing** (`defaultDurationInFrames: 60` each; these are entrances only):
+  - **Per Character Rise:** 21-frame fade and 10-frame rise per character, 1-frame stagger.
+  - **Bottom-Up and Top-Down:** 12-frame fade and 7-frame travel per letter, `staggerDelay` apart. Keep them to short words: the last letter lands at (letters − 1) × staggerDelay + 12.
+  - **Spring Scale In:** 11 frames per word, split on spaces, `staggerDelay` apart.
+- **Verified:** 2026-09-27, [remocn-letters-contact.png](renders/remocn-letters-contact.png):
+  - "One mo…" at frame 6, then "One more thing." at frame 45.
+  - "Sh…" rising and "Si…" dropping at frame 6, both whole by frame 40.
+  - "Fast. Crisp." popping at frame 5, then "Fast. Crisp. Fluid." at frame 40.
+  - Custom: "Launch" in #7c3aed with a 5-frame stagger shows "La" at frame 10.
+  - The studio previews match these frames.
+- **Soft Blur In** was pasted again with this batch. Its registry source matches the saved file, so nothing changed.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`
