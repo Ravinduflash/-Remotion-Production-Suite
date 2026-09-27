@@ -102,6 +102,82 @@ Source: <https://remocn.dev/docs/guides/launch-video>. The full launch video: pa
 | Install | 840–960 | A short title `text_card`, then `community_typewriter` with the command |
 | Outro | 960–1050 | `remotion_img` logo with a closing `text_card`. remocn draws the logo on over `shader-smoke-ring`, and there's no stand-in for that here. |
 
+## Workflow: from beats to a finished file
+
+These notes condense the remocn.dev craft guides and translate each one into this studio's tools. Sources: [How a video is built](https://remocn.dev/docs/guides/how-a-video-is-built), [Directing your agent](https://remocn.dev/docs/guides/directing-your-agent), [Words on screen](https://remocn.dev/docs/guides/words-on-screen), [Your brand](https://remocn.dev/docs/guides/your-brand), [Music and sound](https://remocn.dev/docs/guides/music-and-sound), [One video, three formats](https://remocn.dev/docs/guides/one-video-three-formats) and [Exporting your video](https://remocn.dev/docs/guides/exporting-your-video).
+
+### Beats
+
+A **beat** is one idea on screen. If it needs "and" to describe it, it's two beats.
+- **Length:** a text beat lasts about 2 seconds, 60 frames.
+- **Count:** a video is 5 to 10 beats, in three acts. **Hook** is one or two beats (pain, claim or question). **Body** is three to five (what it is, value, proof). **Close** is one: the single next action.
+- **In the studio:** each beat is one or a few layers with `startFrame` and `durationInFrames` on the external components, or keyframed opacity on built-in layers. Write the beat list first, then place the layers from it. The recipe tables above are beat lists with frame ranges.
+
+### Words on screen
+
+A line is gone in two seconds, so:
+- **Six words or fewer, one idea per line.** Split a long sentence into two beats rather than shrinking it.
+- **Verbs over adjectives, concrete over grand.** Numbers, commands and names, never unprovable adjectives.
+- **The two-second test:** say the line aloud at speaking pace. If it takes longer than two seconds, tighten it.
+- **Formulas:**
+  - Pain line: the problem in the viewer's words, then a twist.
+  - Tagline: what it is, plus who it's for.
+  - Positioning: "Like X, for Y".
+  - Value: three concrete, provable claims.
+  - Close: one command **or** one URL, not both.
+
+### Directing: plain notes mapped to studio operations
+
+Watch the whole cut once, then give notes by beat number, one sentence per note. **If the structure is wrong** (the story, the order, the number of beats), rewrite the beat list and rebuild. Patching structure through notes is slower.
+
+| Note | What to change |
+|---|---|
+| "Hold it longer" / "too fast" | Lengthen that beat: raise `durationInFrames`, or `move_keyframe` the exit later, then shift the later beats' `startFrame`. |
+| "Tighter" / "cut the dead air" | Shrink the gaps between beats. `set_timeline totalFrames` to the new end. |
+| "Let it breathe" | Add 15 to 30 frames of hold after the big moment. |
+| "Snappier" / "softer" | Change the layer's default easing with `update_asset`, or shorten or lengthen the keyframe span. Softer also means less travel in `baseX`/`baseY`. |
+| "Come in from the left" | Set the entry keyframe's `baseX` off to the left, then ease to the resting position. |
+| "Less bouncy" | Use a non-overshooting easing. External components have their own motion baked in, so swap the component instead. |
+| "The background is too loud" | Lower the background layer's `opacity`, or use a calmer background such as Paper Texture instead of the starburst. |
+| "Show me two options" | `duplicate_asset` or copy the scene with `get_scene`, change one version, and `render_still` both at the same frame. |
+
+### Brand
+
+To keep every video on-brand, save a `BRAND.md` brief in the project (don't commit it until it's filled in) and read it before building any video. The brief lists:
+- The product and a one-line description.
+- Background, text and accent hex values.
+- The font mood and the logo file.
+- The copy tone.
+
+Use one accent, at most one accented element per beat. Use off-white text on dark and near-black on light, not pure white on black. An SVG logo scales cleanly in `remotion_img`.
+
+### Music and sound
+
+Build the silent cut first: most feeds autoplay muted, so every beat must work without sound. Then add the music:
+- **Track:** add a `remotion_audio` layer with `src` as the track (`staticFile()` or a URL) and `volume` around 0.2 to 0.35, so it never competes with the screen.
+- **Fade out over the outro:** `volume` is a keyframable number. Set keyframes of about 0.3 at the outro start and 0 at the last frame.
+- **Start on beat 2:** set a later `startFrame`. **Duck under the demo:** add volume keyframes that dip and come back.
+- **Choosing a track:** instrumental with steady energy, and **licensed for commercial use.** A product video counts as commercial use even when the product is free. Free libraries include Pixabay Music, Uppbeat and the YouTube Audio Library.
+- **Sound effects:** components like Subscribe Nudge carry their own; see its notes.
+
+### One video, three formats
+
+Finish the 16:9 cut completely first, then re-cut it.
+- **The re-cut:** `set_aspect` with `preset: "9:16"` (or `"1:1"`, `"4:5"`) and `refit: true` remaps positions and full-frame backgrounds to the new frame. Keep the same beats, words and timing.
+- **What breaks in vertical:**
+  - **Long lines wrap.** Shorten the line; don't shrink the font.
+  - **Side-by-side layouts** should stack top and bottom.
+  - **Fixed 1920×1080 Elements** (Picture in Picture, YouTube End Card) keep their layout; use a 1920×1080 box and scale the layer.
+- **Keep text and logos in the middle band.** Platform UI covers the top and bottom. Add `community_social_safe_zones` (9:16) at the top of the scene tree to check, then **delete it before rendering**.
+- `check_scene` flags `outside_safe_area` and `offscreen` layers after the re-cut. Watch every format all the way through before publishing.
+
+### Export
+
+`render_scene` writes an MP4, h264 by default, to `render-project/out/` and returns the full path. It waits up to 40 s, then gives a `jobId` for `render_status`.
+- **Proof first:** `render_still` one frame per beat, or `render_scene` with `scale: 0.5` and a `frames` range.
+- **Render time on this machine:** real renders are slow. A 120-frame clip at 0.25 scale took 73 s, and heavy WebGL components like the map flyover take much longer per frame. Expect a 30-second video to take many minutes.
+- **After changes:** render again. Renders are cheap to repeat.
+
 ## Gaps: remocn components not in the catalog
 
 These guides name remocn components that aren't registered here. They install with `npx shadcn add @remocn/<name>`, which copies their source into a project. Once you have the source, paste it in like the Remotion Elements, and it goes through `write_component_file` and `register_component`.
