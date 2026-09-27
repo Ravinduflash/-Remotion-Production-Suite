@@ -5476,5 +5476,1111 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 75
+  },
+  {
+    "id": "remocn_centered_word_build",
+    "componentName": "CenteredWordBuild",
+    "name": "Centered Word Build (remocn)",
+    "desc": "remocn • words cut in from below while the centred phrase pushes closer each beat; exits through a left-to-right opacity wipe",
+    "icon": "🎯",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/centered-word-build",
+      "exportName": "CenteredWordBuild",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "text": "everything we learn from",
+        "fontSize": 52,
+        "fontWeight": 400,
+        "color": "#fff3df",
+        "wordGap": 11,
+        "accel": 0.75,
+        "rise": 0.18,
+        "zoomStep": 0.035,
+        "settleFrames": 9,
+        "exitAt": 51,
+        "exitFrames": 12
+      }
+    },
+    "controls": [
+      {
+        "group": "Centered Word Build (remocn) (whole clip) • 1280×720 layout at scale 1.5, transparent",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "wordGap",
+            "label": "FIRST GAPS (frames)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "accel",
+            "label": "ACCEL (later gaps ×)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.3,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "rise",
+            "label": "RISE (em)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "zoomStep",
+            "label": "ZOOM STEP per word",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.2,
+            "step": 0.005
+          },
+          {
+            "key": "settleFrames",
+            "label": "SETTLE FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "exitAt",
+            "label": "EXIT AT (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "exitFrames",
+            "label": "EXIT WIPE FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic2",
+      "style": "cwb"
+    },
+    "defaultDurationInFrames": 75
+  },
+  {
+    "id": "remocn_inline_pill_takeover",
+    "componentName": "InlinePillTakeover",
+    "name": "Inline Pill Takeover (remocn)",
+    "desc": "remocn • a pill opens inside a sentence, pushes the words apart and the camera punches into it (CTA takeover)",
+    "icon": "💊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/inline-pill-takeover",
+      "exportName": "InlinePillTakeover",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "before": "powering 20%",
+        "insert": "Start building",
+        "after": "of the Internet.",
+        "fontSize": 52,
+        "fontWeight": 400,
+        "pillWidth": 260,
+        "expandFrames": 12,
+        "pillRevealHeightScale": 0.35,
+        "pillGrowAt": 12,
+        "pillGrowFrames": 24,
+        "pillGrowWidthScale": 1.08,
+        "pillGrowHeightScale": 1.16,
+        "outerExitFrames": 18,
+        "takeoverAt": 12,
+        "takeoverScale": 2.15,
+        "blur": 12,
+        "color": "#fff3df",
+        "pillColor": "#fffaf0",
+        "pillTextColor": "#1c1210"
+      }
+    },
+    "controls": [
+      {
+        "group": "Inline Pill Takeover (remocn) (whole clip) • 1280×720 layout at scale 1.5, transparent",
+        "items": [
+          {
+            "key": "before",
+            "label": "BEFORE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "insert",
+            "label": "PILL TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "after",
+            "label": "AFTER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "pillWidth",
+            "label": "PILL WIDTH (tune to the pill text)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 60,
+            "max": 1000,
+            "step": 1
+          },
+          {
+            "key": "expandFrames",
+            "label": "EXPAND FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "pillRevealHeightScale",
+            "label": "START HEIGHT ×",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "pillGrowAt",
+            "label": "GROW AT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "pillGrowFrames",
+            "label": "GROW FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 90,
+            "step": 1
+          },
+          {
+            "key": "pillGrowWidthScale",
+            "label": "GROW WIDTH ×",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "pillGrowHeightScale",
+            "label": "GROW HEIGHT ×",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "outerExitFrames",
+            "label": "OUTER EXIT FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "takeoverAt",
+            "label": "TAKEOVER AT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "takeoverScale",
+            "label": "TAKEOVER SCALE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "blur",
+            "label": "OUTER BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "TEXT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "pillColor",
+            "label": "PILL COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "pillTextColor",
+            "label": "PILL TEXT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic2",
+      "style": "pill"
+    },
+    "defaultDurationInFrames": 45
+  },
+  {
+    "id": "remocn_typed_split_wipe",
+    "componentName": "TypedSplitWipe",
+    "name": "Typed Split Wipe (remocn)",
+    "desc": "remocn • cursorless centred type-on, then prefix and suffix words wipe away in opposite directions; the anchor closes last",
+    "icon": "✂️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/typed-split-wipe",
+      "exportName": "TypedSplitWipe",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "prefix": "Introducing",
+        "anchor": "X",
+        "suffix": "Ads MCP",
+        "typeFrames": 30,
+        "exitAt": 50,
+        "exitFrames": 20,
+        "wordStagger": 4,
+        "anchorShift": -72,
+        "fontSize": 42,
+        "fontWeight": 400,
+        "color": "#e8e8e8"
+      }
+    },
+    "controls": [
+      {
+        "group": "Typed Split Wipe (remocn) (whole clip) • 1280×720 layout at scale 1.5, transparent",
+        "items": [
+          {
+            "key": "prefix",
+            "label": "PREFIX",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "anchor",
+            "label": "ANCHOR (stays longest)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "suffix",
+            "label": "SUFFIX WORDS",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "typeFrames",
+            "label": "TYPE FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "exitAt",
+            "label": "EXIT AT (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "exitFrames",
+            "label": "EXIT FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "wordStagger",
+            "label": "SUFFIX STAGGER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "anchorShift",
+            "label": "ANCHOR SHIFT px",
+            "kind": "range",
+            "keyframable": false,
+            "min": -300,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic2",
+      "style": "typed"
+    },
+    "defaultDurationInFrames": 75
+  },
+  {
+    "id": "remocn_shadow_sweep_text",
+    "componentName": "ShadowSweepText",
+    "name": "Shadow Sweep Text (remocn)",
+    "desc": "remocn • a rising line is uncovered and then covered by dense dark shadow sweeps (37-frame cycle) • paints its own dark field",
+    "icon": "🌑",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shadow-sweep-text",
+      "exportName": "ShadowSweepText",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "text": "are abandoned",
+        "fontSize": 96,
+        "fontWeight": 700,
+        "color": "#aaa6b5",
+        "backgroundColor": "#030012",
+        "shadowColor": "#030012",
+        "shadowSoftness": 130,
+        "rise": 96,
+        "driftLeft": 16
+      }
+    },
+    "controls": [
+      {
+        "group": "Shadow Sweep Text (remocn) (whole clip) • 1280×720 layout at scale 1.5, owns its background",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "TEXT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "shadowColor",
+            "label": "SHADOW",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "shadowSoftness",
+            "label": "SHADOW SOFTNESS px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "rise",
+            "label": "RISE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "driftLeft",
+            "label": "DRIFT LEFT px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic2",
+      "style": "shadow"
+    },
+    "defaultDurationInFrames": 37
+  },
+  {
+    "id": "remocn_outline_fill_track_text",
+    "componentName": "OutlineFillTrackText",
+    "name": "Outline Fill Track Text (remocn)",
+    "desc": "remocn • a lead word rises, then the track moves left to an outlined value that fills left to right • paints its own dark field",
+    "icon": "💯",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/outline-fill-track-text",
+      "exportName": "OutlineFillTrackText",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "leadText": "Keep",
+        "valueText": "100%",
+        "fontSize": 552,
+        "fontWeight": 700,
+        "color": "#f4f3f6",
+        "outlineColor": "#e6e2ed",
+        "outlineWidth": 4.5,
+        "backgroundColor": "#030012",
+        "glowColor": "#64109a",
+        "enterOffset": 360,
+        "trackDistance": 0,
+        "anchorOffsetX": -126,
+        "wordGap": 330,
+        "endPadding": 144,
+        "fillDuration": 38
+      }
+    },
+    "controls": [
+      {
+        "group": "Outline Fill Track Text (remocn) (whole clip) • full frame (px props scaled 1.5× for 1080p), owns its background",
+        "items": [
+          {
+            "key": "leadText",
+            "label": "LEAD TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "valueText",
+            "label": "VALUE TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 40,
+            "max": 900,
+            "step": 1
+          },
+          {
+            "key": "color",
+            "label": "FILL COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "outlineColor",
+            "label": "OUTLINE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "outlineWidth",
+            "label": "OUTLINE WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 12,
+            "step": 0.5
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "glowColor",
+            "label": "GLOW",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "enterOffset",
+            "label": "ENTER OFFSET px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 800,
+            "step": 1
+          },
+          {
+            "key": "trackDistance",
+            "label": "TRACK DISTANCE (0 = measured)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5000,
+            "step": 1
+          },
+          {
+            "key": "anchorOffsetX",
+            "label": "ANCHOR OFFSET X",
+            "kind": "range",
+            "keyframable": false,
+            "min": -600,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "wordGap",
+            "label": "WORD GAP px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 800,
+            "step": 1
+          },
+          {
+            "key": "endPadding",
+            "label": "END PADDING px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "fillDuration",
+            "label": "FILL FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 80,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic2",
+      "style": "outline"
+    },
+    "defaultDurationInFrames": 80,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_gradient_scale_cut_text",
+    "componentName": "GradientScaleCutText",
+    "name": "Gradient Scale Cut Text (remocn)",
+    "desc": "remocn • an oversized gradient reveal hard-cuts to a compact blurred line that settles into focus • paints its own black field",
+    "icon": "✂️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/gradient-scale-cut-text",
+      "exportName": "GradientScaleCutText",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "text": "Introducing",
+        "giantFontSize": 520,
+        "compactFontSize": 132,
+        "fontWeight": 700,
+        "gradientStart": "#f04a14",
+        "gradientEnd": "#f3f1f1",
+        "ghostColor": "#170b0a",
+        "backgroundColor": "#000000",
+        "anchorOffsetX": -16,
+        "giantTravel": 400,
+        "settleTravel": 160,
+        "cutFrame": 13,
+        "revealSoftness": 14,
+        "compactBlur": 12
+      }
+    },
+    "controls": [
+      {
+        "group": "Gradient Scale Cut Text (remocn) (whole clip) • 1280×720 layout at scale 1.5, owns its background",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "giantFontSize",
+            "label": "GIANT FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 60,
+            "max": 1200,
+            "step": 1
+          },
+          {
+            "key": "compactFontSize",
+            "label": "COMPACT FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "gradientStart",
+            "label": "GRADIENT START",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "gradientEnd",
+            "label": "GRADIENT END",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "ghostColor",
+            "label": "GHOST (unrevealed)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "anchorOffsetX",
+            "label": "ANCHOR OFFSET X",
+            "kind": "range",
+            "keyframable": false,
+            "min": -400,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "giantTravel",
+            "label": "GIANT TRAVEL px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1200,
+            "step": 1
+          },
+          {
+            "key": "settleTravel",
+            "label": "SETTLE TRAVEL px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "cutFrame",
+            "label": "CUT FRAME",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "revealSoftness",
+            "label": "REVEAL SOFTNESS %",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "compactBlur",
+            "label": "COMPACT BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic2",
+      "style": "gradcut"
+    },
+    "defaultDurationInFrames": 45
+  },
+  {
+    "id": "remocn_rush_type",
+    "componentName": "RushType",
+    "name": "Rush Type (remocn)",
+    "desc": "remocn • WebGL: one word at a time rests sharp, then blasts through a vertical orbit with RGB shutter trails • paints its own background",
+    "icon": "⚡",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/rush-type",
+      "exportName": "RushType",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "phrase": "gone before you look",
+        "fontSize": 102,
+        "fontFamily": "Arial, Helvetica, sans-serif",
+        "fontWeight": 400,
+        "color": "#ffffff",
+        "backgroundColor": "#000000",
+        "verticalStretch": 7,
+        "chromaticSpread": 1,
+        "restDuration": 12,
+        "peakHoldDuration": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Rush Type (remocn) (whole clip) • full frame, WebGL, 26 frames per word",
+        "items": [
+          {
+            "key": "phrase",
+            "label": "PHRASE (one word per cycle)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "CAP HEIGHT px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "TEXT COLOR (hex)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND (hex)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "verticalStretch",
+            "label": "VERTICAL STRETCH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "chromaticSpread",
+            "label": "CHROMATIC SPREAD",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "restDuration",
+            "label": "REST FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "peakHoldDuration",
+            "label": "PEAK HOLD FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic2",
+      "style": "rush"
+    },
+    "defaultDurationInFrames": 104,
+    "fullFrame": true,
+    "renderTimeoutMs": 120000
   }
 ];

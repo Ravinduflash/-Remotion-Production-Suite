@@ -53,6 +53,10 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **The problem:** when the variable is undefined, CSS treats the whole declaration as invalid at computed-value time, so the text falls back to the browser's **serif** default rather than the listed sans fonts. Soft Blur In and the Chat to Preview placeholders first rendered in serif this way.
   - **The fix:** SceneRenderer's root now defines `--font-geist-sans` (Geist, Inter, Segoe UI, Arial, sans-serif) and `--font-geist-mono` (Geist Mono, JetBrains Mono, Consolas, monospace).
   - Geist itself is not loaded; `@remotion/google-fonts` in 4.0.526 has no Geist. Inter or Segoe UI stands in.
+- **remocn px layouts, the 1280×720 box at layer scale 1.5:** several remocn components carry pixel constants that are not props, such as Shadow Sweep's rest offset (−20, 9), Gradient Scale Cut's −28 / −48 / 28 px corrections and Typed Split Wipe's anchor shift.
+  - Scaling only the font props would leave those at 720p proportions, so these components are registered in a 1280×720 box with layer `scale: 1.5`. Every pixel then scales together, and the render matches remocn's reference exactly. This is how Chat to Preview was already registered.
+  - Components that read `useVideoConfig().width/height` (Outline Fill Track, Rush Type, Backdrop, Stage, Inline Word Roll…) stay full-frame instead, with their pixel props scaled 1.5×.
+  - `check_scene` treats an external layer whose box covers the frame as a background, like `fullFrame`. Before, scaled 1280 boxes that paint their own field falsely warned `no_background`.
 - **Wrapper layers, from 2026-09-27:** a registered component whose `external.children` is set can render other layers inside it.
   - **How to use it:** call `update_asset { assetId, wraps: [ids] }`, or `{ slot: ids[] }` for slotted layouts. Pass `null` to clear. The Inspector's Layer timing group has a WRAPS LAYERS field.
   - **What the renderer does:** wrapped layers are skipped at top level and drawn on a composition-sized canvas passed as the prop (default `children`).
@@ -921,6 +925,34 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Fog Rise: blurred at frame 8, sharp at 40, and gone upward at 70.
   - Caret Swap: caret, block eating the text, typing, then "That's where everyone quits"; custom "Manual reports?" → "Automate them".
   - Zoom Words: defocused "Still", the camera riding "piecing", then "…gether tools".
+
+### Centered Word Build, Inline Pill Takeover, Typed Split Wipe, Shadow Sweep Text, Outline Fill Track Text, Gradient Scale Cut Text and Rush Type (remocn)
+
+- **Catalog ids:** `remocn_centered_word_build`, `remocn_inline_pill_takeover`, `remocn_typed_split_wipe`, `remocn_shadow_sweep_text`, `remocn_outline_fill_track_text`, `remocn_gradient_scale_cut_text`, `remocn_rush_type`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT. Rush Type is a 33 KB WebGL component.
+- **Size:**
+  - **1280×720 box at scale 1.5**, keeping remocn's pixel props at their defaults: Centered Word Build, Inline Pill Takeover, Typed Split Wipe, Shadow Sweep, Gradient Scale Cut. On other aspect ratios, move or rescale the layer.
+  - **Full frame:** Outline Fill Track, which measures against the composition width (its pixel props are scaled 1.5×: font 552, enterOffset 360, anchorOffsetX −126, wordGap 330, endPadding 144, outline 4.5), and Rush Type (cap height 102, WebGL canvas at the composition size, `renderTimeoutMs: 120000`).
+- **Backgrounds:** Shadow Sweep, Outline Fill Track, Gradient Scale Cut and Rush Type **paint their own dark field**. The other three are transparent; remocn pairs them with the orange radial glow (Centered Word Build, Pill) or #101010 (Typed Split Wipe).
+- **Controls, all whole clip:** every documented prop, plus `speed`.
+- **Preview:** one shared kind, `kinetic2`. It ports the components' HTML and frame math, including Outline Fill Track's canvas `measureText`. Rush Type is approximated with a vertical stretch and an RGB split; the real one is a WebGL shutter accumulation.
+- **Timing and defaults:**
+  - **Centered Word Build:** words at frames 0, 11, 22, 30, …, then an opacity wipe at `exitAt` (51) over 12 frames. Layer 75.
+  - **Inline Pill Takeover:** the pill opens over 12 frames, the camera cuts in at frame 24, and it holds on the pill. Layer 45; tune `pillWidth` to the pill text.
+  - **Typed Split Wipe:** types over 30 frames, then a split exit from frame 50 to 70. Layer 75.
+  - **Shadow Sweep:** a fixed 37-frame cycle, revealed by frame 23 and covered by frame 36. Layer 37.
+  - **Outline Fill Track:** an 80-frame cycle that ends holding on the filled value. Layer 80.
+  - **Gradient Scale Cut:** giant text until `cutFrame` (13), then the compact line, fully revealed by frame 33. Layer 45.
+  - **Rush Type:** 26 frames per word (7 arrive, 4 leave, 12 rest, 3 hold). The default four words take 104 frames. Layer 104.
+- **Verified:** 2026-09-27, [remocn-kinetic2-contact.png](renders/remocn-kinetic2-contact.png):
+  - Word build "everything → we learn → from", wiping at frame 57; custom "ship it with confidence".
+  - The pill opening in "powering 20% ◯ of the Internet.", then the "Start building" close-up.
+  - Typed "Introducing X Ads MCP" splitting apart; custom "Meet Nova for teams".
+  - Shadow reveal and cover of "are abandoned".
+  - "Keep" rising, the track moving, and the outlined "100%" filling.
+  - Giant "Intro…" cutting to a blurred, then sharp, compact "Introducing".
+  - Rush: "gone" sharp, "before" smeared into RGB trails, "before" resolved, "you" blasting.
+  - `check_scene` found no errors after the background fix.
 
 ### Typewriter Text
 
