@@ -1084,6 +1084,37 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Chromatic: "APPLES / MUSIC / APPLES" with RGB fringes where the wave crosses.
   - Stretch: Anton "REMOCN" smearing in; custom "SHIP IT" in #f43f5e.
 
+### Search Reveal, Glass Code Block, Glass Code Walk, Terminal Simulator, Terminal Cursor Zoom and Animated Line Chart (remocn UI blocks)
+
+- **Catalog ids:** `remocn_search_reveal`, `remocn_glass_code_block`, `remocn_glass_code_walk`, `remocn_terminal_simulator`, `remocn_terminal_cursor_zoom`, `remocn_animated_line_chart`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT. Glass Code Walk imports `@/components/remocn/glass-code-block`, and Terminal Cursor Zoom imports `@/components/remocn/terminal-simulator`; both resolve through the aliases.
+- **Size:**
+  - **Search Reveal is full frame.** It scales its own 1280×720 stage to the composition and paints its own background.
+  - **The other five are 1280×720 boxes at scale 1.5.** The two camera rigs pin to hidden 720p screen coordinates (`ANCHOR_SCREEN_X = 110`, `TARGET_Y = 360`, `STAGE_WIDTH = 1280`), and the windows have fixed pixel sizes.
+  - Their `width`/`height` window props clash with the layer box keys, so they stay at remocn's defaults (code block 760×460, walk 880×420, chart 1000×500). The terminal window is a fixed 900×480.
+- **Backgrounds:** Terminal Simulator and Cursor Zoom draw an opaque window. The glass code block and walk are translucent glass, so put a gradient or image under them to refract, as in the tests. The chart is transparent.
+- **Controls, all whole clip:**
+  - Code is a multiline control.
+  - Terminal `lines` is JSON: `[{text, type: command|log|success|error, delay?, pause?}]`. Lines ending in "..." auto-pause for 18 frames.
+  - Chart `data` is a JSON number array.
+  - Search Reveal colours, the panel and guide toggles, and `reducedMotion`.
+- **Preview:** one shared kind, `uiblock`. It reproduces each component's timing and camera maths (the search state machine, the line-scan camera with pull-back, the cursor-pinned camera, the terminal start and scroll schedule, and the chart dash-draw) on a 1280×720 stage. The chrome is simplified: no syntax tokenizer, no contour rings or flower accents.
+- **Timing:**
+  - Search Reveal: circles over 0 to 25, the field over 26 to 48, typing from 54, the panel over 56 to 90, with the final pose held. Layer 108.
+  - Glass Code Block: lines `staggerFrames` (4) apart, each fading over 8 frames. Layer 180.
+  - Glass Code Walk: the scan follows the lines at `staggerFrames` (10), then a 24-frame pull-back. Layer 150.
+  - Terminal Simulator: the cumulative line schedule starts at frame 10. Layer 240.
+  - Terminal Cursor Zoom: typing from frame 10. Layer 90.
+  - Animated Line Chart: **draws over 85 % of the layer duration**. Layer 90.
+- **Registration slip fixed:** the first registration of the five boxed components forgot the 720p box argument, leaving them 1920 wide at scale 1, with windows rendered at 1×. The side-by-side comparison with the previews caught it. They were re-registered and re-rendered, and the manifest audit now shows every remocn 720p layout at width 1280, scale 1.5.
+- **Verified:** 2026-09-27, [remocn-uiblocks-contact.png](renders/remocn-uiblocks-contact.png):
+  - Search: circles → field → "remo|" typing → panel with accents; custom "Find your next idea" with no panel or guides.
+  - Code block over an indigo gradient, lines revealing.
+  - Walk: 2.6× line scan, then pull-back.
+  - Terminal: the build log streaming.
+  - Cursor zoom riding "npx shadcn add @remocn/…"; custom "npm i remotion".
+  - Chart drawing on; custom hockey-stick data in #f97316.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

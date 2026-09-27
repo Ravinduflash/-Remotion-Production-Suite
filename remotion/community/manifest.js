@@ -10058,5 +10058,683 @@ window.CommunityManifest = [
     "fullFrame": true,
     "defaultDurationInFrames": 60,
     "renderTimeoutMs": 90000
+  },
+  {
+    "id": "remocn_search_reveal",
+    "componentName": "SearchReveal",
+    "name": "Search Reveal (remocn)",
+    "desc": "remocn • construction circles expand into a search field that types your product name, then reveals a purple graphic panel • paints its own background",
+    "icon": "🔍",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/search-reveal",
+      "exportName": "SearchReveal",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "text": "remocn",
+        "fieldWidth": 464,
+        "fontSize": 34,
+        "framesPerCharacter": 4,
+        "showPanel": true,
+        "showGuides": true,
+        "color": "#26232b",
+        "fieldColor": "#ffffff",
+        "ringColor": "#cbc5cf",
+        "panelColor": "#a800b7",
+        "accentColor": "#e8f99a",
+        "backgroundColor": "#f5f1f5",
+        "reducedMotion": false
+      }
+    },
+    "controls": [
+      {
+        "group": "Search Reveal (remocn) (whole clip) • scales its own 1280×720 stage to the composition",
+        "items": [
+          {
+            "key": "text",
+            "label": "SEARCH TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fieldWidth",
+            "label": "FIELD WIDTH (720p, 320–640)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 320,
+            "max": 640,
+            "step": 1
+          },
+          {
+            "key": "fontSize",
+            "label": "MAX FONT SIZE (18–54)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 18,
+            "max": 54,
+            "step": 1
+          },
+          {
+            "key": "framesPerCharacter",
+            "label": "FRAMES PER CHARACTER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "showPanel",
+            "label": "SHOW GRAPHIC PANEL",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "showGuides",
+            "label": "SHOW GUIDES",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "TEXT / CARET",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fieldColor",
+            "label": "FIELD",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "ringColor",
+            "label": "RINGS / GUIDES",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "panelColor",
+            "label": "PANEL",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENTS",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "reducedMotion",
+            "label": "REDUCED MOTION (static final pose)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiblock",
+      "style": "search"
+    },
+    "defaultDurationInFrames": 108,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_glass_code_block",
+    "componentName": "GlassCodeBlock",
+    "name": "Glass Code Block (remocn)",
+    "desc": "remocn • frosted-glass code editor window with a regex tokenizer and line-by-line stagger reveal • transparent (glass refracts what is behind it)",
+    "icon": "🧊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/glass-code-block",
+      "exportName": "GlassCodeBlock",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "code": "export function Hero() {\n  const frame = useCurrentFrame();\n  const opacity = frame / 30;\n  return <h1 style={{ opacity }}>Hello</h1>;\n}",
+        "title": "hero.tsx",
+        "fontSize": 16,
+        "glassColor": "rgba(10, 10, 10, 0.6)",
+        "staggerFrames": 4,
+        "showTrafficLights": true,
+        "aura": false
+      }
+    },
+    "controls": [
+      {
+        "group": "Glass Code Block (remocn) (whole clip) • 1280×720 layout at scale 1.5; window 760×460",
+        "items": [
+          {
+            "key": "code",
+            "label": "CODE",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "title",
+            "label": "FILE NAME",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 8,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "glassColor",
+            "label": "GLASS COLOR (keep alpha < 1)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "staggerFrames",
+            "label": "STAGGER (frames per line)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "showTrafficLights",
+            "label": "TRAFFIC LIGHTS",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "aura",
+            "label": "GLOW AURA behind the glass",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiblock",
+      "style": "code"
+    },
+    "defaultDurationInFrames": 180
+  },
+  {
+    "id": "remocn_glass_code_walk",
+    "componentName": "GlassCodeWalk",
+    "name": "Glass Code Walk (remocn)",
+    "desc": "remocn • camera scans a glass code block at 2.6× line by line as it reveals, then pulls back to a centred hold • transparent",
+    "icon": "🎥",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/glass-code-walk",
+      "exportName": "GlassCodeWalk",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "code": "export function Intro() {\n  return (\n    <AbsoluteFill>\n      <Typewriter text=\"Ship it\" />\n    </AbsoluteFill>\n  );\n}",
+        "title": "scene.tsx",
+        "fontSize": 18,
+        "staggerFrames": 10,
+        "zoom": 2.6
+      }
+    },
+    "controls": [
+      {
+        "group": "Glass Code Walk (remocn) (whole clip) • 1280×720 layout at scale 1.5; window 880×420",
+        "items": [
+          {
+            "key": "code",
+            "label": "CODE",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "title",
+            "label": "FILE NAME",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 8,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "staggerFrames",
+            "label": "STAGGER (frames per line)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "zoom",
+            "label": "CAMERA ZOOM while scanning",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 6,
+            "step": 0.1
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiblock",
+      "style": "walk"
+    },
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_terminal_simulator",
+    "componentName": "TerminalSimulator",
+    "name": "Terminal Simulator (remocn)",
+    "desc": "remocn • console window that types commands and streams logs, rolling older lines off the top • paints its own window",
+    "icon": "🖥️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/terminal-simulator",
+      "exportName": "TerminalSimulator",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "lines": [
+          {
+            "text": "npm run build",
+            "type": "command",
+            "delay": 0
+          },
+          {
+            "text": "Resolving dependencies...",
+            "type": "log",
+            "delay": 6
+          },
+          {
+            "text": "> remocn@1.0.0 build",
+            "type": "log",
+            "delay": 4
+          },
+          {
+            "text": "> next build",
+            "type": "log",
+            "delay": 4
+          },
+          {
+            "text": "Compiling...",
+            "type": "log",
+            "delay": 12
+          },
+          {
+            "text": "Compiled successfully in 4.2s",
+            "type": "success",
+            "delay": 14
+          },
+          {
+            "text": "Generating static pages (24/24)",
+            "type": "log",
+            "delay": 10
+          },
+          {
+            "text": "Build completed without errors",
+            "type": "success",
+            "delay": 12
+          }
+        ],
+        "prompt": "$",
+        "title": "~/projects/remocn",
+        "background": "#0a0a0a",
+        "chromeColor": "#1a1a1a",
+        "fontSize": 18,
+        "charsPerFrame": 1,
+        "chunkSize": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Terminal Simulator (remocn) (whole clip) • 1280×720 layout at scale 1.5; window 900×480",
+        "items": [
+          {
+            "key": "lines",
+            "label": "LINES [{text, type: command|log|success|error, delay?, pause?}]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "prompt",
+            "label": "PROMPT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "title",
+            "label": "WINDOW TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "background",
+            "label": "TERMINAL BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "chromeColor",
+            "label": "CHROME BAR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 8,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "charsPerFrame",
+            "label": "TYPING SPEED (chars/frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 10,
+            "step": 0.1
+          },
+          {
+            "key": "chunkSize",
+            "label": "CHARS PER STEP",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiblock",
+      "style": "term"
+    },
+    "defaultDurationInFrames": 240
+  },
+  {
+    "id": "remocn_terminal_cursor_zoom",
+    "componentName": "TerminalCursorZoom",
+    "name": "Terminal Cursor Zoom (remocn)",
+    "desc": "remocn • camera locked to the typing cursor at 2.8×, dollying across one command as it types",
+    "icon": "🔎",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/terminal-cursor-zoom",
+      "exportName": "TerminalCursorZoom",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "command": "npx shadcn add @remocn/terminal-cursor-zoom",
+        "zoom": 2.8,
+        "fontSize": 20,
+        "prompt": "$",
+        "title": "~/code/remocn-demo",
+        "charsPerFrame": 1,
+        "chunkSize": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Terminal Cursor Zoom (remocn) (whole clip) • 1280×720 layout at scale 1.5",
+        "items": [
+          {
+            "key": "command",
+            "label": "COMMAND",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "zoom",
+            "label": "CAMERA ZOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 6,
+            "step": 0.1
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 8,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "prompt",
+            "label": "PROMPT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "title",
+            "label": "WINDOW TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "charsPerFrame",
+            "label": "TYPING SPEED (chars/frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 10,
+            "step": 0.1
+          },
+          {
+            "key": "chunkSize",
+            "label": "CHARS PER STEP",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiblock",
+      "style": "zoom"
+    },
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_animated_line_chart",
+    "componentName": "AnimatedLineChart",
+    "name": "Animated Line Chart (remocn)",
+    "desc": "remocn • a line chart path draws on left to right with a leading dot (over 85% of the layer) • transparent",
+    "icon": "📈",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/animated-line-chart",
+      "exportName": "AnimatedLineChart",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "speed": 1,
+        "data": [
+          12,
+          19,
+          8,
+          15,
+          22,
+          18,
+          28,
+          25,
+          32
+        ],
+        "strokeColor": "#22c55e",
+        "strokeWidth": 4,
+        "gridColor": "#27272a",
+        "showDot": true
+      }
+    },
+    "controls": [
+      {
+        "group": "Animated Line Chart (remocn) (whole clip) • 1280×720 layout at scale 1.5; chart 1000×500, draw timed from the layer duration",
+        "items": [
+          {
+            "key": "data",
+            "label": "DATA (JSON array of numbers)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "strokeColor",
+            "label": "LINE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "strokeWidth",
+            "label": "LINE WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "gridColor",
+            "label": "GRID COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "showDot",
+            "label": "LEADING DOT",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiblock",
+      "style": "chart"
+    },
+    "defaultDurationInFrames": 90
   }
 ];
