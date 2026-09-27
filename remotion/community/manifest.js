@@ -8950,5 +8950,1113 @@ window.CommunityManifest = [
     },
     "defaultDurationInFrames": 90,
     "fullFrame": true
+  },
+  {
+    "id": "remocn_gooey_morph",
+    "componentName": "GooeyMorph",
+    "name": "Gooey Morph (remocn)",
+    "desc": "remocn • four bars fly in Tetris-style, land in a row and melt into a word through a gooey blur-threshold morph (frames 50–76) • transparent",
+    "icon": "🫠",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/gooey-morph",
+      "exportName": "GooeyMorph",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "word": "HELLO",
+        "fill": "#ffffff",
+        "fontFamily": "sans-serif",
+        "fontSize": 237,
+        "tracking": 0,
+        "wordCenterX": 961.4,
+        "wordBaselineY": 601.3,
+        "barWidth": 213,
+        "barHeight": 181,
+        "barEntryFrames": [
+          8,
+          0,
+          4,
+          13
+        ],
+        "barTravelFrames": 30,
+        "morphStartFrame": 50,
+        "morphPeakFrame": 63,
+        "morphEndFrame": 76,
+        "blurRadius": 6,
+        "blurIterations": 6,
+        "alphaInputBlack": 0.4588,
+        "alphaInputWhite": 0.5098,
+        "displaceAmount": 20,
+        "displaceSize": 19,
+        "displaceComplexity": 1,
+        "displaceEvolutionPerSecond": 50
+      }
+    },
+    "controls": [
+      {
+        "group": "Gooey Morph (remocn) (whole clip) • 1920×1080 design space, letterboxed on other aspects",
+        "items": [
+          {
+            "key": "word",
+            "label": "WORD",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fill",
+            "label": "FILL",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY (heavy faces melt best)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 40,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "tracking",
+            "label": "TRACKING",
+            "kind": "range",
+            "keyframable": false,
+            "min": -50,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "key": "wordCenterX",
+            "label": "WORD CENTRE X",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1920,
+            "step": 0.1
+          },
+          {
+            "key": "wordBaselineY",
+            "label": "WORD BASELINE Y",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1080,
+            "step": 0.1
+          },
+          {
+            "key": "barWidth",
+            "label": "BAR WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "barHeight",
+            "label": "BAR HEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "barStartPositions",
+            "label": "BAR START POSITIONS [[x,y]×4]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "barRestPositions",
+            "label": "BAR REST POSITIONS [[x,y]×4]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "barEntryFrames",
+            "label": "BAR ENTRY FRAMES [n×4]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "barTravelFrames",
+            "label": "BAR TRAVEL FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "morphStartFrame",
+            "label": "MORPH START",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "morphPeakFrame",
+            "label": "MORPH PEAK",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "morphEndFrame",
+            "label": "MORPH END",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "blurRadius",
+            "label": "GOO BLUR RADIUS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 0.5
+          },
+          {
+            "key": "blurIterations",
+            "label": "BLUR ITERATIONS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "alphaInputBlack",
+            "label": "ALPHA THRESHOLD LOW",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.0001
+          },
+          {
+            "key": "alphaInputWhite",
+            "label": "ALPHA THRESHOLD HIGH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.0001
+          },
+          {
+            "key": "displaceAmount",
+            "label": "DISPLACE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "key": "displaceSize",
+            "label": "DISPLACE SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "displaceComplexity",
+            "label": "NOISE OCTAVES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 6,
+            "step": 1
+          },
+          {
+            "key": "displaceEvolutionPerSecond",
+            "label": "NOISE PAN / s",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic6",
+      "style": "gooey"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_perspective_squeeze",
+    "componentName": "PerspectiveSqueeze",
+    "name": "Perspective Squeeze (remocn)",
+    "desc": "remocn • two lines of heavy type trade height endlessly while a corner-pin bends the stack into receding planes (225-frame loop) • transparent",
+    "icon": "🗜️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/perspective-squeeze",
+      "exportName": "PerspectiveSqueeze",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "upperText": "REMOCN",
+        "lowerText": "BEST",
+        "upperFontFamily": "Impact, 'Arial Narrow', sans-serif",
+        "lowerFontFamily": "Impact, 'Arial Narrow', sans-serif",
+        "upperFontSize": 603,
+        "lowerFontSize": 124,
+        "fill": "#ffffff",
+        "blockWidth": 990,
+        "blockHeight": 546,
+        "upperBlockPosition": [
+          960,
+          314
+        ],
+        "lowerBlockPosition": [
+          960,
+          860
+        ],
+        "cornerKeyframes": [
+          0,
+          45,
+          70
+        ],
+        "scaleKeyframes": [
+          0,
+          60,
+          118,
+          161,
+          196,
+          225
+        ],
+        "upperScaleY": [
+          100,
+          35.8,
+          64,
+          45,
+          110,
+          100
+        ],
+        "lowerScaleY": [
+          100,
+          384.8,
+          270,
+          330,
+          150,
+          100
+        ],
+        "capRatio": 0.65,
+        "lineGap": 50
+      }
+    },
+    "controls": [
+      {
+        "group": "Perspective Squeeze (remocn) (whole clip) • stage scales to fit any composition",
+        "items": [
+          {
+            "key": "upperText",
+            "label": "UPPER TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "lowerText",
+            "label": "LOWER TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "upperFontFamily",
+            "label": "UPPER FONT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "lowerFontFamily",
+            "label": "LOWER FONT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "upperFontSize",
+            "label": "UPPER FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 1200,
+            "step": 1
+          },
+          {
+            "key": "lowerFontSize",
+            "label": "LOWER FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 1200,
+            "step": 1
+          },
+          {
+            "key": "fill",
+            "label": "FILL",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "blockWidth",
+            "label": "BLOCK WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 1920,
+            "step": 1
+          },
+          {
+            "key": "blockHeight",
+            "label": "BLOCK HEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 1080,
+            "step": 1
+          },
+          {
+            "key": "upperBlockPosition",
+            "label": "UPPER BLOCK CENTRE [x,y]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "lowerBlockPosition",
+            "label": "LOWER BLOCK CENTRE [x,y]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "cornerKeyframes",
+            "label": "CORNER KEYFRAMES [3]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "upperCornersMid",
+            "label": "UPPER CORNERS MID [[x,y]×4]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "upperCornersEnd",
+            "label": "UPPER CORNERS END",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "lowerCornersMid",
+            "label": "LOWER CORNERS MID",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "lowerCornersEnd",
+            "label": "LOWER CORNERS END",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "scaleKeyframes",
+            "label": "SQUISH KEYFRAMES",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "upperScaleY",
+            "label": "UPPER SCALE Y % per keyframe",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "lowerScaleY",
+            "label": "LOWER SCALE Y % per keyframe",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "capRatio",
+            "label": "CAP RATIO",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.3,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "lineGap",
+            "label": "LINE GAP",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic6",
+      "style": "squeeze"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 225
+  },
+  {
+    "id": "remocn_extrude_pop",
+    "componentName": "ExtrudePop",
+    "name": "Extrude Pop (remocn)",
+    "desc": "remocn • a flat word pops up off the plane on a solid coloured extruded body (frames 0–48, eases out and holds) • transparent",
+    "icon": "🧱",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/extrude-pop",
+      "exportName": "ExtrudePop",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "letter": "WIN",
+        "bodyColor": "#e8192b",
+        "faceColor": "#ffffff",
+        "fontFamily": "'Helvetica Neue', Helvetica, Arial, sans-serif",
+        "fontWeight": 700,
+        "fontSize": 603,
+        "maxTextWidth": 1660,
+        "basePosition": [
+          959.2,
+          752.5
+        ],
+        "minimaxRadius": 80,
+        "extrudeAngleDeg": -58.6,
+        "extrudeSteps": 200,
+        "extrudeStartFrame": 0,
+        "extrudeEndFrame": 48
+      }
+    },
+    "controls": [
+      {
+        "group": "Extrude Pop (remocn) (whole clip) • 1920×1080 design space",
+        "items": [
+          {
+            "key": "letter",
+            "label": "TEXT (one short word)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "bodyColor",
+            "label": "BODY COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "faceColor",
+            "label": "FACE COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "fontFamily",
+            "label": "FONT FAMILY",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontWeight",
+            "label": "FONT WEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 900,
+            "step": 100
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 40,
+            "max": 1200,
+            "step": 1
+          },
+          {
+            "key": "maxTextWidth",
+            "label": "MAX TEXT WIDTH (auto-shrink)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 1900,
+            "step": 1
+          },
+          {
+            "key": "basePosition",
+            "label": "BASELINE ANCHOR [x,y]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "minimaxRadius",
+            "label": "DEPTH RADIUS (depth = 2×)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "extrudeAngleDeg",
+            "label": "EXTRUDE ANGLE°",
+            "kind": "range",
+            "keyframable": false,
+            "min": -180,
+            "max": 180,
+            "step": 0.1
+          },
+          {
+            "key": "extrudeSteps",
+            "label": "BODY COPIES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "extrudeStartFrame",
+            "label": "POP START",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "extrudeEndFrame",
+            "label": "POP END",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 600,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic6",
+      "style": "extrude"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_chromatic_wave",
+    "componentName": "ChromaticWave",
+    "name": "Chromatic Wave (remocn)",
+    "desc": "remocn • a soft wave travels down through the type, rippling it into RGB fringes that settle back to white • paints its own (dark) background",
+    "icon": "🌈",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/chromatic-wave",
+      "exportName": "ChromaticWave",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "headline": "MUSIC",
+        "kicker": "APPLES",
+        "headlineFontSize": 174,
+        "kickerFontSize": 52,
+        "kickerTracking": 32,
+        "headlineBaselineY": 601,
+        "kickerBaselines": [
+          444,
+          670
+        ],
+        "textCenterX": 960,
+        "fill": "#ffffff",
+        "background": "#000000",
+        "bandHeight": 147.1,
+        "bandCopies": 7,
+        "bandPitch": 750,
+        "mapStartY": 31,
+        "mapEndY": 1560,
+        "mapTravelFrames": 150,
+        "waveHeight": 28,
+        "waveWidth": 272,
+        "waveSpeed": 1,
+        "turbulentAmount": 130,
+        "turbulentSize": 163,
+        "evolutionPerSecond": 50,
+        "mapBlurRadius": 13,
+        "mapBlurIterations": 6,
+        "glassDisplacement": 100,
+        "maxDisplacementPx": 39,
+        "glassPasses": 3,
+        "channelOrder": [
+          "blue",
+          "green",
+          "red"
+        ]
+      }
+    },
+    "controls": [
+      {
+        "group": "Chromatic Wave (remocn) (whole clip) • owns its background; keep it dark",
+        "items": [
+          {
+            "key": "headline",
+            "label": "HEADLINE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "kicker",
+            "label": "KICKER (above + below)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "headlineFontFamily",
+            "label": "HEADLINE FONT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "kickerFontFamily",
+            "label": "KICKER FONT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "headlineFontSize",
+            "label": "HEADLINE SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "kickerFontSize",
+            "label": "KICKER SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "kickerTracking",
+            "label": "KICKER TRACKING",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "headlineBaselineY",
+            "label": "HEADLINE BASELINE Y",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1080,
+            "step": 1
+          },
+          {
+            "key": "kickerBaselines",
+            "label": "KICKER BASELINES [top, bottom]",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "textCenterX",
+            "label": "TEXT CENTRE X",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1920,
+            "step": 1
+          },
+          {
+            "key": "fill",
+            "label": "TEXT COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "background",
+            "label": "BACKGROUND (keep dark)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "bandHeight",
+            "label": "BAND HEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 600,
+            "step": 0.1
+          },
+          {
+            "key": "bandCopies",
+            "label": "BAND COPIES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "bandPitch",
+            "label": "BAND PITCH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 50,
+            "max": 2000,
+            "step": 1
+          },
+          {
+            "key": "mapStartY",
+            "label": "MAP START Y",
+            "kind": "range",
+            "keyframable": false,
+            "min": -2000,
+            "max": 2000,
+            "step": 1
+          },
+          {
+            "key": "mapEndY",
+            "label": "MAP END Y",
+            "kind": "range",
+            "keyframable": false,
+            "min": -2000,
+            "max": 4000,
+            "step": 1
+          },
+          {
+            "key": "mapTravelFrames",
+            "label": "MAP TRAVEL FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "waveHeight",
+            "label": "WAVE HEIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "waveWidth",
+            "label": "WAVE WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 1000,
+            "step": 1
+          },
+          {
+            "key": "waveSpeed",
+            "label": "WAVE SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "turbulentAmount",
+            "label": "TURBULENCE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "turbulentSize",
+            "label": "TURBULENCE SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "evolutionPerSecond",
+            "label": "NOISE PAN / s",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "mapBlurRadius",
+            "label": "MAP BLUR",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "mapBlurIterations",
+            "label": "MAP BLUR ITERATIONS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "glassDisplacement",
+            "label": "GLASS DISPLACEMENT %",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "maxDisplacementPx",
+            "label": "MAX DISPLACEMENT px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "glassPasses",
+            "label": "PASSES / CHANNELS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 3,
+            "step": 1
+          },
+          {
+            "key": "channelOrder",
+            "label": "CHANNEL ORDER [\"blue\",\"green\",\"red\"]",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic6",
+      "style": "chroma"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_stretch_in",
+    "componentName": "StretchIn",
+    "name": "Stretch In (remocn)",
+    "desc": "remocn • letters fly in from off-canvas right and smear horizontally (vertex-lag deformation of real glyph outlines via opentype.js) • transparent",
+    "icon": "↔️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/stretch-in",
+      "exportName": "StretchIn",
+      "packages": [
+        "opentype.js"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "text": "REMOCN",
+        "fontUrl": "https://fonts.gstatic.com/s/anton/v27/1Ptgg87LROyAm0K0.ttf",
+        "fontSize": 510,
+        "letterSpacing": 0,
+        "fill": "#ffffff",
+        "strokeWidth": 0,
+        "stroke": "#ffffff",
+        "entryStart": 0,
+        "entryStagger": 3,
+        "travelFrames": 33,
+        "travelDistance": 1500,
+        "vertexLagFrames": 3.5,
+        "curveSteps": 8
+      }
+    },
+    "controls": [
+      {
+        "group": "Stretch In (remocn) (whole clip) • needs the font file at render time",
+        "items": [
+          {
+            "key": "text",
+            "label": "TEXT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontUrl",
+            "label": "FONT FILE URL (.ttf/.otf)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fontSize",
+            "label": "FONT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 40,
+            "max": 1200,
+            "step": 1
+          },
+          {
+            "key": "letterSpacing",
+            "label": "LETTER SPACING px",
+            "kind": "range",
+            "keyframable": false,
+            "min": -100,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "fill",
+            "label": "FILL (or \"none\")",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "strokeWidth",
+            "label": "STROKE WIDTH (wireframe)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "stroke",
+            "label": "STROKE",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "entryStart",
+            "label": "ENTRY START",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "entryStagger",
+            "label": "STAGGER (frames per letter)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "travelFrames",
+            "label": "TRAVEL FRAMES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "travelDistance",
+            "label": "TRAVEL DISTANCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 4000,
+            "step": 1
+          },
+          {
+            "key": "vertexLagFrames",
+            "label": "SMEAR (trailing-edge lag frames)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "curveSteps",
+            "label": "CURVE STEPS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 32,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "kinetic6",
+      "style": "stretch"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60,
+    "renderTimeoutMs": 90000
   }
 ];

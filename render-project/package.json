@@ -25,6 +25,7 @@
     "@remotion/three": "4.0.526",
     "@turf/turf": "^7.4.0",
     "maplibre-gl": "^6.11.2",
+    "opentype.js": "^2.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "remotion": "4.0.526",

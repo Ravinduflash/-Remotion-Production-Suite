@@ -1061,6 +1061,29 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - SYSTEM glitching at frames 22 and 24.
   - The first countdown still failed once, with an empty log, and passed on re-run; most likely a cold font fetch.
 
+### Gooey Morph, Perspective Squeeze, Extrude Pop, Chromatic Wave and Stretch In (remocn)
+
+- **Catalog ids:** `remocn_gooey_morph`, `remocn_perspective_squeeze`, `remocn_extrude_pop`, `remocn_chromatic_wave`, `remocn_stretch_in`
+- **Files:** the matching kebab-case `.tsx` files, from the remocn registry, verbatim, MIT. **Stretch In depends on the npm package `opentype.js`** (installed at ^2.0.0 by the render step; it isn't a Remotion package, so it keeps a caret range). It fetches `fontUrl` (Anton .ttf on gstatic) at render time, so `renderTimeoutMs` is 90000.
+- **Size:** all full frame, `sizeMode: none`. Their own `width` and `height` props are a 1920×1080 design space: an SVG `viewBox` with `meet` for most, and a fitted stage for Perspective Squeeze. They are native at 1080p and letterbox on other aspect ratios. The layer box's size is deliberately not forwarded.
+- **Backgrounds:** Chromatic Wave paints its own background (#000); keep it dark, because the screen-blend channel reassembly is only exact over black. The rest are transparent.
+- **Controls, all whole clip:** every documented prop. Position, corner and keyframe arrays are JSON controls.
+- **Preview:** one shared kind, `kinetic6`.
+  - **Exact SVG/HTML ports:** Gooey Morph (the blur, threshold and turbulence filter), Perspective Squeeze (the `matrix3d` corner-pin solver), Chromatic Wave (the generated displacement map, its feImage and filters, and the screen blend), and Extrude Pop, which uses at most 60 body copies in the preview versus 200 in the render.
+  - **Stretch In is approximated:** each letter slides in and stretches horizontally by the vertex-lag difference. The render deforms real glyph outlines. The preview also measures letter widths before Anton loads, so its spacing can look wide.
+- **Timing and defaults:**
+  - **Gooey Morph:** bars fly in over 0 to 43 frames, then melt over 50 to 76. Layer 90.
+  - **Perspective Squeeze:** a 225-frame loop that ends where it starts. Layer 225.
+  - **Extrude Pop:** pops over 0 to 48, then holds. Layer 60.
+  - **Chromatic Wave:** the bands travel over 150 frames. Layer 150.
+  - **Stretch In:** letters enter 3 frames apart, 33 frames each. Layer 60.
+- **Verified:** 2026-09-27, [remocn-kinetic6-contact.png](renders/remocn-kinetic6-contact.png):
+  - Gooey: bars scatter → row → melt → "HELLO", in Impact.
+  - Squeeze: "REMOCN / BEST" through the corner poses; custom "BIG / DEAL" in #facc15 on blue.
+  - Extrude: "WIN" popping on red over cream; custom "GO!" in green on navy.
+  - Chromatic: "APPLES / MUSIC / APPLES" with RGB fringes where the wave crosses.
+  - Stretch: Anton "REMOCN" smearing in; custom "SHIP IT" in #f43f5e.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`
