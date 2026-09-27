@@ -21,6 +21,13 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
 - **Preview guard, 2026-09-27:** the `paper` preview used to loop forever when `gridSize` was 0. It now draws a grid only when `gridSize` is at least 4, and defaults to no grid.
+- **Several studio pages, fixed 2026-09-27:** every open `index.html` retries the bridge every 4 seconds. The server used to send commands to whichever page connected last. A test run was therefore split between a headless page and the user's open tab: components registered on one page, then `add_asset` failed on the other, and test edits landed in the user's scene. The server now:
+  - sends commands to one stable page, the earliest connected, unless `select_studio` pins another;
+  - sends `register_component` to every open page, so catalogs cannot diverge;
+  - lists all pages in `studio_status`.
+- **Isolated testing:** open the studio as `index.html?bridge=ws://localhost:7778` and start the server with `STUDIO_WS_PORT=7778`. Tests then never touch a studio on the default port 7777.
+- **`clear_scene` keeps the canvas size,** as well as fps and duration. Call `set_aspect` and `set_timeline` again when the next scene needs different ones. This mis-framed the first Liquid Contours test scene.
+- **Composition-length loops:** Moving Waves and Moving Zigzags tie their motion to `durationInFrames`. They flow exactly one loop per composition, whatever its length. A longer video means slower motion, not more loops.
 - **TypeScript target:** `render-project/tsconfig.json` targets ES2021, because Elements use `String.replaceAll`.
 
 ## Components
@@ -101,6 +108,44 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - The rotation keeps going past frame 2000, because this `interpolate` is not clamped.
   - The rays centre on the frame, so they stay centred after an aspect change.
   - Use dark strokes on characters, since the background is light.
+
+### Moving Waves
+
+- **Catalog id:** `community_moving_waves`
+- **File:** `MovingWaves.tsx`, from Remotion Elements `backgrounds/moving-waves`, saved verbatim
+- **Packages:** `@remotion/effects`
+- **Size:** full frame, `fullFrame: true`
+- **Controls:** none. The component takes no props.
+- **Preview:** `bands` with style `waves`, following the playhead and the composition length
+- **Verified:** 2026-09-27, [moving-waves-f30.png](renders/moving-waves-f30.png), 16:9 with a stickman jab and a title. Frames 0 and 30 differ.
+- **Notes:**
+  - The bands move 448 px over the whole composition. That is 4 full band periods, so the last frame meets the first seamlessly.
+  - Speed depends on the composition length.
+  - It reads the composition's `durationInFrames`, not the layer's, so it is best as a whole-video background.
+
+### Moving Zigzags
+
+- **Catalog id:** `community_moving_zigzags`
+- **File:** `MovingZigzags.tsx`, from Remotion Elements `backgrounds/moving-zigzags`, saved verbatim
+- **Packages:** `@remotion/effects`
+- **Size:** full frame, `fullFrame: true`
+- **Controls:** none
+- **Preview:** `bands` with style `zigzag`
+- **Verified:** 2026-09-27, [moving-zigzags-f30.png](renders/moving-zigzags-f30.png), 9:16 with a stickman uppercut. Frames 0 and 30 differ.
+- **Notes:** it moves 480 px, 6 band periods, over the composition. Otherwise the same caveats as Moving Waves apply.
+
+### Liquid Contours
+
+- **Catalog id:** `community_liquid_contours`
+- **File:** `LiquidContours.tsx`, from Remotion Elements `backgrounds/liquid-contours`, saved verbatim
+- **Packages:** `@remotion/effects`
+- **Size:** full frame, `fullFrame: true`
+- **Controls:** none
+- **Preview:** `bands` with style `contours`, a rough stand-in. The real contours are organic and different.
+- **Verified:** 2026-09-27, [liquid-contours-f0.png](renders/liquid-contours-f0.png) and [liquid-contours-f120.png](renders/liquid-contours-f120.png) at 1:1. The two frames differ.
+- **Notes:**
+  - The phase drifts from 3.23 to 4.23 over 240 frames, which is slow and calm.
+  - The `interpolate` is not clamped, so the drift keeps going past frame 240 and never stops.
 
 ### Typewriter Text
 

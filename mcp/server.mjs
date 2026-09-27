@@ -33,20 +33,30 @@ const WAIT_MS = Number(process.env.STUDIO_RENDER_WAIT || 50000); // how long ren
 const log = (...a) => console.error('[remotion-studio-mcp]', ...a);
 
 /* ---------------- WebSocket bridge to the browser UI ---------------- */
-let studio = null;          // active studio socket
-let lastState = null;       // last pushed RemotionWorkspaceState (served when the UI is offline)
-let studioMethods = [];     // methods advertised by the UI on hello
+// Several studio pages can be connected at once (e.g. the user's open tab plus a headless test page,
+// and every page retries the bridge every 4s). Commands must go to ONE stable page, never "whichever
+// connected last": the target is the pinned client if set, otherwise the earliest-connected open page.
+const clients = new Map();  // clientId → { ws, clientId, connectedAt, href, title }
+let pinnedClientId = null;  // set with select_studio
+let lastState = null;       // last pushed RemotionWorkspaceState from the target page (served when offline)
+let studioMethods = [];     // methods advertised by the target page on hello
 const pending = new Map();
-let seq = 0;
+let seq = 0, clientSeq = 0;
+
+const openClients = () => [...clients.values()].filter(c => c.ws.readyState === 1).sort((a, b) => a.connectedAt - b.connectedAt);
+function target() { const open = openClients(); return open.find(c => c.clientId === pinnedClientId) || open[0] || null; }
+const describeClients = () => { const t = target(); return openClients().map(c => ({ clientId: c.clientId, href: c.href, title: c.title, connectedAt: new Date(c.connectedAt).toISOString(), target: c === t, pinned: c.clientId === pinnedClientId })); };
 
 const wss = new WebSocketServer({ port: PORT });
 wss.on('listening', () => log(`bridge listening on ws://localhost:${PORT}`));
 wss.on('connection', (ws) => {
-  studio = ws; log('studio UI connected');
+  const client = { ws, clientId: `studio_${++clientSeq}`, connectedAt: Date.now(), href: null, title: null };
+  clients.set(client.clientId, client);
+  log(`studio UI connected (${client.clientId}; ${openClients().length} open; target ${target() && target().clientId})`);
   ws.on('message', async (raw) => {
     let msg; try { msg = JSON.parse(raw.toString()); } catch { return; }
-    if (msg.event === 'hello') { studioMethods = msg.api || []; return; }
-    if (msg.event === 'state') { lastState = msg.state; return; }
+    if (msg.event === 'hello') { client.href = msg.href || null; client.title = msg.title || null; if (target() === client) studioMethods = msg.api || []; return; }
+    if (msg.event === 'state') { if (target() === client) lastState = msg.state; return; }
     if (msg.event === 'render') { // UI "Render" button → run a job and report back
       const job = createJob('render', msg.params || {});
       const progress = (message) => { try { ws.send(JSON.stringify({ event: 'renderProgress', id: msg.id, message })); } catch { } };
@@ -58,18 +68,30 @@ wss.on('connection', (ws) => {
       msg.error ? reject(new Error(msg.error)) : resolve(msg.result);
     }
   });
-  ws.on('close', () => { if (studio === ws) studio = null; log('studio UI disconnected'); });
+  ws.on('close', () => { clients.delete(client.clientId); if (pinnedClientId === client.clientId) pinnedClientId = null; log(`studio UI disconnected (${client.clientId}; ${openClients().length} open)`); });
   ws.on('error', (e) => log('socket error', e.message));
 });
 
-function call(method, params = {}) {
+function sendTo(client, method, params) {
   return new Promise((resolve, reject) => {
-    if (!studio || studio.readyState !== 1) return reject(new Error(`Studio UI is not connected. Open index.html in a browser — it auto-connects to ws://localhost:${PORT} (header pill turns green).`));
     const id = ++seq;
     const timer = setTimeout(() => { pending.delete(id); reject(new Error(`Studio call timed out: ${method}`)); }, TIMEOUT_MS);
     pending.set(id, { resolve, reject, timer });
-    studio.send(JSON.stringify({ id, method, params }));
+    client.ws.send(JSON.stringify({ id, method, params }));
   });
+}
+function call(method, params = {}) {
+  const t = target();
+  if (!t) return Promise.reject(new Error(`Studio UI is not connected. Open index.html in a browser — it auto-connects to ws://localhost:${PORT} (header pill turns green).`));
+  return sendTo(t, method, params);
+}
+/** Catalog changes (register_component) go to every open page so their catalogs never diverge. */
+async function broadcast(method, params = {}) {
+  const t = target(); if (!t) throw new Error('Studio UI is not connected.');
+  const result = await sendTo(t, method, params);
+  const others = openClients().filter(c => c !== t);
+  const settled = await Promise.allSettled(others.map(c => sendTo(c, method, params)));
+  return { result, alsoApplied: others.map((c, i) => ({ clientId: c.clientId, ok: settled[i].status === 'fulfilled' })) };
 }
 
 /* ---------------- render jobs ---------------- */
@@ -164,9 +186,10 @@ const easing = z.enum(['linear', 'easeInOut', 'easeOut', 'spring']).optional();
 
 /* --- status & discovery --- */
 tool('studio_status', 'Is the browser studio connected? Returns connection state, render project path and a scene summary.', {}, async () => ({
-  connected: !!(studio && studio.readyState === 1), bridge: `ws://localhost:${PORT}`, renderProject: RENDER_PROJECT, renderProjectInstalled: fs.existsSync(path.join(RENDER_PROJECT, 'node_modules')), methods: studioMethods,
+  connected: !!target(), studios: describeClients(), bridge: `ws://localhost:${PORT}`, renderProject: RENDER_PROJECT, renderProjectInstalled: fs.existsSync(path.join(RENDER_PROJECT, 'node_modules')), methods: studioMethods,
   scene: lastState ? { name: lastState.name, size: `${lastState.width}x${lastState.height}`, fps: lastState.fps, totalFrames: lastState.totalFrames, currentFrame: Math.round(lastState.currentFrame || 0), assets: lastState.assets.map(a => ({ id: a.id, name: a.name, type: a.type, componentName: a.componentName, keyframes: a.keyframes.length, visible: a.visible !== false })) } : null,
 }));
+tool('select_studio', 'Choose which connected studio page receives commands, when several are open (see studio_status.studios). Omit clientId to go back to the default: the earliest-connected page.', { clientId: z.string().optional() }, (a) => { if (a.clientId && !openClients().some(c => c.clientId === a.clientId)) throw new Error('No open studio with clientId ' + a.clientId); pinnedClientId = a.clientId || null; return { target: target() && target().clientId, studios: describeClients() }; });
 tool('list_catalog', 'All assets that can be added to a scene (characters, environments, widgets, 3D, media, community), with default properties, inspector control schemas, presets and modifiers. Call this first so you know what you can build with.', {}, () => call('listCatalog'));
 tool('list_presets', 'Martial-arts choreography presets that can be applied to character assets.', {}, () => call('listPresets'));
 tool('list_modifiers', 'Context-aware motion generators available for an asset (bullish/bearish for charts, spin for 3D, fade/pop for text and media…).', { assetId: z.string().optional() }, (a) => call('listModifiers', a));
@@ -175,7 +198,7 @@ tool('list_aspect_ratios', 'Composition size presets (16:9, 9:16, 1:1, 4:5, 4:3,
 /* --- scene --- */
 tool('get_scene', 'Full RemotionWorkspaceState JSON (assets with keyframes, timeline settings).', {}, async () => { try { return await call('getState'); } catch (e) { if (lastState) return { offline: true, ...lastState }; throw e; } });
 tool('set_scene', 'Replace the whole scene with a RemotionWorkspaceState JSON object.', { state: z.record(z.any()) }, (a) => call('setState', a));
-tool('clear_scene', 'Remove every asset from the scene.', {}, () => call('clearScene'));
+tool('clear_scene', 'Remove every asset from the scene. Keeps the canvas size, fps and duration: call set_aspect / set_timeline afterwards if the next scene needs different ones.', {}, () => call('clearScene'));
 tool('set_aspect', 'Set the composition aspect ratio / size. preset from list_aspect_ratios, or explicit width+height. refit (default true) re-maps asset positions and full-frame backgrounds to the new size.', { preset: z.string().optional(), width: z.number().optional(), height: z.number().optional(), refit: z.boolean().optional() }, (a) => call('setAspect', a));
 tool('set_timeline', 'Set totalFrames, fps, background colour or scene name (use set_aspect for size).', { totalFrames: z.number().optional(), fps: z.number().optional(), background: z.string().optional(), name: z.string().optional() }, (a) => call('setTimeline', a));
 tool('check_scene', 'Validate the scene and get structured critique: off-screen assets, characters clipping the floor, overlapping characters, title-safe violations, keyframes past the duration, missing background, unused duration, required npm packages. Returns {ok, score, errors[], warnings[], info[]} with suggested fixes. Run it after building and before rendering.', {}, () => call('validateScene'));
@@ -223,7 +246,7 @@ tool('register_component', 'Register an external/community Remotion component as
     external: z.object({ importPath: z.string(), exportName: z.string(), package: z.string().optional(), packages: z.array(z.string()).optional(), sizeMode: z.enum(['style', 'props', 'none']).optional(), omitProps: z.array(z.string()).optional(), styleMap: z.record(z.string()).optional() }),
     defaults: z.record(z.any()).optional(), controls: z.array(z.record(z.any())).optional(), preview: z.record(z.any()).optional(), easing }).passthrough(),
   persist: z.boolean().optional(),
-}, async (a) => { const r = await call('registerComponent', { entry: a.entry }); if (a.persist) { const m = readManifest(); const i = m.findIndex(x => x.id === a.entry.id); if (i >= 0) m[i] = a.entry; else m.push(a.entry); writeManifest(m); r.persisted = MANIFEST; } return r; });
+}, async (a) => { const b = await broadcast('registerComponent', { entry: a.entry }); const r = { ...b.result, alsoAppliedTo: b.alsoApplied }; if (a.persist) { const m = readManifest(); const i = m.findIndex(x => x.id === a.entry.id); if (i >= 0) m[i] = a.entry; else m.push(a.entry); writeManifest(m); r.persisted = MANIFEST; } return r; });
 tool('unregister_component', 'Remove a community component from remotion/community/manifest.js (takes effect after the studio reloads).', { id: z.string() }, (a) => { const m = readManifest(); const n = m.filter(x => x.id !== a.id); writeManifest(n); return { removed: m.length - n.length }; });
 tool('call_studio', 'Escape hatch: call any StudioAPI method by name (see studio_status.methods).', { method: z.string(), params: z.record(z.any()).optional() }, (a) => call(a.method, a.params || {}));
 

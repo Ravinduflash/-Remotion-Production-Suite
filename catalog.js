@@ -338,6 +338,17 @@
         if (g >= 4) for (let x = 0; x <= W; x += g) lines += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${lc}" stroke-width="${lw}"/>`;
         if (g >= 4) for (let y = 0; y <= H; y += g) lines += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${lc}" stroke-width="${lw}"/>`;
         return `<rect x="0" y="0" width="${W}" height="${H}" fill="${cp.color || '#ffffff'}"/><rect x="0" y="0" width="${W}" height="${H}" fill="#f3efe6" opacity="0.35"/>${lines}`; }
+      case 'bands': { // style: waves | zigzag | contours — flowing two-colour bands (Moving Waves / Moving Zigzags / Liquid Contours)
+        const style = pv.style || 'waves', cols = Array.isArray(cp.colors) && cp.colors.length ? cp.colors : ['#dff4ff', '#7cc6ff'], f = num(ctx.frame, 0), dur = Math.max(1, num(ctx.totalFrames, 120));
+        const th = num(cp.thickness, style === 'zigzag' ? 40 : 56), amp = num(cp.amplitude, style === 'zigzag' ? 40 : 24), wl = num(cp.wavelength, 160);
+        if (style === 'contours') { const ph = num(cp.phaseStart, 3.23) + (num(cp.phaseEnd, 4.23) - num(cp.phaseStart, 3.23)) * (f / num(cp.phaseFrames, 240)); let out = `<rect width="${W}" height="${H}" fill="${cols[1]}"/>`;
+          for (let k = 9; k >= 1; k--) { const r = k / 9, pts = []; for (let i = 0; i < 48; i++) { const a = i / 48 * Math.PI * 2; const rr = r * Math.hypot(W, H) * 0.55 * (1 + 0.12 * Math.sin(a * 3 + ph * 2 + k) + 0.07 * Math.sin(a * 5 - ph * 3)); pts.push(`${(W * 0.45 + rr * Math.cos(a)).toFixed(1)},${(H * 0.55 + rr * 0.7 * Math.sin(a)).toFixed(1)}`); } out += `<polygon points="${pts.join(' ')}" fill="${cols[k % 2]}"/>`; }
+          return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+        const period = th * cols.length, off = (f / dur) * num(cp.loopDistance, style === 'zigzag' ? 480 : 448); let out = `<rect width="${W}" height="${H}" fill="${cols[0]}"/>`;
+        for (let b = -2, y0 = -(off % period) - period; y0 < H + period; b++, y0 += th) { const pts = [], step = style === 'zigzag' ? wl / 2 : 16;
+          for (let x = -wl; x <= W + wl; x += step) { const t = x / wl; const dy = style === 'zigzag' ? amp * (2 * Math.abs(2 * (t - Math.floor(t + 0.5))) - 1) : amp * Math.sin(t * Math.PI * 2); pts.push(`${x.toFixed(1)},${(y0 + dy).toFixed(1)}`); }
+          const idx = ((b % cols.length) + cols.length) % cols.length; out += `<polygon points="${pts.join(' ')} ${W + wl},${(y0 + th + amp * 2).toFixed(1)} ${-wl},${(y0 + th + amp * 2).toFixed(1)}" fill="${cols[idx]}"/>`; }
+        return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
       case 'starburst': { const rays = Math.max(2, Math.round(num(cp.rays, 28))), cols = Array.isArray(cp.colors) && cp.colors.length ? cp.colors : ['#dff4ff', '#7cc6ff'];
         const cx = W * num(cp.originX, 0.5), cy = H * num(cp.originY, 0.5), R = Math.hypot(W, H), rot = num(cp.rotationPerFrame, 360 / 2000) * num(ctx.frame, 0); const step = 360 / rays; let wedges = '';
         for (let i = 0; i < rays; i++) { const a0 = (rot + i * step - 90) * Math.PI / 180, a1 = (rot + (i + 1) * step - 90) * Math.PI / 180; wedges += `<polygon points="${cx.toFixed(1)},${cy.toFixed(1)} ${(cx + R * Math.cos(a0)).toFixed(1)},${(cy + R * Math.sin(a0)).toFixed(1)} ${(cx + R * Math.cos(a1)).toFixed(1)},${(cy + R * Math.sin(a1)).toFixed(1)}" fill="${cols[i % cols.length]}"/>`; }

@@ -445,5 +445,130 @@ window.CommunityManifest = [
       "kind": "starburst"
     },
     "fullFrame": true
+  },
+  {
+    "id": "community_moving_waves",
+    "componentName": "MovingWaves",
+    "name": "Moving Waves",
+    "desc": "Remotion Elements • light-blue wave bands flowing upward, loops once per composition",
+    "icon": "🌊",
+    "external": {
+      "importPath": "./community/MovingWaves",
+      "exportName": "MovingWaves",
+      "packages": [
+        "@remotion/effects"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "colors": [
+          "#dff4ff",
+          "#7cc6ff"
+        ],
+        "thickness": 56,
+        "amplitude": 24,
+        "wavelength": 160,
+        "loopDistance": 448
+      }
+    },
+    "controls": [
+      {
+        "group": "Moving Waves • fixed look, no props (sizes itself to the composition)",
+        "items": []
+      }
+    ],
+    "preview": {
+      "kind": "bands",
+      "style": "waves"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "community_moving_zigzags",
+    "componentName": "MovingZigzags",
+    "name": "Moving Zigzags",
+    "desc": "Remotion Elements • light-blue zigzag bands flowing upward, loops once per composition",
+    "icon": "〽️",
+    "external": {
+      "importPath": "./community/MovingZigzags",
+      "exportName": "MovingZigzags",
+      "packages": [
+        "@remotion/effects"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "colors": [
+          "#dff4ff",
+          "#7cc6ff"
+        ],
+        "thickness": 40,
+        "amplitude": 40,
+        "wavelength": 160,
+        "loopDistance": 480
+      }
+    },
+    "controls": [
+      {
+        "group": "Moving Zigzags • fixed look, no props (sizes itself to the composition)",
+        "items": []
+      }
+    ],
+    "preview": {
+      "kind": "bands",
+      "style": "zigzag"
+    },
+    "fullFrame": true
+  },
+  {
+    "id": "community_liquid_contours",
+    "componentName": "LiquidContours",
+    "name": "Liquid Contours",
+    "desc": "Remotion Elements • two-colour liquid contour bands, slow phase drift",
+    "icon": "💧",
+    "external": {
+      "importPath": "./community/LiquidContours",
+      "exportName": "LiquidContours",
+      "packages": [
+        "@remotion/effects"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "colors": [
+          "#dff4ff",
+          "#7cc6ff"
+        ],
+        "phaseStart": 3.23,
+        "phaseEnd": 4.23,
+        "phaseFrames": 240
+      }
+    },
+    "controls": [
+      {
+        "group": "Liquid Contours • fixed look, no props (sizes itself to the composition)",
+        "items": []
+      }
+    ],
+    "preview": {
+      "kind": "bands",
+      "style": "contours"
+    },
+    "fullFrame": true
   }
 ];

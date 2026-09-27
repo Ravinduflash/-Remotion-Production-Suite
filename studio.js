@@ -30,7 +30,7 @@
   /* ---------------- STATE ---------------- */
   // RemotionWorkspaceState (see README / SceneRenderer.tsx for the TypeScript interface)
   let store = { version: 1, name: 'Untitled Scene', width: 1920, height: 1080, fps: 60, totalFrames: 120, currentFrame: 0, background: '#0a0a0f', selectedAssetId: null, assets: [] };
-  const ui = { tab: 'characters', isPlaying: false, loop: true, speed: 1, selectedKeyframe: null, drag: null, lastTime: 0, fpsSmooth: 60, inspectorAsset: null, bridgeUrl: localStorage.getItem('rps.bridgeUrl') || 'ws://localhost:7777' };
+  const ui = { tab: 'characters', isPlaying: false, loop: true, speed: 1, selectedKeyframe: null, drag: null, lastTime: 0, fpsSmooth: 60, inspectorAsset: null, bridgeUrl: new URLSearchParams(location.search).get('bridge') || localStorage.getItem('rps.bridgeUrl') || 'ws://localhost:7777' };
   const history = { past: [], future: [], last: '' };
   const listeners = new Set();
 
@@ -234,7 +234,7 @@
     store.assets.forEach(asset => {
       if (asset.visible === false) return; const cat = catalogOf(asset); if (!cat) return; const p = sampleAsset(asset, f); samples[asset.id] = p;
       if (asset.type === 'three') { threeLayers.push({ asset, p }); const sz = (p.customProperties.size || 200) * (p.scale || 1) / 2; hits += `<rect class="asset hit ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" x="${p.baseX - sz}" y="${p.baseY - sz}" width="${sz * 2}" height="${sz * 2}" fill="transparent"/>`; if (!ThreeBridge.ready) svg += `<g class="asset three-placeholder" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${p.opacity}">${cat.render(p.customProperties, { uid: asset.id })}</g>`; return; }
-      svg += `<g class="asset ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${round2(p.opacity ?? 1)}">${cat.render(p.customProperties, { uid: asset.id, entry: cat, frame: f })}</g>`;
+      svg += `<g class="asset ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${round2(p.opacity ?? 1)}">${cat.render(p.customProperties, { uid: asset.id, entry: cat, frame: f, totalFrames: store.totalFrames })}</g>`;
     });
     $('assetsLayer').innerHTML = svg; $('hitLayer').innerHTML = hits;
     ThreeBridge.sync(threeLayers);
@@ -647,7 +647,7 @@
       clearTimeout(this.retry); try { this.ws && this.ws.close(); } catch (e) { }
       let ws; try { ws = new WebSocket(ui.bridgeUrl); } catch (e) { this.status(false); this.retry = setTimeout(() => this.connect(), 4000); return; }
       this.ws = ws;
-      ws.onopen = () => { this.status(true); ws.send(JSON.stringify({ event: 'hello', role: 'studio', api: StudioAPI.describe().map(d => d.method) })); ws.send(JSON.stringify({ event: 'state', state: store })); };
+      ws.onopen = () => { this.status(true); ws.send(JSON.stringify({ event: 'hello', role: 'studio', href: location.href, title: document.title, api: StudioAPI.describe().map(d => d.method) })); ws.send(JSON.stringify({ event: 'state', state: store })); };
       ws.onclose = () => { this.status(false); this.retry = setTimeout(() => this.connect(), 4000); };
       ws.onerror = () => { };
       ws.onmessage = async (ev) => {

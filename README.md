@@ -128,7 +128,7 @@ cd mcp && npm install
 claude mcp add remotion-studio -- node "C:/path/to/mcp/server.mjs"
 ```
 
-Start the MCP client, then open `index.html`. The studio auto-connects to `ws://localhost:7777` (click the header pill to change the URL); the pill turns green when linked. Agent workflow:
+Start the MCP client, then open `index.html`. If several studio pages are open, commands go to the earliest-connected one; `studio_status` lists them and `select_studio` switches. Open `index.html?bridge=ws://localhost:7778` together with `STUDIO_WS_PORT=7778` to run an isolated second bridge. The studio auto-connects to `ws://localhost:7777` (click the header pill to change the URL); the pill turns green when linked. Agent workflow:
 
 1. `list_catalog` → learn assets, control keys, presets, modifiers.
 2. `set_timeline`, `add_asset` per script beat (choose stable ids like `hero`, `rival`, `odds_chart`).
