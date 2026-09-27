@@ -1979,5 +1979,186 @@ window.CommunityManifest = [
       "kind": "split"
     },
     "fullFrame": true
+  },
+  {
+    "id": "community_map_flyover",
+    "componentName": "MapFlyover",
+    "name": "A-to-B Map Flyover",
+    "desc": "Remotion Elements • satellite-map flyover along a curved route, camera follows (≈245 frames) • MapLibre",
+    "icon": "🛰️",
+    "external": {
+      "importPath": "./community/MapFlyover",
+      "exportName": "MapFlyover",
+      "packages": [
+        "maplibre-gl",
+        "@turf/turf"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "origin": [
+          -0.1276,
+          51.5072
+        ],
+        "destination": [
+          139.6917,
+          35.6895
+        ],
+        "originLabel": "London",
+        "destinationLabel": "Tokyo",
+        "routeColor": "#ff5c4d",
+        "lineWidth": 24,
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Route (whole clip)",
+        "items": [
+          {
+            "key": "origin",
+            "label": "ORIGIN [longitude, latitude]",
+            "kind": "numlist",
+            "keyframable": false
+          },
+          {
+            "key": "destination",
+            "label": "DESTINATION [longitude, latitude]",
+            "kind": "numlist",
+            "keyframable": false
+          },
+          {
+            "key": "originLabel",
+            "label": "ORIGIN LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "destinationLabel",
+            "label": "DESTINATION LABEL",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Style",
+        "items": [
+          {
+            "key": "routeColor",
+            "label": "ROUTE COLOR",
+            "kind": "color"
+          },
+          {
+            "key": "lineWidth",
+            "label": "ROUTE WIDTH",
+            "kind": "range",
+            "min": 2,
+            "max": 24,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "map",
+      "style": "flyover"
+    },
+    "fullFrame": true,
+    "renderTimeoutMs": 180000
+  },
+  {
+    "id": "community_watercolor_map",
+    "componentName": "WatercolorMap",
+    "name": "Watercolor Map",
+    "desc": "Remotion Elements • watercolour-map journey with an arcing route and place labels (≈155 frames)",
+    "icon": "🗺️",
+    "external": {
+      "importPath": "./community/WatercolorMap",
+      "exportName": "WatercolorMap",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "origin": [
+          -118.2437,
+          34.0522
+        ],
+        "destination": [
+          8.5417,
+          47.3769
+        ],
+        "originLabel": "Los Angeles",
+        "destinationLabel": "Zurich",
+        "routeColor": "#ff0041",
+        "routeWidth": 18,
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "controls": [
+      {
+        "group": "Route (whole clip)",
+        "items": [
+          {
+            "key": "origin",
+            "label": "ORIGIN [longitude, latitude]",
+            "kind": "numlist",
+            "keyframable": false
+          },
+          {
+            "key": "destination",
+            "label": "DESTINATION [longitude, latitude]",
+            "kind": "numlist",
+            "keyframable": false
+          },
+          {
+            "key": "originLabel",
+            "label": "ORIGIN LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "destinationLabel",
+            "label": "DESTINATION LABEL",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      },
+      {
+        "group": "Style",
+        "items": [
+          {
+            "key": "routeColor",
+            "label": "ROUTE COLOR",
+            "kind": "color"
+          },
+          {
+            "key": "routeWidth",
+            "label": "ROUTE WIDTH",
+            "kind": "range",
+            "min": 4,
+            "max": 30,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "map",
+      "style": "watercolor"
+    },
+    "fullFrame": true,
+    "renderTimeoutMs": 180000
   }
 ];

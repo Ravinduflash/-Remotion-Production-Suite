@@ -51,7 +51,15 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - The studio preview here does not need the feature, because it draws its own SVG approximation.
 - **Default layer duration, added 2026-09-27:** a manifest entry can set `defaultDurationInFrames`. `add_asset` then gives the layer that duration automatically, and `add_asset` also accepts `startFrame` and `durationInFrames` directly. Use it for self-contained clips such as Rotating Cards, whose `productCollectionDurationInFrames` is 150.
 - **Hard-coded remote images:** Rotating Cards, Picture in Picture and Slide to Split Screen, like Shine and Tear, load `remotion.media` images. Renders need network access, and using your own scenes means editing the source.
-- **TypeScript target:** `render-project/tsconfig.json` targets ES2021, because Elements use `String.replaceAll`.
+- **Render timeouts, from 2026-09-27:** Remotion gives each frame 30 seconds to finish loading. A manifest entry can declare `renderTimeoutMs`. `render_scene` and `render_still` pass the largest one in the scene as `--timeout`, and both also accept `timeoutMs`. The two maps use 180000. The first cold flyover render, with fresh packages and uncached worker and tiles, blew the 30-second limit. Warm, it loads in about 3 seconds.
+- **Heavy renders starving the machine, fixed 2026-09-27:** software-WebGL renders such as the map flyover's 4096 px plate filled all 4 cores.
+  - **The effect:** a separate do-nothing Node process measured 15.7 seconds of timer lag. The MCP server stalled for 22 to 29 seconds, so `render_still` overran the 60-second client limit.
+  - **Two causes:** the render processes ran at normal priority, and Chrome raises its own GPU process to AboveNormal.
+  - **The fix:** the render subprocess now starts at below-normal priority, which its children inherit. During a render, one long-lived PowerShell loop re-demotes any `chrome-headless-shell` process that raises itself; a fresh PowerShell every few seconds cost too much CPU on this machine.
+  - **The result:** the slowest status poll during a map render dropped from 29 s to 62 ms.
+  - `STUDIO_RENDER_PRIORITY=normal` turns this off.
+- **Server wait lowered to 40 seconds:** render tools now wait 40 s, previously 50 s, before returning a job id. That stays under the 60-second request timeout many MCP clients use.
+- **TypeScript target:** `render-project/tsconfig.json` targets ES2022, since 2026-09-27, because Map Flyover uses `Array.prototype.at`. It was ES2021 before, for Elements that use `String.replaceAll`.
 
 ## Components
 
@@ -400,6 +408,37 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Notes:**
   - It opens over frames 20 to 52, holds, then closes back to full frame over 98 to 130.
   - Because it reads the **composition** size, not the layer box, it is meant to cover the whole frame. Scaling the layer does not change its internal layout.
+
+### A-to-B Map Flyover
+
+- **Catalog id:** `community_map_flyover`
+- **File:** `MapFlyover.tsx`, from Remotion Elements `maps/map-flyover`, saved verbatim
+- **Packages:** `maplibre-gl` and `@turf/turf`. Neither is a Remotion package, so they are not version-pinned. The file also imports `maplibre-gl/dist/maplibre-gl.css`, which Remotion's bundler handles.
+- **Size:** full frame, sized from `useVideoConfig()`. It renders a 4096 px MapLibre "plate" and pans a camera across it.
+- **Controls:**
+  - Whole clip: `origin` and `destination` as `[longitude, latitude]`, and the origin and destination labels.
+  - Keyframable: route colour, and route width from 2 to 24.
+- **Render timeout:** 180000 ms
+- **Preview:** `map` with style `flyover`, a stylised stand-in without tiles
+- **Verified:** 2026-09-27, [maps-contact.png](renders/maps-contact.png), top row, London to Tokyo: London at frame 0, route over Russia at frame 100, arriving in Tokyo at 240.
+- **Timing:** travel eases over frames 0 to 205. The destination marker appears at 210 to 234, and the label fades in at 232 to 240. About a 245-frame clip.
+- **Network at render time:**
+  - The MapLibre worker script, `unpkg.com/maplibre-gl@<version>/dist/maplibre-gl-worker.mjs`.
+  - NASA GIBS Blue Marble tiles, up to zoom 8.
+- **Cost:** it renders with WebGL. On this 4-core machine, with software WebGL, one frame takes about 50 seconds direct and 100 seconds through MCP at below-normal priority. Budget heavily for full videos.
+
+### Watercolor Map
+
+- **Catalog id:** `community_watercolor_map`
+- **File:** `WatercolorMap.tsx`, from Remotion Elements `maps/watercolor-map`, saved verbatim
+- **Packages:** `@remotion/google-fonts` for Lora
+- **Size:** full frame, sized from `useVideoConfig()`. The tile zoom is picked from the route length, assuming a 1920 px width.
+- **Controls:** the same as Map Flyover, with `routeWidth` from 4 to 30.
+- **Render timeout:** 180000 ms
+- **Preview:** `map` with style `watercolor`, covering the arc, markers and labels
+- **Verified:** 2026-09-27, bottom row, with a **custom route** set through props, Colombo `[79.8612, 6.9271]` to Paris `[2.3522, 48.8566]`: Colombo label at frame 0, arrival with the Paris label at 160. Each frame took about 35 seconds.
+- **Timing:** the camera and route travel over frames 40 to 130. The destination marker and label spring in from frame 130. About a 155-frame clip.
+- **Network:** tiles come from `watercolormaps.collection.cooperhewitt.org`. The attribution "Map tiles by Stamen Design, CC BY 3.0 · Data by OpenStreetMap, CC BY-SA" is drawn in the bottom-right corner, so keep it visible.
 
 ### Typewriter Text
 

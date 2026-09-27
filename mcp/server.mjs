@@ -21,6 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import os from 'node:os';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKSPACE = path.resolve(__dirname, '..');
@@ -29,7 +30,7 @@ const COMMUNITY_DIR = path.join(REMOTION_DIR, 'community');
 const RENDER_PROJECT = process.env.STUDIO_RENDER_PROJECT ? path.resolve(process.env.STUDIO_RENDER_PROJECT) : path.join(WORKSPACE, 'render-project');
 const PORT = Number(process.env.STUDIO_WS_PORT || 7777);
 const TIMEOUT_MS = Number(process.env.STUDIO_CALL_TIMEOUT || 15000);
-const WAIT_MS = Number(process.env.STUDIO_RENDER_WAIT || 50000); // how long render tools block before returning a job id
+const WAIT_MS = Number(process.env.STUDIO_RENDER_WAIT || 40000); // stay well under the 60 s request timeout many MCP clients use // how long render tools block before returning a job id
 const log = (...a) => console.error('[remotion-studio-mcp]', ...a);
 
 /* ---------------- WebSocket bridge to the browser UI ---------------- */
@@ -105,6 +106,10 @@ function run(cmd, args, cwd, onLine) {
   return new Promise((resolve) => {
     const isWin = process.platform === 'win32';
     const child = spawn(isWin ? `${cmd}.cmd` : cmd, args, { cwd, shell: isWin, env: { ...process.env, FORCE_COLOR: '0', CI: '1' } });
+    // Heavy renders (e.g. software-WebGL maps) can saturate every core and starve other processes, this MCP server included:
+    // a bystander Node process measured 15.7 s of timer lag during one map frame. Below-normal priority is inherited by the
+    // renderer's Chrome processes on Windows, so the server and the user's machine stay responsive. STUDIO_RENDER_PRIORITY=normal disables it.
+    if (process.env.STUDIO_RENDER_PRIORITY !== 'normal') { try { os.setPriority(child.pid, os.constants.priority.PRIORITY_BELOW_NORMAL); } catch (e) { log('could not lower render priority:', e.message); } }
     let out = '';
     const feed = (d) => { const t = d.toString(); out += t; t.split(/\r?\n|\r/).forEach(l => l.trim() && onLine && onLine(l.trim())); };
     child.stdout.on('data', feed); child.stderr.on('data', feed);
@@ -112,6 +117,18 @@ function run(cmd, args, cwd, onLine) {
     child.on('close', (code) => resolve({ code, out }));
   });
 }
+/** Windows: Chrome raises its own GPU process to AboveNormal, overriding the inherited below-normal priority. With software
+ *  WebGL (maps, three.js) that process fills every core and starves the whole machine, this server included (measured: a 29 s
+ *  stall on a status request). While a render runs, re-demote Remotion's own browser processes (chrome-headless-shell). */
+function keepRendererPriorityLow() {
+  if (process.platform !== 'win32' || process.env.STUDIO_RENDER_PRIORITY === 'normal') return () => { };
+  // One long-lived PowerShell loop per render (starting PowerShell every few seconds costs more CPU than it saves on small machines).
+  const loop = "while ($true) { Get-Process chrome-headless-shell -ErrorAction SilentlyContinue | Where-Object { $_.PriorityClass -notin 'BelowNormal','Idle' } | ForEach-Object { try { $_.PriorityClass = 'BelowNormal' } catch {} }; Start-Sleep -Milliseconds 1500 }";
+  let ps = null;
+  try { ps = spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', loop], { windowsHide: true, stdio: 'ignore' }); ps.on('error', () => { }); } catch { }
+  return () => { try { ps && ps.kill(); } catch { } };
+}
+
 async function runJob(job, progress = () => { }) {
   const say = (m) => { job.log += m + '\n'; progress(m); };
   try {
@@ -133,12 +150,16 @@ async function runJob(job, progress = () => { }) {
     fs.mkdirSync(path.join(RENDER_PROJECT, 'out'), { recursive: true });
     const safeName = String(job.params.outName || bundle.name || 'master').replace(/[^\w.-]+/g, '_');
     job.status = 'rendering';
+    // Components that load maps / tiles / workers declare renderTimeoutMs in their catalog entry; the largest one in the scene wins.
+    const timeout = Math.max(Number(job.params.timeoutMs) || 0, Number(bundle.renderTimeoutMs) || 0) || null;
+    if (timeout) say(`Using render timeout ${timeout} ms`);
     let args;
     if (job.kind === 'still') {
       const frame = Math.max(0, Math.round(job.params.frame || 0));
       job.outFile = path.join(RENDER_PROJECT, 'out', `${safeName}-f${frame}.png`);
       args = ['remotion', 'still', 'src/index.ts', 'MasterScene', job.outFile, `--frame=${frame}`, '--overwrite'];
       if (job.params.scale) args.push(`--scale=${job.params.scale}`);
+      if (timeout) args.push(`--timeout=${timeout}`);
     } else {
       const codec = job.params.codec || 'h264'; const ext = codec === 'gif' ? 'gif' : codec === 'vp8' || codec === 'vp9' ? 'webm' : codec === 'prores' ? 'mov' : 'mp4';
       job.outFile = path.join(RENDER_PROJECT, 'out', `${safeName}.${ext}`);
@@ -147,9 +168,12 @@ async function runJob(job, progress = () => { }) {
       if (job.params.frames) args.push(`--frames=${job.params.frames}`);
       if (job.params.concurrency) args.push(`--concurrency=${job.params.concurrency}`);
       if (job.params.muted) args.push('--muted');
+      if (timeout) args.push(`--timeout=${timeout}`);
     }
     say(`npx ${args.join(' ')}`);
+    const stopPriorityWatch = keepRendererPriorityLow();
     const r = await run('npx', args, RENDER_PROJECT, (l) => { const m = l.match(/(\d+)\/(\d+)/); if (m && /render|frame/i.test(l)) { job.progress = Math.round(+m[1] / +m[2] * 100); } if (/Rendered|Encoded|Bundled|Error|error|Downloading|Chrome/i.test(l)) say(l); });
+    stopPriorityWatch();
     if (r.code !== 0) throw new Error(`remotion exited with code ${r.code}:\n` + r.out.slice(-3000));
     if (!fs.existsSync(job.outFile)) throw new Error('Render finished but output file is missing:\n' + r.out.slice(-2000));
     job.status = 'done'; job.progress = 100; job.finishedAt = Date.now(); say(`Done → ${job.outFile} (${(fs.statSync(job.outFile).size / 1048576).toFixed(2)} MB)`);
@@ -233,9 +257,9 @@ tool('pause', 'Pause playback in the UI.', {}, () => call('pause'));
 tool('export_json', 'scene.json for remotion/Root.tsx.', {}, () => call('exportJSON'));
 tool('export_remotion', 'Full export bundle: scene.json, MasterScene.tsx, Root.tsx, mcp-manifest.json, plus .packages (npm deps needed). Pass file to get a single file as text.', { file: z.string().optional() }, async (a) => { const b = await call('exportRemotion'); return a.file ? (b.files[a.file] ?? `Unknown file. Available: ${Object.keys(b.files).join(', ')}`) : b; });
 tool('render_scene', `Render the current scene to a video with Remotion (real pixels, not the preview). Syncs remotion/ + the export into ${path.basename(RENDER_PROJECT)}/, installs missing packages, runs "npx remotion render". Blocks up to ${Math.round(WAIT_MS / 1000)}s then returns a jobId to poll with render_status. First run also needs npm install + Chrome download (minutes). Returns the absolute output path.`, {
-  codec: z.enum(['h264', 'h265', 'vp8', 'vp9', 'prores', 'gif']).optional(), scale: z.number().optional().describe('e.g. 0.5 for a fast half-res proof'), frames: z.string().optional().describe('range like "0-59"'), outName: z.string().optional(), concurrency: z.number().optional(), muted: z.boolean().optional(), wait: z.boolean().optional().describe('false → return immediately with jobId'),
+  codec: z.enum(['h264', 'h265', 'vp8', 'vp9', 'prores', 'gif']).optional(), scale: z.number().optional().describe('e.g. 0.5 for a fast half-res proof'), frames: z.string().optional().describe('range like "0-59"'), timeoutMs: z.number().optional().describe('per-frame load timeout in ms; defaults to the largest renderTimeoutMs among the scene components, else the Remotion default of 30000'), outName: z.string().optional(), concurrency: z.number().optional(), muted: z.boolean().optional(), wait: z.boolean().optional().describe('false → return immediately with jobId'),
 }, (a) => startAndMaybeWait(createJob('render', a), a.wait));
-tool('render_still', 'Render ONE frame to PNG with Remotion — the cheapest way for an agent to see the real output. Read the returned PNG path with your file/image tool, critique, adjust, repeat.', { frame: z.number(), scale: z.number().optional(), outName: z.string().optional(), wait: z.boolean().optional() }, (a) => startAndMaybeWait(createJob('still', a), a.wait));
+tool('render_still', 'Render ONE frame to PNG with Remotion — the cheapest way for an agent to see the real output. Read the returned PNG path with your file/image tool, critique, adjust, repeat.', { frame: z.number(), scale: z.number().optional(), outName: z.string().optional(), wait: z.boolean().optional(), timeoutMs: z.number().optional() }, (a) => startAndMaybeWait(createJob('still', a), a.wait));
 tool('render_status', 'Status of a render job (queued|exporting|installing|rendering|done|error), progress %, output path and log tail. Omit jobId to list all jobs.', { jobId: z.string().optional() }, (a) => a.jobId ? (jobs.has(a.jobId) ? publicJob(jobs.get(a.jobId)) : (() => { throw new Error('Unknown jobId'); })()) : [...jobs.values()].map(publicJob));
 
 /* --- community / external components (asset registry over the Remotion ecosystem) --- */

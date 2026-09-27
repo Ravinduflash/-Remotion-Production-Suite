@@ -359,6 +359,28 @@
         data.forEach(([l], i) => { if (i % 2 === 0) out += `<text x="${pts[i][0]}" y="${y0 + ch + 104}" fill="#4b5563" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="40">${l}</text>`; });
         if (f > 58) { const k = cl((f - 58) / 12), [lx, ly] = pts[pts.length - 1]; out += `<g transform="translate(${lx} ${ly - 30}) scale(${k.toFixed(3)})"><rect x="-68" y="-80" width="136" height="80" rx="12" fill="#2563eb"/><text x="0" y="-24" fill="#fff" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="44">74K</text></g>`; }
         return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
+      case 'map': { // Map Flyover / Watercolor Map elements: stylised stand-in (no tiles) — route between origin and destination drawn with the element's timing
+        const style = pv.style || 'flyover', f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v));
+        const o = Array.isArray(cp.origin) && cp.origin.length === 2 ? cp.origin : [-0.1276, 51.5072], d0 = Array.isArray(cp.destination) && cp.destination.length === 2 ? cp.destination : [139.6917, 35.6895];
+        let dLng = d0[0]; while (dLng - o[0] > 180) dLng -= 360; while (dLng - o[0] < -180) dLng += 360;
+        const merc = (lng, lat) => { const r = Math.max(-85, Math.min(85, lat)) * Math.PI / 180; return [lng / 360, (0.5 - Math.log(Math.tan(Math.PI / 4 + r / 2)) / (2 * Math.PI))]; };
+        const a = merc(o[0], o[1]), b = merc(dLng, d0[1]), span = Math.max(Math.abs(b[0] - a[0]) / (W * 0.8), Math.abs(b[1] - a[1]) / (H * 0.6), 1e-6), cx = (a[0] + b[0]) / 2, cy = (a[1] + b[1]) / 2;
+        const pt = m => [W / 2 + (m[0] - cx) / span, H / 2 + (m[1] - cy) / span], A = pt(a), B = pt(b), dist = Math.hypot(B[0] - A[0], B[1] - A[1]), bend = Math.min(style === 'watercolor' ? 400 : 160, H * 0.37, dist * 0.35);
+        const ctrl = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2 - bend], col = cp.routeColor || (style === 'watercolor' ? '#ff0041' : '#ff5c4d'), lw = num(style === 'watercolor' ? cp.routeWidth : cp.lineWidth, style === 'watercolor' ? 18 : 24);
+        const eq = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, prog = style === 'watercolor' ? eq(cl((f - 40) / 90)) : eq(cl(f / 205)), endF = style === 'watercolor' ? 130 : 205;
+        const bez = t => [(1 - t) * (1 - t) * A[0] + 2 * (1 - t) * t * ctrl[0] + t * t * B[0], (1 - t) * (1 - t) * A[1] + 2 * (1 - t) * t * ctrl[1] + t * t * B[1]]; let path = `M${A[0].toFixed(1)} ${A[1].toFixed(1)}`;
+        for (let i = 1; i <= 40 && i / 40 <= prog + 1e-9; i++) { const q = bez(i / 40); path += ` L${q[0].toFixed(1)} ${q[1].toFixed(1)}`; } if (prog > 0 && prog < 1) { const q = bez(prog); path += ` L${q[0].toFixed(1)} ${q[1].toFixed(1)}`; }
+        let out = style === 'watercolor' ? `<rect width="${W}" height="${H}" fill="#e6ec88"/><circle cx="${W * 0.3}" cy="${H * 0.4}" r="${H * 0.5}" fill="#9fd3c7" opacity="0.5"/><circle cx="${W * 0.75}" cy="${H * 0.65}" r="${H * 0.45}" fill="#f2c9a0" opacity="0.45"/>` : `<rect width="${W}" height="${H}" fill="#0b2a4a"/><circle cx="${W * 0.35}" cy="${H * 0.45}" r="${H * 0.38}" fill="#2f5d3a" opacity="0.55"/><circle cx="${W * 0.72}" cy="${H * 0.5}" r="${H * 0.3}" fill="#6b5b3a" opacity="0.45"/>`;
+        for (let g = 1; g < 6; g++) out += `<line x1="0" x2="${W}" y1="${H * g / 6}" y2="${H * g / 6}" stroke="#fff" stroke-opacity="0.08"/><line y1="0" y2="${H}" x1="${W * g / 6}" x2="${W * g / 6}" stroke="#fff" stroke-opacity="0.08"/>`;
+        if (style === 'watercolor' && prog > 0) out += `<path d="${path}" fill="none" stroke="#fff" stroke-width="${lw + 24}" stroke-linecap="round"/>`;
+        if (prog > 0) out += `<path d="${path}" fill="none" stroke="${col}" stroke-width="${lw}" stroke-linecap="round" stroke-linejoin="round"/>`;
+        const mk = (P, s) => style === 'watercolor' ? `<circle cx="${P[0]}" cy="${P[1]}" r="${24 * s}" fill="${col}" stroke="#fff" stroke-width="${12 * s}"/>` : `<circle cx="${P[0]}" cy="${P[1]}" r="${Math.max(14, lw * 0.8) * s}" fill="${col}"/>`;
+        const label = (P, txt, op) => op <= 0.01 ? '' : style === 'watercolor' ? `<g opacity="${op.toFixed(2)}"><rect x="${P[0] - (String(txt).length * 12 + 36)}" y="${P[1] + 44}" width="${String(txt).length * 24 + 72}" height="68" rx="32" fill="#fff"/><text x="${P[0]}" y="${P[1] + 90}" fill="#182026" text-anchor="middle" font-family="Lora, serif" font-weight="700" font-size="40">${esc(txt)}</text></g>` : `<text x="${P[0]}" y="${P[1] + 52}" fill="#fff" opacity="${op.toFixed(2)}" text-anchor="middle" font-family="sans-serif" font-weight="600" font-size="26">${esc(txt)}</text>`;
+        out += mk(A, 1) + label(A, cp.originLabel || 'Origin', style === 'watercolor' ? 1 - cl((f - 40) / 20) : 1 - cl(f / 14));
+        if (f >= endF + (style === 'watercolor' ? 3 : 5)) out += mk(B, cl((f - endF - (style === 'watercolor' ? 3 : 5)) / 12));
+        out += label(B, cp.destinationLabel || 'Destination', style === 'watercolor' ? cl((f - 130) / 20) : cl((f - endF - 27) / 8));
+        out += `<text x="${W - 12}" y="${H - 12}" fill="#fff" fill-opacity="0.7" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="14">preview • real ${style === 'watercolor' ? 'watercolour tiles' : 'satellite map + camera follow'} in render</text>`;
+        return `<svg x="0" y="0" width="${W}" height="${H}" overflow="hidden">${out}</svg>`; }
       case 'cards': { // Rotating Cards element: 3 cards (A pink-centre B, C) in a 900×660 container at (60,180); centre card changes over frames 24–122; fades in 0–10 / out 142–149
         const f = num(ctx.frame, 0), cl = v => Math.max(0, Math.min(1, v)), eio = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, sx = W / 1080, sy = H / 1080;
         const raw = 2 * cl((f - 24) / (150 - 28 - 24)), ti = Math.min(Math.floor(raw), 1), scroll = ti + eio(cl((raw - ti - 0.18) / 0.64)), op = Math.min(cl(f / 10), cl((149 - f) / 7));
@@ -542,7 +564,7 @@
     const controls = m.controls && m.controls.length ? m.controls : [{ group: m.componentName, items: Object.entries(cp).map(([k, v]) => typeof v === 'number' ? { key: k, label: k.toUpperCase(), kind: 'number' } : typeof v === 'boolean' ? { key: k, label: k.toUpperCase(), kind: 'checkbox' } : /^#[0-9a-f]{6}$/i.test(String(v)) ? { key: k, label: k.toUpperCase(), kind: 'color' } : { key: k, label: k.toUpperCase(), kind: 'text' }) }];
     return { id: m.id, tab: m.tab || 'community', type: 'external', componentName: m.componentName, name: m.name || m.componentName, desc: m.desc || m.description || (m.external && m.external.importPath) || 'community component', icon: m.icon || '🧩', renderTarget: 'html',
       preview: m.preview || { kind: 'card' }, external: Object.assign({ importPath: './community/' + m.componentName, exportName: m.componentName, sizeMode: 'style' }, m.external || {}),
-      defaults: Object.assign(base(200, 200), m.defaults || {}, { customProperties: cp }), controls, render: renderExternal, easing: m.easing, fullFrame: !!m.fullFrame, fullWidth: !!m.fullWidth, defaultDurationInFrames: m.defaultDurationInFrames };
+      defaults: Object.assign(base(200, 200), m.defaults || {}, { customProperties: cp }), controls, render: renderExternal, easing: m.easing, fullFrame: !!m.fullFrame, fullWidth: !!m.fullWidth, defaultDurationInFrames: m.defaultDurationInFrames, renderTimeoutMs: m.renderTimeoutMs };
   }
 
   const CATALOG_BY_ID = Object.fromEntries(CATALOG.map(c => [c.id, c]));

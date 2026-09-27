@@ -649,7 +649,8 @@
   }
   function buildRemotionBundle() {
     const files = { 'scene.json': StudioAPI.exportJSON(), 'MasterScene.tsx': buildMasterScene(), 'Root.tsx': buildRoot(), 'mcp-manifest.json': JSON.stringify({ generatedAt: new Date().toISOString(), api: StudioAPI.describe(), catalog: StudioAPI.listCatalog() }, null, 2) };
-    return { files, componentsUsed: [...new Set(store.assets.map(a => a.componentName))], threeUsed: store.assets.some(a => a.type === 'three'), externals: externalsOf(store), packages: [...new Set(externalsOf(store).flatMap(e => [e.package].concat(e.packages || [])).filter(Boolean).concat(store.assets.some(a => a.type === 'three') ? ['three', '@react-three/fiber', '@remotion/three'] : []))], width: store.width, height: store.height, fps: store.fps, totalFrames: store.totalFrames, name: store.name };
+    const renderTimeoutMs = Math.max(0, ...store.assets.map(a => Number((catalogOf(a) || {}).renderTimeoutMs) || 0)) || undefined;
+    return { renderTimeoutMs, files, componentsUsed: [...new Set(store.assets.map(a => a.componentName))], threeUsed: store.assets.some(a => a.type === 'three'), externals: externalsOf(store), packages: [...new Set(externalsOf(store).flatMap(e => [e.package].concat(e.packages || [])).filter(Boolean).concat(store.assets.some(a => a.type === 'three') ? ['three', '@react-three/fiber', '@remotion/three'] : []))], width: store.width, height: store.height, fps: store.fps, totalFrames: store.totalFrames, name: store.name };
   }
 
   /* =====================================================================
