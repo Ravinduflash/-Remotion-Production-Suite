@@ -440,6 +440,59 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Timing:** the camera and route travel over frames 40 to 130. The destination marker and label spring in from frame 130. About a 155-frame clip.
 - **Network:** tiles come from `watercolormaps.collection.cooperhewitt.org`. The attribution "Map tiles by Stamen Design, CC BY 3.0 · Data by OpenStreetMap, CC BY-SA" is drawn in the bottom-right corner, so keep it visible.
 
+### Location Lower Third
+
+- **Catalog id:** `community_location_lower_third`
+- **File:** `LocationLowerThird.tsx`, from Remotion Elements `overlays/location-lower-third`, saved verbatim
+- **Packages:** none. The font is Arial or Helvetica.
+- **Size:** a fixed 680×138 layout, `sizeMode: none`. The default box is at (96, 846), bottom-left on 16:9.
+- **Controls:** box size only. The text "Berlin, Germany" is a hard-coded constant.
+- **Preview:** `lowerthird` with style `location`
+- **Verified:** 2026-09-27, [overlays-contact.png](renders/overlays-contact.png) rows 1 to 3:
+  - Frame 12: the pin outline is drawn and the fill fades in.
+  - Frame 45: the pin and the text are fully in.
+  - Frame 104: the text is wiped almost away.
+- **Notes:**
+  - Timeline:
+    - Frames 0 to 21: the pin draws, fills and drops in.
+    - Frames 14 to 38: the text wipes in with a spring `cropRight`.
+    - Frames 88 to 119: everything leaves.
+  - `defaultDurationInFrames: 120`.
+  - **The text is near-black (#18181b),** so it is designed for light footage. On a dark background it barely reads, as in the test render.
+  - To change the place, edit the `location` constant. That is a deliberate edit to the source.
+
+### Name Lower Third
+
+- **Catalog id:** `community_name_lower_third`
+- **File:** `NameLowerThird.tsx`, from Remotion Elements `overlays/name-lower-third`, saved verbatim
+- **Packages:** `@remotion/google-fonts`, for Inter 500 and 700
+- **Size:** a fixed 534×132 layout (two 66 px bars), `sizeMode: none`. The default box is at (96, 852).
+- **Controls:** box size only. "Alex Morgan" and "Creative Developer" are hard-coded.
+- **Preview:** `lowerthird` with style `name`. Bar widths are estimated from the character count.
+- **Verified:** 2026-09-27, contact sheet rows 4 and 5: half-revealed at frame 10, fully in at frame 50
+- **Notes:**
+  - Timeline:
+    - Frames 0 to 20: the blue name bar wipes in.
+    - Frames 4 to 24: the dark title bar follows.
+    - Frames 92 to 116: both wipe out.
+  - `defaultDurationInFrames: 120`.
+  - Each bar is as wide as its text, so longer names give wider bars.
+
+### Social Safe Zones
+
+- **Catalog id:** `community_social_safe_zones`
+- **File:** `SocialSafeZones.tsx`, from Remotion Elements `overlays/social-safe-zones`, saved verbatim
+- **Packages:** none. It uses `CanvasImage` from `remotion`, which needs HtmlInCanvas; see the pipeline notes.
+- **Size:** a fixed 1080×1920, so **use it on a 9:16 scene**. It is `fullFrame` and `sizeMode: none`. On other aspect ratios it overflows or is cropped.
+- **Controls:** `platform` (Instagram Reels or TikTok), whole clip. It is a real prop on the component.
+- **Preview:** `safezones`, which draws the same two images
+- **Verified:** 2026-09-27, contact sheet right: the Instagram and TikTok interfaces over the sample image, at 9:16
+- **Notes:**
+  - **It is a guide, not content.** Delete or hide the layer before the final render, or the fake app interface ends up in the video.
+  - **Upstream also draws a sample "Background" image** (the blue building with "A") underneath the interface, so it covers everything below it in the scene tree. To check your own footage, put the guide at the top and edit out the first `<CanvasImage>`. That is a deliberate edit to the source. Without that edit it only shows the interface over the sample.
+  - The interface images come from `remotion.media`, so renders need network access.
+  - Upstream says the zones were measured from iOS captures. Treat them as a reference, not a guarantee.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

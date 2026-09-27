@@ -2160,5 +2160,175 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "renderTimeoutMs": 180000
+  },
+  {
+    "id": "community_location_lower_third",
+    "componentName": "LocationLowerThird",
+    "name": "Location Lower Third",
+    "desc": "Remotion Elements • map pin draws in, \"Berlin, Germany\" wipes in; out by frame 119",
+    "icon": "📍",
+    "external": {
+      "importPath": "./community/LocationLowerThird",
+      "exportName": "LocationLowerThird",
+      "packages": [],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 96,
+      "baseY": 846,
+      "customProperties": {
+        "width": 680,
+        "height": 138
+      }
+    },
+    "controls": [
+      {
+        "group": "Location Lower Third • fixed 680×138, text hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "lowerthird",
+      "style": "location"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "community_name_lower_third",
+    "componentName": "NameLowerThird",
+    "name": "Name Lower Third",
+    "desc": "Remotion Elements • blue name bar + dark title bar wipe in and out (≈116 frames)",
+    "icon": "🪪",
+    "external": {
+      "importPath": "./community/NameLowerThird",
+      "exportName": "NameLowerThird",
+      "packages": [
+        "@remotion/google-fonts"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 96,
+      "baseY": 852,
+      "customProperties": {
+        "width": 534,
+        "height": 132
+      }
+    },
+    "controls": [
+      {
+        "group": "Name Lower Third • fixed 534×132, text hard-coded",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "lowerthird",
+      "style": "name"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "community_social_safe_zones",
+    "componentName": "SocialSafeZones",
+    "name": "Social Safe Zones",
+    "desc": "Remotion Elements • TikTok / Instagram Reels UI guide for 9:16 (fixed 1080×1920) • HtmlInCanvas • hide before final render",
+    "icon": "📱",
+    "external": {
+      "importPath": "./community/SocialSafeZones",
+      "exportName": "SocialSafeZones",
+      "packages": [],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1080,
+        "height": 1920,
+        "platform": "instagram"
+      }
+    },
+    "controls": [
+      {
+        "group": "Guide (whole clip)",
+        "items": [
+          {
+            "key": "platform",
+            "label": "PLATFORM",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "instagram",
+                "Instagram Reels"
+              ],
+              [
+                "tiktok",
+                "TikTok"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Social Safe Zones • fixed 1080×1920",
+        "items": [
+          {
+            "key": "width",
+            "label": "BOX WIDTH",
+            "kind": "range",
+            "min": 100,
+            "max": 3840,
+            "step": 1
+          },
+          {
+            "key": "height",
+            "label": "BOX HEIGHT",
+            "kind": "range",
+            "min": 60,
+            "max": 2160,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "safezones"
+    },
+    "fullFrame": true
   }
 ];
