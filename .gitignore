@@ -1,0 +1,15 @@
+# dependencies
+node_modules/
+
+# render project: generated on every render_scene / render_still
+render-project/src/remotion/
+render-project/src/MasterScene.tsx
+render-project/src/scene.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+render-project/out/

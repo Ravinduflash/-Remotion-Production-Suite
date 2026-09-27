@@ -1,0 +1,1062 @@
+{
+  "version": 1,
+  "name": "Demo Fight",
+  "width": 1920,
+  "height": 1080,
+  "fps": 60,
+  "totalFrames": 120,
+  "currentFrame": 0,
+  "background": "#0a0a0f",
+  "assets": [
+    {
+      "id": "sky_gradient_n47th",
+      "type": "environment",
+      "componentName": "SkyGradient",
+      "catalogId": "sky_gradient",
+      "name": "Night Sky",
+      "visible": true,
+      "locked": false,
+      "easing": "linear",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 0,
+            "baseY": 0,
+            "scale": 1,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "width": 1920,
+              "height": 1080,
+              "topColor": "#0b1026",
+              "bottomColor": "#2a1a3e",
+              "showSun": false,
+              "sunX": 1500,
+              "sunY": 220,
+              "sunRadius": 70,
+              "sunColor": "#ffd60a",
+              "stars": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "street_block_b4k1m",
+      "type": "environment",
+      "componentName": "StreetBlock",
+      "catalogId": "street_block",
+      "name": "Downtown Street",
+      "visible": true,
+      "locked": false,
+      "easing": "linear",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 0,
+            "baseY": 820,
+            "scale": 1,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "width": 1920,
+              "buildingCount": 9,
+              "skylineColor": "#161626",
+              "roadColor": "#15151f",
+              "roadHeight": 90,
+              "windowColor": "#ffd60a",
+              "lamps": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "floor_line_n208e",
+      "type": "environment",
+      "componentName": "FloorLine",
+      "catalogId": "floor_line",
+      "name": "Studio Floor",
+      "visible": true,
+      "locked": false,
+      "easing": "linear",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 0,
+            "baseY": 820,
+            "scale": 1,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "width": 1920,
+              "color": "#2a2a40",
+              "strokeWidth": 3,
+              "dashed": true,
+              "glow": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stickman_fighter_wlatc",
+      "type": "character",
+      "componentName": "AdvancedStickman",
+      "catalogId": "stickman_fighter",
+      "name": "Hero",
+      "visible": true,
+      "locked": false,
+      "easing": "spring",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 620,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          }
+        },
+        {
+          "frame": 10,
+          "properties": {
+            "baseX": 620,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 18,
+          "properties": {
+            "baseX": 630,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -88,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": -45,
+              "rightElbow": 90,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 24,
+          "properties": {
+            "baseX": 650,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -85,
+              "neck": 0,
+              "leftShoulder": 130,
+              "leftElbow": -40,
+              "leftWrist": 0,
+              "rightShoulder": -90,
+              "rightElbow": 120,
+              "rightWrist": 0,
+              "leftHip": 78,
+              "leftKnee": 25,
+              "leftAnkle": 0,
+              "rightHip": 108,
+              "rightKnee": 12,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 32,
+          "properties": {
+            "baseX": 680,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -80,
+              "neck": 0,
+              "leftShoulder": 110,
+              "leftElbow": -80,
+              "leftWrist": 0,
+              "rightShoulder": 15,
+              "rightElbow": 5,
+              "rightWrist": 10,
+              "leftHip": 80,
+              "leftKnee": 20,
+              "leftAnkle": 0,
+              "rightHip": 110,
+              "rightKnee": 10,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 42,
+          "properties": {
+            "baseX": 620,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 50,
+          "properties": {
+            "baseX": 620,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 60,
+          "properties": {
+            "baseX": 600,
+            "baseY": 810,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -80,
+              "neck": 0,
+              "leftShoulder": 150,
+              "leftElbow": -30,
+              "leftWrist": 0,
+              "rightShoulder": 20,
+              "rightElbow": -90,
+              "rightWrist": 0,
+              "leftHip": 60,
+              "leftKnee": 60,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 68,
+          "properties": {
+            "baseX": 590,
+            "baseY": 800,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -70,
+              "neck": 0,
+              "leftShoulder": 170,
+              "leftElbow": -20,
+              "leftWrist": 0,
+              "rightShoulder": -10,
+              "rightElbow": -100,
+              "rightWrist": 0,
+              "leftHip": 40,
+              "leftKnee": 100,
+              "leftAnkle": 0,
+              "rightHip": 20,
+              "rightKnee": 20,
+              "rightAnkle": 30,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 76,
+          "properties": {
+            "baseX": 620,
+            "baseY": 810,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -60,
+              "neck": 0,
+              "leftShoulder": 180,
+              "leftElbow": 0,
+              "leftWrist": 0,
+              "rightShoulder": -30,
+              "rightElbow": -80,
+              "rightWrist": 0,
+              "leftHip": 30,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": -10,
+              "rightKnee": 10,
+              "rightAnkle": 40,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 88,
+          "properties": {
+            "baseX": 620,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#ff3b30",
+              "strokeWidth": 6,
+              "facing": 1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        }
+      ]
+    },
+    {
+      "id": "stickman_rival_icsah",
+      "type": "character",
+      "componentName": "AdvancedStickman",
+      "catalogId": "stickman_rival",
+      "name": "Rival",
+      "visible": true,
+      "locked": false,
+      "easing": "spring",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 1300,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          }
+        },
+        {
+          "frame": 22,
+          "properties": {
+            "baseX": 1300,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 30,
+          "properties": {
+            "baseX": 1310,
+            "baseY": 825,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -95,
+              "neck": 0,
+              "leftShoulder": -120,
+              "leftElbow": -100,
+              "leftWrist": 0,
+              "rightShoulder": -60,
+              "rightElbow": -110,
+              "rightWrist": 0,
+              "leftHip": 80,
+              "leftKnee": 35,
+              "leftAnkle": 0,
+              "rightHip": 100,
+              "rightKnee": 25,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 42,
+          "properties": {
+            "baseX": 1310,
+            "baseY": 825,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -95,
+              "neck": 0,
+              "leftShoulder": -120,
+              "leftElbow": -100,
+              "leftWrist": 0,
+              "rightShoulder": -60,
+              "rightElbow": -110,
+              "rightWrist": 0,
+              "leftHip": 80,
+              "leftKnee": 35,
+              "leftAnkle": 0,
+              "rightHip": 100,
+              "rightKnee": 25,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 52,
+          "properties": {
+            "baseX": 1300,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 66,
+          "properties": {
+            "baseX": 1300,
+            "baseY": 820,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -90,
+              "neck": 0,
+              "leftShoulder": 120,
+              "leftElbow": -60,
+              "leftWrist": 0,
+              "rightShoulder": 60,
+              "rightElbow": -70,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 72,
+          "properties": {
+            "baseX": 1330,
+            "baseY": 810,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -110,
+              "neck": -30,
+              "leftShoulder": -150,
+              "leftElbow": -30,
+              "leftWrist": 0,
+              "rightShoulder": -100,
+              "rightElbow": -40,
+              "rightWrist": 0,
+              "leftHip": 75,
+              "leftKnee": 30,
+              "leftAnkle": 0,
+              "rightHip": 105,
+              "rightKnee": 15,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 82,
+          "properties": {
+            "baseX": 1390,
+            "baseY": 860,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -150,
+              "neck": -20,
+              "leftShoulder": -170,
+              "leftElbow": -20,
+              "leftWrist": 0,
+              "rightShoulder": -140,
+              "rightElbow": -30,
+              "rightWrist": 0,
+              "leftHip": 40,
+              "leftKnee": 80,
+              "leftAnkle": 0,
+              "rightHip": 60,
+              "rightKnee": 70,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 92,
+          "properties": {
+            "baseX": 1440,
+            "baseY": 915,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -175,
+              "neck": 10,
+              "leftShoulder": -160,
+              "leftElbow": 20,
+              "leftWrist": 0,
+              "rightShoulder": -190,
+              "rightElbow": 40,
+              "rightWrist": 0,
+              "leftHip": 10,
+              "leftKnee": 40,
+              "leftAnkle": 0,
+              "rightHip": 25,
+              "rightKnee": 60,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        },
+        {
+          "frame": 106,
+          "properties": {
+            "baseX": 1440,
+            "baseY": 915,
+            "scale": 1.35,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "torso": -175,
+              "neck": 10,
+              "leftShoulder": -160,
+              "leftElbow": 20,
+              "leftWrist": 0,
+              "rightShoulder": -190,
+              "rightElbow": 40,
+              "rightWrist": 0,
+              "leftHip": 10,
+              "leftKnee": 40,
+              "leftAnkle": 0,
+              "rightHip": 25,
+              "rightKnee": 60,
+              "rightAnkle": 0,
+              "strokeColor": "#ffffff",
+              "leftLimbColor": "#64d2ff",
+              "strokeWidth": 6,
+              "facing": -1,
+              "shadow": true
+            }
+          },
+          "easing": "spring"
+        }
+      ]
+    },
+    {
+      "id": "text_card_32lla",
+      "type": "text",
+      "componentName": "TextCard",
+      "catalogId": "text_card",
+      "name": "Round Title",
+      "visible": true,
+      "locked": false,
+      "easing": "linear",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 640,
+            "baseY": 60,
+            "scale": 0.6,
+            "rotation": 0,
+            "opacity": 0,
+            "customProperties": {
+              "text": "ROUND 1",
+              "subtitle": "FIGHT",
+              "fontSize": 64,
+              "color": "#e8e8ef",
+              "subtitleColor": "#ff3b30",
+              "bg": "none",
+              "borderColor": "none",
+              "radius": 16,
+              "width": 640,
+              "height": 170,
+              "align": "center",
+              "font": "sans",
+              "letterSpacing": -1
+            }
+          }
+        },
+        {
+          "frame": 12,
+          "properties": {
+            "baseX": 640,
+            "baseY": 60,
+            "scale": 1.08,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "text": "ROUND 1",
+              "subtitle": "FIGHT",
+              "fontSize": 64,
+              "color": "#e8e8ef",
+              "subtitleColor": "#ff3b30",
+              "bg": "none",
+              "borderColor": "none",
+              "radius": 16,
+              "width": 640,
+              "height": 170,
+              "align": "center",
+              "font": "sans",
+              "letterSpacing": -1
+            }
+          }
+        },
+        {
+          "frame": 20,
+          "properties": {
+            "baseX": 640,
+            "baseY": 60,
+            "scale": 1,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "text": "ROUND 1",
+              "subtitle": "FIGHT",
+              "fontSize": 64,
+              "color": "#e8e8ef",
+              "subtitleColor": "#ff3b30",
+              "bg": "none",
+              "borderColor": "none",
+              "radius": 16,
+              "width": 640,
+              "height": 170,
+              "align": "center",
+              "font": "sans",
+              "letterSpacing": -1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "trading_chart_l3yzp",
+      "type": "widget",
+      "componentName": "TradingChart",
+      "catalogId": "trading_chart",
+      "name": "Fight Odds",
+      "visible": true,
+      "locked": false,
+      "easing": "linear",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 1330,
+            "baseY": 90,
+            "scale": 0.75,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "ticker": "HERO / RIVAL",
+              "data": [
+                100,
+                104,
+                101,
+                108,
+                112,
+                109,
+                118,
+                124,
+                121,
+                130
+              ],
+              "width": 560,
+              "height": 300,
+              "reveal": 1,
+              "showTarget": true,
+              "targetPrice": 135,
+              "autoColor": true,
+              "lineColor": "#30d158",
+              "currency": "$",
+              "decimals": 2,
+              "bg": "#12121a"
+            }
+          }
+        },
+        {
+          "frame": 10,
+          "properties": {
+            "baseX": 1330,
+            "baseY": 90,
+            "scale": 0.75,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "ticker": "HERO / RIVAL",
+              "data": [
+                100,
+                104,
+                101,
+                108,
+                112,
+                109,
+                118,
+                124,
+                121,
+                130
+              ],
+              "width": 560,
+              "height": 300,
+              "reveal": 0,
+              "showTarget": true,
+              "targetPrice": 135,
+              "autoColor": true,
+              "lineColor": "#30d158",
+              "currency": "$",
+              "decimals": 2,
+              "bg": "#12121a"
+            }
+          }
+        },
+        {
+          "frame": 80,
+          "properties": {
+            "baseX": 1330,
+            "baseY": 90,
+            "scale": 0.75,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "ticker": "HERO / RIVAL",
+              "data": [
+                100,
+                104,
+                101,
+                108,
+                112,
+                109,
+                118,
+                124,
+                121,
+                130
+              ],
+              "width": 560,
+              "height": 300,
+              "reveal": 1,
+              "showTarget": true,
+              "targetPrice": 135,
+              "autoColor": true,
+              "lineColor": "#30d158",
+              "currency": "$",
+              "decimals": 2,
+              "bg": "#12121a"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "three_knot_lbnr8",
+      "type": "three",
+      "componentName": "ThreePrimitive",
+      "catalogId": "three_knot",
+      "name": "Hero Emblem",
+      "visible": true,
+      "locked": false,
+      "easing": "linear",
+      "keyframes": [
+        {
+          "frame": 0,
+          "properties": {
+            "baseX": 1600,
+            "baseY": 260,
+            "scale": 1,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "shape": "torusKnot",
+              "size": 200,
+              "depth": 0,
+              "rotX": 0,
+              "rotY": 0,
+              "rotZ": 0,
+              "color": "#ff3b30",
+              "emissive": "#220000",
+              "metalness": 0.5,
+              "roughness": 0.3,
+              "wireframe": false
+            }
+          }
+        },
+        {
+          "frame": 120,
+          "properties": {
+            "baseX": 1600,
+            "baseY": 260,
+            "scale": 1,
+            "rotation": 0,
+            "opacity": 1,
+            "customProperties": {
+              "shape": "torusKnot",
+              "size": 200,
+              "depth": 0,
+              "rotX": 0,
+              "rotY": 360,
+              "rotZ": 0,
+              "color": "#ff3b30",
+              "emissive": "#220000",
+              "metalness": 0.5,
+              "roughness": 0.3,
+              "wireframe": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

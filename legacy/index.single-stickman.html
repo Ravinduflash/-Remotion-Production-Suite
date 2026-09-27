@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Stickman Rig — Forward Kinematics Studio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0f;
+    --panel:#12121a;
+    --panel2:#1a1a26;
+    --border:#24243a;
+    --accent:#ff3b30;
+    --accent2:#30d158;
+    --text:#e8e8ef;
+    --muted:#8a8aa0;
+    --grid:#1e1e2e;
+  }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    overflow:hidden;
+    height:100vh;
+  }
+  .mono{font-family:'JetBrains Mono',monospace}
+  header{
+    height:56px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    background:linear-gradient(180deg,var(--panel),var(--bg));
+  }
+  .logo{
+    display:flex;align-items:center;gap:12px;
+    font-weight:700;letter-spacing:-0.02em;
+  }
+  .logo-badge{
+    width:32px;height:32px;
+    background:var(--accent);
+    border-radius:8px;
+    display:grid;place-items:center;
+    font-size:14px;font-weight:800;color:white;
+    transform:rotate(-8deg);
+  }
+  .header-actions{display:flex;gap:8px;align-items:center}
+  .pill{
+    padding:6px 12px;border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--panel2);
+    font-size:12px;color:var(--muted);
+  }
+  .pill b{color:var(--text)}
+  .btn{
+    padding:8px 14px;border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--panel2);
+    color:var(--text);
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;cursor:pointer;
+    transition:.15s;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn:hover{border-color:#3a3a5a;background:#22223a;transform:translateY(-1px)}
+  .btn.primary{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+  .btn.primary:hover{background:white}
+  .btn.accent{background:var(--accent);border-color:var(--accent);color:white;font-weight:700}
+  .btn.accent:hover{background:#ff4d44}
+  .app{
+    display:grid;
+    grid-template-columns:320px 1fr 340px;
+    height:calc(100vh - 56px);
+  }
+  .panel{
+    background:var(--panel);
+    border-right:1px solid var(--border);
+    overflow:auto;
+    padding:16px;
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .panel.right{border-right:none;border-left:1px solid var(--border)}
+  .panel::-webkit-scrollbar{width:4px}
+  .panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+  .section-title{
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);font-family:'JetBrains Mono',monospace;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .control-group{display:flex;flex-direction:column;gap:10px}
+  .slider-row{
+    display:flex;flex-direction:column;gap:6px;
+    padding:10px 12px;background:var(--panel2);
+    border:1px solid var(--border);border-radius:10px;
+  }
+  .slider-header{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:12px;
+  }
+  .slider-header span:first-child{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px}
+  .slider-header span:last-child{
+    background:#0f0f18;border:1px solid var(--border);
+    padding:2px 6px;border-radius:6px;min-width:42px;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+  }
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:100%;height:4px;background:var(--border);border-radius:2px;outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:14px;height:14px;
+    border-radius:50%;background:var(--text);border:2px solid var(--bg);
+    cursor:pointer;box-shadow:0 0 0 2px var(--border);
+  }
+  .slider-row.left-limb input[type=range]::-webkit-slider-thumb{background:var(--accent)}
+  .canvas-wrap{
+    position:relative;background:radial-gradient(1200px 600px at 50% -10%,#1a1a2e 0%,var(--bg) 60%);
+    display:flex;flex-direction:column;
+  }
+  .canvas-toolbar{
+    height:48px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;background:rgba(18,18,26,.8);backdrop-filter:blur(8px);
+  }
+  .timeline{
+    height:84px;border-top:1px solid var(--border);
+    background:var(--panel);padding:10px 16px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .timeline-track{
+    height:36px;background:var(--panel2);border:1px solid var(--border);
+    border-radius:8px;position:relative;overflow:hidden;cursor:pointer;
+  }
+  .timeline-progress{
+    position:absolute;top:0;left:0;bottom:0;background:linear-gradient(90deg,rgba(255,59,48,.15),rgba(255,59,48,.05));
+    border-right:2px solid var(--accent);pointer-events:none;
+  }
+  .timeline-keyframe{
+    position:absolute;top:50%;width:10px;height:10px;
+    background:var(--text);border-radius:50%;transform:translate(-50%,-50%) rotate(45deg);
+    border:2px solid var(--bg);box-shadow:0 0 0 2px var(--border);
+  }
+  .timeline-keyframe.active{background:var(--accent);box-shadow:0 0 0 2px var(--accent),0 0 12px var(--accent)}
+  svg.stage{width:100%;flex:1;display:block}
+  .grid-line{stroke:var(--grid);stroke-width:1}
+  .floor{stroke:#2a2a40;stroke-width:2;stroke-dasharray:8 8}
+  .preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .preset-btn{
+    padding:10px;border-radius:10px;border:1px solid var(--border);
+    background:var(--panel2);color:var(--text);cursor:pointer;
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    text-align:left;transition:.15s;line-height:1.2;
+  }
+  .preset-btn:hover{border-color:#3a3a5a;transform:translateY(-1px);background:#22223a}
+  .preset-btn b{display:block;font-size:12px;margin-bottom:2px}
+  .preset-btn small{color:var(--muted)}
+  .code-block{
+    background:#0a0a12;border:1px solid var(--border);border-radius:10px;
+    padding:12px;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    line-height:1.5;color:#c8c8d8;overflow:auto;max-height:220px;white-space:pre;
+  }
+  .prompt-box{
+    display:flex;gap:8px;background:var(--panel2);border:1px solid var(--border);
+    border-radius:12px;padding:8px;
+  }
+  .prompt-box input{
+    flex:1;background:transparent;border:none;outline:none;
+    color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;
+  }
+  .prompt-box input::placeholder{color:var(--muted)}
+  .joint-label{font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--muted);pointer-events:none}
+  .impact{position:absolute;pointer-events:none;width:40px;height:40px;border:2px solid var(--accent);border-radius:50%;transform:translate(-50%,-50%) scale(0);opacity:0}
+  @keyframes impactPop{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:1}
+    50%{transform:translate(-50%,-50%) scale(1.4);opacity:.8}
+    100%{transform:translate(-50%,-50%) scale(2);opacity:0}
+  }
+  .fk-diagram{
+    padding:10px 12px;background:linear-gradient(135deg,#15151f,#0f0f18);
+    border:1px dashed var(--border);border-radius:10px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.4;color:var(--muted)
+  }
+  .fk-diagram b{color:var(--accent2)}
+  @media(max-width:1200px){
+    .app{grid-template-columns:280px 1fr 300px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-badge">FK</div>
+    <div>
+      <div style="font-size:14px">AdvancedStickman Rig</div>
+      <div style="font-size:10px;color:var(--muted)" class="mono">FORWARD KINEMATICS • TRIGONOMETRY • JOINT INHERITANCE</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <div class="pill mono"><b id="fpsCounter">60</b> FPS • <b id="frameCounter">0</b> FRAME</div>
+    <button class="btn" id="exportBtn">⎙ Export Code</button>
+    <button class="btn primary" id="playBtn">▶ PLAY SEQUENCE</button>
+  </div>
+</header>
+
+<div class="app">
+  <!-- LEFT: JOINT CONTROLS -->
+  <div class="panel">
+    <div class="section-title">Base & Torso <span class="mono" style="font-size:9px">ROOT JOINT</span></div>
+    <div class="control-group">
+      <div class="slider-row">
+        <div class="slider-header"><span>BASE X</span><span id="v-baseX">800</span></div>
+        <input type="range" id="s-baseX" min="200" max="1000" value="800">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span>BASE Y (CROUCH)</span><span id="v-baseY">700</span></div>
+        <input type="range" id="s-baseY" min="400" max="850" value="700">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span>TORSO ANGLE • -90 = upright</span><span id="v-torso">-90</span></div>
+        <input type="range" id="s-torso" min="-180" max="90" value="-90">
+      </div>
+    </div>
+
+    <div class="section-title">Arms <span style="color:var(--accent)">● LEFT RED / RIGHT WHITE</span></div>
+    <div class="control-group">
+      <div class="slider-row left-limb">
+        <div class="slider-header"><span>LEFT SHOULDER</span><span id="v-lSh">120</span></div>
+        <input type="range" id="s-lSh" min="-180" max="180" value="120">
+      </div>
+      <div class="slider-row left-limb">
+        <div class="slider-header"><span>LEFT ELBOW (relative)</span><span id="v-lEl">-60</span></div>
+        <input type="range" id="s-lEl" min="-150" max="150" value="-60">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span>RIGHT SHOULDER</span><span id="v-rSh">60</span></div>
+        <input type="range" id="s-rSh" min="-180" max="180" value="60">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span>RIGHT ELBOW (relative)</span><span id="v-rEl">-60</span></div>
+        <input type="range" id="s-rEl" min="-150" max="150" value="-60">
+      </div>
+    </div>
+
+    <div class="section-title">Legs</div>
+    <div class="control-group">
+      <div class="slider-row left-limb">
+        <div class="slider-header"><span>LEFT HIP</span><span id="v-lHip">75</span></div>
+        <input type="range" id="s-lHip" min="-90" max="180" value="75">
+      </div>
+      <div class="slider-row left-limb">
+        <div class="slider-header"><span>LEFT KNEE (relative)</span><span id="v-lKnee">30</span></div>
+        <input type="range" id="s-lKnee" min="-20" max="150" value="30">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span>RIGHT HIP</span><span id="v-rHip">105</span></div>
+        <input type="range" id="s-rHip" min="-90" max="180" value="105">
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span>RIGHT KNEE (relative)</span><span id="v-rKnee">15</span></div>
+        <input type="range" id="s-rKnee" min="-20" max="150" value="15">
+      </div>
+    </div>
+
+    <div class="fk-diagram">
+      <b>FK CHAIN:</b> hand = shoulder + elbowAngle<br>
+      <b>getJointCoords(x,y,len,θ)</b><br>
+      x' = x + len·cos(θ·π/180)<br>
+      y' = y + len·sin(θ·π/180)<br><br>
+      Forearm inherits Shoulder rotation → realistic punch arc.
+    </div>
+  </div>
+
+  <!-- CENTER: STAGE -->
+  <div class="canvas-wrap">
+    <div class="canvas-toolbar">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn" id="btnReset">↺ Reset Guard</button>
+        <button class="btn" id="btnAddKF">+ Keyframe</button>
+        <button class="btn" id="btnClearTrail">Clear Trail</button>
+        <label class="mono" style="font-size:11px;display:flex;gap:6px;align-items:center;color:var(--muted)"><input type="checkbox" id="chkTrail" checked> Motion Trail</label>
+        <label class="mono" style="font-size:11px;display:flex;gap:6px;align-items:center;color:var(--muted)"><input type="checkbox" id="chkGhost" checked> Ghost Frames</label>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="mono" style="font-size:11px;color:var(--muted)">SPEED</span>
+        <input type="range" id="s-speed" min="0.2" max="2.5" step="0.1" value="1" style="width:80px">
+        <span class="mono" id="v-speed" style="font-size:11px;min-width:24px">1x</span>
+      </div>
+    </div>
+
+    <svg class="stage" id="stage" viewBox="0 0 1100 800" preserveAspectRatio="xMidYMid meet">
+      <!-- Grid -->
+      <g id="grid"></g>
+      <!-- Floor -->
+      <line x1="0" y1="700" x2="1100" y2="700" class="floor"/>
+      <!-- Trail layer -->
+      <g id="trailLayer" opacity="0.25"></g>
+      <!-- Ghost frames -->
+      <g id="ghostLayer" opacity="0.12"></g>
+      <!-- Main stickman -->
+      <g id="stickman" stroke-linecap="round" stroke-linejoin="round"></g>
+      <!-- Impact markers -->
+      <g id="impactLayer"></g>
+    </svg>
+
+    <div class="timeline">
+      <div class="section-title">Choreography Timeline <span class="mono"><b id="kfCount">1</b> KEYFRAMES • <b id="timeLabel">0.0s</b></span></div>
+      <div class="timeline-track" id="timelineTrack">
+        <div class="timeline-progress" id="timelineProgress" style="width:0%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between" class="mono">
+        <span style="font-size:10px;color:var(--muted)">Click track to scrub • Add keyframes to build sequence • Interpolates angles with spring curves</span>
+        <span style="font-size:10px;color:var(--muted)">DURATION: <b id="durationLabel" style="color:var(--text)">1.0s</b> @ 60fps</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: PRESETS & AI -->
+  <div class="panel right">
+    <div class="section-title">AI Prompt Choreographer</div>
+    <div class="prompt-box">
+      <input id="aiPrompt" placeholder='Try: "crouching low sweep kick, arms flare for balance"'/>
+      <button class="btn accent" id="btnGenerate">Generate</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.4" class="mono">
+      The rig understands: punch, jab, cross, hook, uppercut, kick, roundhouse, sweep, crouch, spin, balance, flying knee...
+    </div>
+
+    <div class="section-title">Martial Arts Presets</div>
+    <div class="preset-grid" id="presetGrid">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="section-title">Current Angles Code <span id="copyHint" class="mono" style="font-size:9px;opacity:.6">CLICK TO COPY</span></div>
+    <div class="code-block" id="codeBlock"></div>
+
+    <div class="section-title">Remotion FightScene Snippet</div>
+    <div class="code-block" id="remotionBlock" style="max-height:180px"></div>
+
+    <div style="display:flex;gap:8px">
+      <button class="btn" id="btnExportJSON" style="flex:1">Export JSON</button>
+      <button class="btn" id="btnImportJSON" style="flex:1">Import JSON</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// --- FK MATH (exact from spec) ---
+function getJointCoords(startX, startY, length, angleDegrees){
+  const rad = (angleDegrees * Math.PI) / 180;
+  return {
+    x: startX + length * Math.cos(rad),
+    y: startY + length * Math.sin(rad),
+  };
+}
+function lerp(a,b,t){return a + (b-a)*t}
+function easeInOutCubic(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+function easeOutBack(t){const c1=1.70158,c3=c1+1;return 1 + c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
+function springProgress(t,damping=12,mass=0.5){
+  // snappy spring approx similar to Remotion
+  if(t<=0) return 0; if(t>=1) return 1;
+  const omega = Math.sqrt( (20) / mass );
+  const zeta = damping / (2*Math.sqrt(20*mass));
+  const decay = Math.exp(-zeta*omega*t*2.5);
+  const oscillation = Math.cos(omega*t*6);
+  return 1 - decay * (1 - t) * (0.5 + 0.5*oscillation);
+}
+
+// --- STATE ---
+const SEG = {
+  headRadius:22,
+  neckLength:15,
+  torsoLength:90,
+  upperArmLength:45,
+  forearmLength:40,
+  thighLength:55,
+  shinLength:50
+};
+let state = {
+  baseX:800, baseY:700,
+  angles:{
+    torso:-90,
+    leftShoulder:120, leftElbow:-60,
+    rightShoulder:60, rightElbow:-60,
+    leftHip:75, leftKnee:30,
+    rightHip:105, rightKnee:15
+  }
+};
+let keyframes = [{frame:0, ...JSON.parse(JSON.stringify(state))}];
+let currentFrame = 0;
+let maxFrame = 60; // 1 sec @60fps
+let isPlaying = false;
+let playbackSpeed = 1;
+let trailPoints = {leftHand:[], rightHand:[], leftFoot:[], rightFoot:[]};
+let lastTime = 0;
+
+// --- DOM SLIDERS ---
+const sliders = {
+  baseX: $('s-baseX'), baseY: $('s-baseY'),
+  torso: $('s-torso'),
+  leftShoulder: $('s-lSh'), leftElbow: $('s-lEl'),
+  rightShoulder: $('s-rSh'), rightElbow: $('s-rEl'),
+  leftHip: $('s-lHip'), leftKnee: $('s-lKnee'),
+  rightHip: $('s-rHip'), rightKnee: $('s-rKnee')
+};
+const values = {
+  baseX: $('v-baseX'), baseY: $('v-baseY'),
+  torso: $('v-torso'),
+  leftShoulder: $('v-lSh'), leftElbow: $('v-lEl'),
+  rightShoulder: $('v-rSh'), rightElbow: $('v-rEl'),
+  leftHip: $('v-lHip'), leftKnee: $('v-lKnee'),
+  rightHip: $('v-rHip'), rightKnee: $('v-rKnee')
+};
+function bindSliders(){
+  $('s-baseX').addEventListener('input', e=>{state.baseX=+e.target.value; values.baseX.textContent=e.target.value; render(); updateCode();});
+  $('s-baseY').addEventListener('input', e=>{state.baseY=+e.target.value; values.baseY.textContent=e.target.value; render(); updateCode();});
+  const map = {
+    's-torso':'torso',
+    's-lSh':'leftShoulder','s-lEl':'leftElbow',
+    's-rSh':'rightShoulder','s-rEl':'rightElbow',
+    's-lHip':'leftHip','s-lKnee':'leftKnee',
+    's-rHip':'rightHip','s-rKnee':'rightKnee'
+  };
+  Object.entries(map).forEach(([id,key])=>{
+    $(id).addEventListener('input', e=>{
+      state.angles[key]=+e.target.value;
+      values[key].textContent=e.target.value;
+      render(); updateCode();
+    });
+  });
+  $('s-speed').addEventListener('input', e=>{
+    playbackSpeed=parseFloat(e.target.value);
+    $('v-speed').textContent=playbackSpeed.toFixed(1)+'x';
+  });
+}
+
+// --- RIG CALC ---
+function calculateRig(s){
+  const hipX=s.baseX, hipY=s.baseY;
+  const shoulder = getJointCoords(hipX, hipY, SEG.torsoLength, s.angles.torso);
+  const neck = getJointCoords(shoulder.x, shoulder.y, SEG.neckLength, s.angles.torso);
+  const headCenter = getJointCoords(neck.x, neck.y, SEG.headRadius, s.angles.torso);
+
+  const leftElbow = getJointCoords(shoulder.x, shoulder.y, SEG.upperArmLength, s.angles.leftShoulder);
+  const leftHand = getJointCoords(leftElbow.x, leftElbow.y, SEG.forearmLength, s.angles.leftShoulder + s.angles.leftElbow);
+
+  const rightElbow = getJointCoords(shoulder.x, shoulder.y, SEG.upperArmLength, s.angles.rightShoulder);
+  const rightHand = getJointCoords(rightElbow.x, rightElbow.y, SEG.forearmLength, s.angles.rightShoulder + s.angles.rightElbow);
+
+  const leftKnee = getJointCoords(hipX, hipY, SEG.thighLength, s.angles.leftHip);
+  const leftFoot = getJointCoords(leftKnee.x, leftKnee.y, SEG.shinLength, s.angles.leftHip + s.angles.leftKnee);
+
+  const rightKnee = getJointCoords(hipX, hipY, SEG.thighLength, s.angles.rightHip);
+  const rightFoot = getJointCoords(rightKnee.x, rightKnee.y, SEG.shinLength, s.angles.rightHip + s.angles.rightKnee);
+
+  return {hip:{x:hipX,y:hipY}, shoulder, neck, headCenter, leftElbow, leftHand, rightElbow, rightHand, leftKnee, leftFoot, rightKnee, rightFoot};
+}
+
+// --- RENDER ---
+function renderGrid(){
+  const g=$('grid'); g.innerHTML='';
+  for(let x=0;x<1100;x+=55){
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x); line.setAttribute('y1',0); line.setAttribute('x2',x); line.setAttribute('y2',800);
+    line.setAttribute('class','grid-line'); line.setAttribute('opacity', x%110===0?0.5:0.15);
+    g.appendChild(line);
+  }
+  for(let y=0;y<800;y+=55){
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',0); line.setAttribute('y1',y); line.setAttribute('x2',1100); line.setAttribute('y2',y);
+    line.setAttribute('class','grid-line'); line.setAttribute('opacity', y%110===0?0.5:0.15);
+    g.appendChild(line);
+  }
+}
+function renderStickman(rig, targetGroup, styleOverrides={}){
+  const g=targetGroup;
+  g.innerHTML='';
+  const strokeW = styleOverrides.strokeWidth || 6;
+  const opacity = styleOverrides.opacity ?? 1;
+
+  // shadow
+  const shadow = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+  shadow.setAttribute('cx', rig.hip.x); shadow.setAttribute('cy', 700);
+  shadow.setAttribute('rx', 60); shadow.setAttribute('ry', 10);
+  shadow.setAttribute('fill','black'); shadow.setAttribute('opacity', (0.25*opacity).toString());
+  g.appendChild(shadow);
+
+  // torso
+  const torso = document.createElementNS('http://www.w3.org/2000/svg','line');
+  torso.setAttribute('x1', rig.hip.x); torso.setAttribute('y1', rig.hip.y);
+  torso.setAttribute('x2', rig.shoulder.x); torso.setAttribute('y2', rig.shoulder.y);
+  torso.setAttribute('stroke', styleOverrides.torsoColor||'white'); torso.setAttribute('stroke-width', strokeW);
+  g.appendChild(torso);
+
+  const neckLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+  neckLine.setAttribute('x1', rig.shoulder.x); neckLine.setAttribute('y1', rig.shoulder.y);
+  neckLine.setAttribute('x2', rig.neck.x); neckLine.setAttribute('y2', rig.neck.y);
+  neckLine.setAttribute('stroke','white'); neckLine.setAttribute('stroke-width', strokeW);
+  g.appendChild(neckLine);
+
+  // head
+  const head = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  head.setAttribute('cx', rig.headCenter.x); head.setAttribute('cy', rig.headCenter.y);
+  head.setAttribute('r', SEG.headRadius);
+  head.setAttribute('fill','white'); head.setAttribute('stroke','white'); head.setAttribute('stroke-width','2');
+  head.setAttribute('opacity', opacity);
+  g.appendChild(head);
+
+  function limbLine(a,b,color){
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',a.x); l.setAttribute('y1',a.y); l.setAttribute('x2',b.x); l.setAttribute('y2',b.y);
+    l.setAttribute('stroke',color); l.setAttribute('stroke-width',strokeW); l.setAttribute('opacity',opacity);
+    return l;
+  }
+  // left arm red
+  g.appendChild(limbLine(rig.shoulder, rig.leftElbow, styleOverrides.leftColor||'#ff3b30'));
+  g.appendChild(limbLine(rig.leftElbow, rig.leftHand, styleOverrides.leftColor||'#ff3b30'));
+  // right arm white
+  g.appendChild(limbLine(rig.shoulder, rig.rightElbow, styleOverrides.rightColor||'white'));
+  g.appendChild(limbLine(rig.rightElbow, rig.rightHand, styleOverrides.rightColor||'white'));
+  // left leg red
+  g.appendChild(limbLine(rig.hip, rig.leftKnee, styleOverrides.leftColor||'#ff3b30'));
+  g.appendChild(limbLine(rig.leftKnee, rig.leftFoot, styleOverrides.leftColor||'#ff3b30'));
+  // right leg white
+  g.appendChild(limbLine(rig.hip, rig.rightKnee, styleOverrides.rightColor||'white'));
+  g.appendChild(limbLine(rig.rightKnee, rig.rightFoot, styleOverrides.rightColor||'white'));
+
+  // joints dots
+  [rig.shoulder, rig.leftElbow, rig.rightElbow, rig.hip, rig.leftKnee, rig.rightKnee].forEach(p=>{
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',p.x); c.setAttribute('cy',p.y); c.setAttribute('r',3);
+    c.setAttribute('fill','white'); c.setAttribute('opacity',opacity);
+    g.appendChild(c);
+  });
+}
+function render(){
+  const rig = calculateRig(state);
+  renderStickman(rig, $('stickman'));
+
+  // trail
+  if($('chkTrail').checked){
+    trailPoints.rightHand.push({...rig.rightHand});
+    trailPoints.leftHand.push({...rig.leftHand});
+    trailPoints.rightFoot.push({...rig.rightFoot});
+    trailPoints.leftFoot.push({...rig.leftFoot});
+    if(trailPoints.rightHand.length>25) Object.values(trailPoints).forEach(arr=>arr.shift());
+    const tl=$('trailLayer'); tl.innerHTML='';
+    function drawTrail(points,color){
+      if(points.length<2) return;
+      let d=`M ${points[0].x} ${points[0].y}`;
+      for(let i=1;i<points.length;i++) d+=` L ${points[i].x} ${points[i].y}`;
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d',d); path.setAttribute('stroke',color); path.setAttribute('fill','none');
+      path.setAttribute('stroke-width','2'); path.setAttribute('stroke-linecap','round'); path.setAttribute('opacity','0.5');
+      path.setAttribute('stroke-dasharray','4 6');
+      tl.appendChild(path);
+    }
+    drawTrail(trailPoints.rightHand,'white');
+    drawTrail(trailPoints.leftHand,'#ff3b30');
+    drawTrail(trailPoints.rightFoot,'white');
+    drawTrail(trailPoints.leftFoot,'#ff3b30');
+  }
+
+  // impact detection: if hand moves fast
+  if(trailPoints.rightHand.length>=2){
+    const a=trailPoints.rightHand[trailPoints.rightHand.length-2];
+    const b=trailPoints.rightHand[trailPoints.rightHand.length-1];
+    const dist=Math.hypot(b.x-a.x,b.y-a.y);
+    if(dist>22){
+      spawnImpact(b.x,b.y);
+    }
+  }
+}
+function spawnImpact(x,y){
+  const el=document.createElement('div');
+  el.className='impact';
+  el.style.left=x+'px'; el.style.top=y+'px';
+  // convert svg coords to screen? approximate since viewBox 1100x800 and svg fills width
+  // We'll position using SVG instead for simplicity
+  const svgPt=$('stage').createSVGPoint();
+  // Instead use SVG circle
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r','4');
+  c.setAttribute('fill','none'); c.setAttribute('stroke','#ff3b30'); c.setAttribute('stroke-width','2');
+  c.style.animation='impactPop 0.35s ease-out forwards';
+  $('impactLayer').appendChild(c);
+  setTimeout(()=>c.remove(),400);
+}
+
+// --- INTERPOLATION BETWEEN KEYFRAMES ---
+function getInterpolatedStateAtFrame(frame){
+  if(keyframes.length===0) return state;
+  if(keyframes.length===1) return keyframes[0];
+  // sort
+  keyframes.sort((a,b)=>a.frame-b.frame);
+  let prev=keyframes[0], next=keyframes[keyframes.length-1];
+  for(let i=0;i<keyframes.length-1;i++){
+    if(frame>=keyframes[i].frame && frame<=keyframes[i+1].frame){
+      prev=keyframes[i]; next=keyframes[i+1]; break;
+    }
+  }
+  if(frame<=prev.frame) return prev;
+  if(frame>=next.frame) return next;
+  const t = (frame - prev.frame) / Math.max(1, (next.frame - prev.frame));
+  // use spring for punch-like moves if distance large
+  const eased = springProgress(t, 12, 0.5); // snappy
+  //const eased = easeInOutCubic(t);
+  const out = {
+    baseX: lerp(prev.baseX, next.baseX, eased),
+    baseY: lerp(prev.baseY, next.baseY, eased),
+    angles:{}
+  };
+  for(const k in prev.angles){
+    out.angles[k]=lerp(prev.angles[k], next.angles[k], eased);
+  }
+  return out;
+}
+
+// --- TIMELINE ---
+function renderTimeline(){
+  const track=$('timelineTrack');
+  // clear old keyframes markers but keep progress
+  track.querySelectorAll('.timeline-keyframe').forEach(el=>el.remove());
+  const maxF = Math.max(maxFrame, ...keyframes.map(k=>k.frame), 1);
+  keyframes.forEach((kf,i)=>{
+    const dot=document.createElement('div');
+    dot.className='timeline-keyframe'+(Math.abs(kf.frame-currentFrame)<2?' active':'');
+    dot.style.left = (kf.frame / maxF * 100)+'%';
+    dot.title=`Frame ${kf.frame}`;
+    dot.addEventListener('click', e=>{
+      e.stopPropagation();
+      currentFrame=kf.frame;
+      const interp=getInterpolatedStateAtFrame(currentFrame);
+      state=JSON.parse(JSON.stringify(interp));
+      syncSlidersToState();
+      updateTimelineUI();
+      render();
+    });
+    track.appendChild(dot);
+  });
+  $('kfCount').textContent=keyframes.length;
+  $('durationLabel').textContent=(maxF/60).toFixed(2)+'s';
+  $('timeLabel').textContent=(currentFrame/60).toFixed(2)+'s';
+  $('frameCounter').textContent=Math.floor(currentFrame);
+  $('timelineProgress').style.width=(currentFrame / maxF * 100)+'%';
+  // ghost frames
+  if($('chkGhost').checked){
+    const ghost=$('ghostLayer'); ghost.innerHTML='';
+    for(let i=0;i<keyframes.length;i++){
+      const rig=calculateRig(keyframes[i]);
+      const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+      renderStickman(rig,g,{opacity:0.18, strokeWidth:3, leftColor:'#ff3b30', rightColor:'#888'});
+      ghost.appendChild(g);
+    }
+  }
+}
+function syncSlidersToState(){
+  sliders.baseX.value=state.baseX; values.baseX.textContent=Math.round(state.baseX);
+  sliders.baseY.value=state.baseY; values.baseY.textContent=Math.round(state.baseY);
+  sliders.torso.value=state.angles.torso; values.torso.textContent=Math.round(state.angles.torso);
+  sliders.leftShoulder.value=state.angles.leftShoulder; values.leftShoulder.textContent=Math.round(state.angles.leftShoulder);
+  sliders.leftElbow.value=state.angles.leftElbow; values.leftElbow.textContent=Math.round(state.angles.leftElbow);
+  sliders.rightShoulder.value=state.angles.rightShoulder; values.rightShoulder.textContent=Math.round(state.angles.rightShoulder);
+  sliders.rightElbow.value=state.angles.rightElbow; values.rightElbow.textContent=Math.round(state.angles.rightElbow);
+  sliders.leftHip.value=state.angles.leftHip; values.leftHip.textContent=Math.round(state.angles.leftHip);
+  sliders.leftKnee.value=state.angles.leftKnee; values.leftKnee.textContent=Math.round(state.angles.leftKnee);
+  sliders.rightHip.value=state.angles.rightHip; values.rightHip.textContent=Math.round(state.angles.rightHip);
+  sliders.rightKnee.value=state.angles.rightKnee; values.rightKnee.textContent=Math.round(state.angles.rightKnee);
+  updateCode();
+}
+function updateTimelineUI(){ renderTimeline(); }
+$('timelineTrack').addEventListener('click', e=>{
+  const rect=e.currentTarget.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const pct=x/rect.width;
+  const maxF = Math.max(maxFrame, ...keyframes.map(k=>k.frame), 1);
+  currentFrame = pct*maxF;
+  const interp=getInterpolatedStateAtFrame(currentFrame);
+  state=JSON.parse(JSON.stringify(interp));
+  syncSlidersToState();
+  updateTimelineUI();
+  render();
+});
+
+// --- PLAYBACK ---
+let animId=null;
+function tick(timestamp){
+  if(!lastTime) lastTime=timestamp;
+  const delta=(timestamp-lastTime)/1000; lastTime=timestamp;
+  if(isPlaying){
+    currentFrame += delta*60*playbackSpeed;
+    const maxF = Math.max(maxFrame, ...keyframes.map(k=>k.frame));
+    if(currentFrame>maxF){
+      currentFrame=0;
+      trailPoints={leftHand:[],rightHand:[],leftFoot:[],rightFoot:[]};
+    }
+    const interp=getInterpolatedStateAtFrame(currentFrame);
+    state=JSON.parse(JSON.stringify(interp));
+    syncSlidersToState();
+    render();
+    updateTimelineUI();
+    $('fpsCounter').textContent=Math.round(1/delta);
+  }
+  animId=requestAnimationFrame(tick);
+}
+function togglePlay(){
+  isPlaying=!isPlaying;
+  $('playBtn').textContent=isPlaying?'❚❚ PAUSE':'▶ PLAY SEQUENCE';
+  if(isPlaying){ lastTime=0; trailPoints={leftHand:[],rightHand:[],leftFoot:[],rightFoot:[]}; }
+}
+$('playBtn').addEventListener('click', togglePlay);
+$('btnReset').addEventListener('click', ()=>{
+  applyPreset('guard');
+});
+$('btnAddKF').addEventListener('click', ()=>{
+  keyframes.push({frame:Math.round(currentFrame), ...JSON.parse(JSON.stringify(state))});
+  keyframes.sort((a,b)=>a.frame-b.frame);
+  maxFrame=Math.max(maxFrame, ...keyframes.map(k=>k.frame));
+  renderTimeline();
+});
+$('btnClearTrail').addEventListener('click', ()=>{
+  trailPoints={leftHand:[],rightHand:[],leftFoot:[],rightFoot:[]};
+  $('trailLayer').innerHTML=''; $('impactLayer').innerHTML='';
+  render();
+});
+
+// --- PRESETS ---
+const PRESETS = {
+  guard:{
+    label:'Guard Stance', desc:'Basic fighting stance',
+    kf:[
+      {frame:0, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}}
+    ]
+  },
+  jab:{
+    label:'Jab • Snap Punch', desc:'Wind-up → snap',
+    kf:[
+      {frame:0, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:8, baseX:710, baseY:700, angles:{torso:-88, leftShoulder:120, leftElbow:-60, rightShoulder:-45, rightElbow:90, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:14, baseX:730, baseY:700, angles:{torso:-85, leftShoulder:130, leftElbow:-40, rightShoulder:-90, rightElbow:120, leftHip:78, leftKnee:25, rightHip:108, rightKnee:12}},
+      {frame:22, baseX:760, baseY:700, angles:{torso:-80, leftShoulder:110, leftElbow:-80, rightShoulder:15, rightElbow:5, leftHip:80, leftKnee:20, rightHip:110, rightKnee:10}},
+      {frame:32, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+  cross:{
+    label:'Cross • Power', desc:'Torso twist + straight',
+    kf:[
+      {frame:0, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:10, baseX:690, baseY:710, angles:{torso:-100, leftShoulder:110, leftElbow:-50, rightShoulder:-60, rightElbow:110, leftHip:70, leftKnee:35, rightHip:95, rightKnee:25}},
+      {frame:20, baseX:780, baseY:695, angles:{torso:-70, leftShoulder:90, leftElbow:-90, rightShoulder:10, rightElbow:-5, leftHip:85, leftKnee:15, rightHip:115, rightKnee:5}},
+      {frame:35, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+  hook:{
+    label:'Hook', desc:'Wide arc elbow bent',
+    kf:[
+      {frame:0, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:12, baseX:710, baseY:705, angles:{torso:-95, leftShoulder:100, leftElbow:-40, rightShoulder:90, rightElbow:-80, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:22, baseX:740, baseY:700, angles:{torso:-75, leftShoulder:120, leftElbow:-60, rightShoulder:-20, rightElbow:80, leftHip:80, leftKnee:20, rightHip:110, rightKnee:10}},
+      {frame:32, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+  roundhouse:{
+    label:'Roundhouse Kick', desc:'180° leg swing',
+    kf:[
+      {frame:0, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:10, baseX:680, baseY:690, angles:{torso:-80, leftShoulder:150, leftElbow:-30, rightShoulder:20, rightElbow:-90, leftHip:60, leftKnee:60, rightHip:105, rightKnee:15}},
+      {frame:18, baseX:670, baseY:680, angles:{torso:-70, leftShoulder:170, leftElbow:-20, rightShoulder:-10, rightElbow:-100, leftHip:40, leftKnee:100, rightHip:20, rightKnee:20}},
+      {frame:26, baseX:700, baseY:690, angles:{torso:-60, leftShoulder:180, leftElbow:0, rightShoulder:-30, rightElbow:-80, leftHip:30, leftKnee:30, rightHip:-10, rightKnee:10}},
+      {frame:38, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+  lowSweep:{
+    label:'Low Sweep Kick', desc:'Crouch + leg flare + balance',
+    kf:[
+      {frame:0, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:12, baseX:700, baseY:760, angles:{torso:-65, leftShoulder:160, leftElbow:-10, rightShoulder:-20, rightElbow:-20, leftHip:95, leftKnee:60, rightHip:110, rightKnee:50}},
+      {frame:20, baseX:690, baseY:780, angles:{torso:-45, leftShoulder:190, leftElbow:10, rightShoulder:-50, rightElbow:20, leftHip:110, leftKnee:70, rightHip:5, rightKnee:5}},
+      {frame:30, baseX:680, baseY:775, angles:{torso:-30, leftShoulder:200, leftElbow:20, rightShoulder:-60, rightElbow:30, leftHip:115, leftKnee:65, rightHip:-60, rightKnee:15}},
+      {frame:42, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+  uppercut:{
+    label:'Uppercut', desc:'Low to high snap',
+    kf:[
+      {frame:0, baseX:700, baseY:720, angles:{torso:-95, leftShoulder:120, leftElbow:-60, rightShoulder:80, rightElbow:-100, leftHip:80, leftKnee:40, rightHip:100, rightKnee:30}},
+      {frame:15, baseX:720, baseY:680, angles:{torso:-75, leftShoulder:110, leftElbow:-50, rightShoulder:-40, rightElbow:40, leftHip:75, leftKnee:25, rightHip:105, rightKnee:15}},
+      {frame:25, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+  flyingKnee:{
+    label:'Flying Knee', desc:'Jump + knee drive',
+    kf:[
+      {frame:0, baseX:600, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:10, baseX:650, baseY:680, angles:{torso:-85, leftShoulder:140, leftElbow:-40, rightShoulder:40, rightElbow:-50, leftHip:60, leftKnee:50, rightHip:90, rightKnee:40}},
+      {frame:18, baseX:750, baseY:620, angles:{torso:-70, leftShoulder:180, leftElbow:-10, rightShoulder:10, rightElbow:-20, leftHip:20, leftKnee:100, rightHip:70, rightKnee:20}},
+      {frame:28, baseX:850, baseY:700, angles:{torso:-80, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+  spinning:{
+    label:'Spinning Back Kick', desc:'360° torque',
+    kf:[
+      {frame:0, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+      {frame:8, baseX:690, baseY:695, angles:{torso:-120, leftShoulder:90, leftElbow:-80, rightShoulder:100, rightElbow:-60, leftHip:60, leftKnee:40, rightHip:90, rightKnee:30}},
+      {frame:18, baseX:710, baseY:690, angles:{torso:-200, leftShoulder:60, leftElbow:-90, rightShoulder:140, rightElbow:-40, leftHip:100, leftKnee:20, rightHip:40, rightKnee:60}},
+      {frame:26, baseX:760, baseY:700, angles:{torso:-80, leftShoulder:120, leftElbow:-60, rightShoulder:-10, rightElbow:10, leftHip:80, leftKnee:25, rightHip:15, rightKnee:5}},
+      {frame:36, baseX:700, baseY:700, angles:{torso:-90, leftShoulder:120, leftElbow:-60, rightShoulder:60, rightElbow:-70, leftHip:75, leftKnee:30, rightHip:105, rightKnee:15}},
+    ]
+  },
+};
+function applyPreset(name){
+  const p=PRESETS[name];
+  if(!p) return;
+  keyframes = p.kf.map(kf=>({...kf, angles:{...kf.angles}}));
+  maxFrame = Math.max(...keyframes.map(k=>k.frame));
+  currentFrame=0;
+  state=JSON.parse(JSON.stringify(keyframes[0]));
+  syncSlidersToState();
+  renderTimeline();
+  render();
+  if(!isPlaying) togglePlay();
+}
+function buildPresetGrid(){
+  const grid=$('presetGrid');
+  Object.entries(PRESETS).forEach(([key,preset])=>{
+    const btn=document.createElement('button');
+    btn.className='preset-btn';
+    btn.innerHTML=`<b>${preset.label}</b><small>${preset.desc}</small>`;
+    btn.addEventListener('click',()=>applyPreset(key));
+    grid.appendChild(btn);
+  });
+}
+
+// --- CODE EXPORT ---
+function updateCode(){
+  const anglesCode = `const currentAngles = {
+  torso: ${Math.round(state.angles.torso)},
+  leftShoulder: ${Math.round(state.angles.leftShoulder)},
+  leftElbow: ${Math.round(state.angles.leftElbow)},
+  rightShoulder: ${Math.round(state.angles.rightShoulder)},
+  rightElbow: ${Math.round(state.angles.rightElbow)},
+  leftHip: ${Math.round(state.angles.leftHip)},
+  leftKnee: ${Math.round(state.angles.leftKnee)},
+  rightHip: ${Math.round(state.angles.rightHip)},
+  rightKnee: ${Math.round(state.angles.rightKnee)},
+};`;
+  const fullCode = `<AdvancedStickman
+  baseX={${Math.round(state.baseX)}}
+  baseY={${Math.round(state.baseY)}}
+  angles={currentAngles}
+/>`;
+  $('codeBlock').textContent=anglesCode+'\n\n'+fullCode;
+
+  // Remotion snippet for current sequence if multiple keyframes
+  let remotionSnippet = `// ${keyframes.length} keyframe sequence @60fps
+export const FightScene = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+
+  // Keyframes generated by FK Studio
+  const keyframes = ${JSON.stringify(keyframes.map(k=>({frame:k.frame, baseX:k.baseX, baseY:k.baseY, angles:k.angles})), null, 2)};
+
+  const getState = (f) => {
+    // spring interpolation like studio
+    let prev=keyframes[0], next=keyframes[keyframes.length-1];
+    for(let i=0;i<keyframes.length-1;i++){
+      if(f>=keyframes[i].frame && f<=keyframes[i+1].frame){prev=keyframes[i];next=keyframes[i+1];break;}
+    }
+    const t=(f-prev.frame)/Math.max(1,next.frame-prev.frame);
+    const eased=spring({frame:t*20,fps,config:{damping:12,mass:0.5}});
+    return {
+      baseX: interpolate(eased,[0,1],[prev.baseX,next.baseX]),
+      baseY: interpolate(eased,[0,1],[prev.baseY,next.baseY]),
+      angles:{
+        torso: interpolate(eased,[0,1],[prev.angles.torso,next.angles.torso]),
+        leftShoulder: interpolate(eased,[0,1],[prev.angles.leftShoulder,next.angles.leftShoulder]),
+        // ... repeat for all joints
+      }
+    };
+  };
+  const current = getState(frame);
+  return <svg width={1920} height={1080}><AdvancedStickman {...current} /></svg>;
+};`;
+  $('remotionBlock').textContent=remotionSnippet;
+}
+
+// --- AI PROMPT PARSER ---
+function generateFromPrompt(prompt){
+  const p=prompt.toLowerCase();
+  let chosen='jab';
+  if(p.includes('sweep') && p.includes('low') || p.includes('crouch')) chosen='lowSweep';
+  else if(p.includes('roundhouse') || (p.includes('kick') && p.includes('round'))) chosen='roundhouse';
+  else if(p.includes('uppercut')) chosen='uppercut';
+  else if(p.includes('hook')) chosen='hook';
+  else if(p.includes('cross') || p.includes('straight')) chosen='cross';
+  else if(p.includes('jab') || p.includes('punch')) chosen='jab';
+  else if(p.includes('flying') || p.includes('knee')) chosen='flyingKnee';
+  else if(p.includes('spin')) chosen='spinning';
+  else if(p.includes('sweep')) chosen='lowSweep';
+  else if(p.includes('kick')) chosen='roundhouse';
+
+  // modify based on extra keywords
+  const preset=JSON.parse(JSON.stringify(PRESETS[chosen]));
+  // crouch modifier
+  if(p.includes('crouch') || p.includes('low')){
+    preset.kf.forEach(kf=>{
+      kf.baseY+=40;
+      kf.angles.torso-=15;
+    });
+  }
+  if(p.includes('balance') || p.includes('flare')){
+    preset.kf.forEach(kf=>{
+      if(kf.frame>0){
+        kf.angles.leftShoulder+=20;
+        kf.angles.rightShoulder-=20;
+      }
+    });
+  }
+  if(p.includes('180') || p.includes('sine wave')){
+    // enhance leg swing
+    preset.kf.forEach(kf=>{
+      if(kf.angles.rightHip!==undefined) kf.angles.rightHip-=10;
+    });
+  }
+  return preset;
+}
+$('btnGenerate').addEventListener('click', ()=>{
+  const val=$('aiPrompt').value.trim();
+  if(!val) return;
+  const preset=generateFromPrompt(val);
+  keyframes = preset.kf;
+  maxFrame=Math.max(...keyframes.map(k=>k.frame));
+  currentFrame=0;
+  state=JSON.parse(JSON.stringify(keyframes[0]));
+  syncSlidersToState();
+  renderTimeline();
+  render();
+  if(!isPlaying) togglePlay();
+});
+$('aiPrompt').addEventListener('keydown', e=>{if(e.key==='Enter') $('btnGenerate').click();});
+
+// --- EXPORT / IMPORT ---
+$('exportBtn').addEventListener('click', ()=>{
+  navigator.clipboard.writeText($('codeBlock').textContent);
+  const old=$('exportBtn').textContent;
+  $('exportBtn').textContent='✓ Copied!';
+  setTimeout(()=>$('exportBtn').textContent=old,1200);
+});
+$('codeBlock').addEventListener('click', ()=>{
+  navigator.clipboard.writeText($('codeBlock').textContent);
+  $('copyHint').textContent='COPIED!';
+  setTimeout(()=>$('copyHint').textContent='CLICK TO COPY',1000);
+});
+$('btnExportJSON').addEventListener('click', ()=>{
+  const data=JSON.stringify(keyframes,null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='stickman-sequence.json'; a.click();
+});
+$('btnImportJSON').addEventListener('click', ()=>{
+  const input=document.createElement('input'); input.type='file'; input.accept='.json';
+  input.onchange=e=>{
+    const file=e.target.files[0];
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const kf=JSON.parse(reader.result);
+        keyframes=kf;
+        maxFrame=Math.max(...keyframes.map(k=>k.frame));
+        currentFrame=0;
+        state=JSON.parse(JSON.stringify(keyframes[0]));
+        syncSlidersToState();
+        renderTimeline();
+        render();
+      }catch(err){alert('Invalid JSON')}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+});
+
+// --- INIT ---
+renderGrid();
+bindSliders();
+buildPresetGrid();
+syncSlidersToState();
+renderTimeline();
+render();
+updateCode();
+requestAnimationFrame(tick);
+
+// intro animation: auto play jab after 0.5s
+setTimeout(()=>applyPreset('jab'),600);
+</script>
+</body>
+</html>

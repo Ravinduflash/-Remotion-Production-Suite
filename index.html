@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remotion Production Suite</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0f; --panel:#12121a; --panel2:#1a1a26; --panel3:#20202f;
+    --border:#24243a; --border2:#34344f;
+    --accent:#ff3b30; --green:#30d158; --cyan:#64d2ff; --amber:#ffd60a; --violet:#bf5af2;
+    --text:#e8e8ef; --muted:#8a8aa0; --grid:#1e1e2e;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;overflow:hidden;font-size:13px}
+  .mono{font-family:'JetBrains Mono',monospace}
+  button{font-family:inherit}
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+  /* ---------- HEADER ---------- */
+  header{height:52px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:linear-gradient(180deg,var(--panel),var(--bg))}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em}
+  .logo-badge{width:30px;height:30px;background:var(--accent);border-radius:8px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff;transform:rotate(-8deg)}
+  .header-actions{display:flex;gap:8px;align-items:center}
+  .pill{padding:5px 10px;border-radius:999px;border:1px solid var(--border);background:var(--panel2);font-size:11px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+  .pill b{color:var(--text)}
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+  .pill.online .dot{background:var(--green);box-shadow:0 0 8px var(--green)}
+  .btn{padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .btn:hover{border-color:var(--border2);background:#22223a;transform:translateY(-1px)}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .btn.primary{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+  .btn.primary:hover{background:#fff}
+  .btn.accent{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+  .btn.accent:hover{background:#ff4d44}
+  .btn.green{background:var(--green);border-color:var(--green);color:#04150a;font-weight:700}
+  .btn.green:hover{background:#4ae06e}
+  .btn.sm{padding:4px 8px;font-size:10px;border-radius:6px}
+  .btn.icon{padding:4px 6px;min-width:26px;justify-content:center}
+  .btn.active{border-color:var(--accent);color:var(--accent)}
+
+  /* ---------- APP GRID ---------- */
+  .app{display:grid;grid-template-columns:20% 55% 25%;grid-template-rows:1fr minmax(170px,25%);height:calc(100vh - 52px)}
+  .col{background:var(--panel);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+  .col.left{border-right:1px solid var(--border)}
+  .col.right{border-left:1px solid var(--border);overflow:auto;padding:14px;gap:16px}
+  .section-title{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .section-title .tag{font-size:9px;padding:2px 6px;border:1px solid var(--border);border-radius:5px}
+
+  /* ---------- LEFT: DRAWERS ---------- */
+  .drawer{display:flex;flex-direction:column;min-height:0;border-bottom:1px solid var(--border)}
+  .drawer.open{flex:1}
+  .drawer-head{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;background:var(--panel2);border-bottom:1px solid var(--border)}
+  .drawer-head:hover{background:var(--panel3)}
+  .drawer-head .chev{transition:.2s;color:var(--muted);font-size:10px}
+  .drawer:not(.open) .drawer-head .chev{transform:rotate(-90deg)}
+  .drawer-body{overflow:auto;flex:1;display:none;flex-direction:column}
+  .drawer.open .drawer-body{display:flex}
+  .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--panel);overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:1 0 auto;padding:8px 8px;text-align:center;font-size:10px;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--text);border-bottom-color:var(--accent)}
+  .catalog-list{padding:10px;display:flex;flex-direction:column;gap:8px}
+  .cat-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--panel2)}
+  .cat-item:hover{border-color:var(--border2)}
+  .cat-icon{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-size:16px;background:var(--panel3);border:1px solid var(--border);flex-shrink:0}
+  .cat-meta{flex:1;min-width:0}
+  .cat-meta b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cat-meta small{color:var(--muted);font-size:10px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cat-item .btn{flex-shrink:0}
+
+  .tree-list{padding:8px;display:flex;flex-direction:column;gap:4px}
+  .tree-row{display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid transparent;border-radius:8px;cursor:pointer;background:transparent}
+  .tree-row:hover{background:var(--panel2)}
+  .tree-row.selected{background:var(--panel2);border-color:var(--accent);box-shadow:0 0 0 1px rgba(255,59,48,.25),0 0 14px rgba(255,59,48,.15)}
+  .tree-row.hidden-asset{opacity:.45}
+  .tree-row .t-icon{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:11px;flex-shrink:0;background:var(--panel3);border:1px solid var(--border)}
+  .tree-row .t-name{flex:1;min-width:0;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tree-row .t-name small{display:block;color:var(--muted);font-size:9px;font-family:'JetBrains Mono',monospace}
+  .tree-row .t-name input{width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:4px;padding:2px 4px;font:inherit;font-size:12px}
+  .tbtn{width:22px;height:22px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:5px;font-size:11px;display:grid;place-items:center}
+  .tbtn:hover{background:var(--panel3);color:var(--text)}
+  .tbtn.on{color:var(--text)}
+  .tbtn.lock.on{color:var(--amber)}
+  .tbtn.del:hover{color:var(--accent)}
+  .tbtn:disabled{opacity:.25;cursor:default}
+  .empty{padding:20px;text-align:center;color:var(--muted);font-size:11px;line-height:1.5}
+  .type-character{color:var(--accent)} .type-environment{color:var(--green)} .type-widget{color:var(--cyan)} .type-text{color:var(--amber)} .type-three{color:var(--violet)}
+
+  /* ---------- CENTER: VIEWPORT ---------- */
+  .viewport{position:relative;background:radial-gradient(1200px 600px at 50% -10%,#1a1a2e 0%,var(--bg) 60%);display:flex;flex-direction:column;min-width:0;border-right:1px solid var(--border)}
+  .canvas-toolbar{min-height:44px;flex-wrap:wrap;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:4px 12px;background:rgba(18,18,26,.85);backdrop-filter:blur(8px);gap:8px;flex-shrink:0}
+  .canvas-toolbar .grp{display:flex;gap:6px;align-items:center}
+  .chk{font-family:'JetBrains Mono',monospace;font-size:10px;display:flex;gap:5px;align-items:center;color:var(--muted);cursor:pointer;user-select:none}
+  .stage-area{flex:1;position:relative;display:grid;place-items:center;padding:12px;min-height:0;overflow:hidden}
+  .stage-box{position:relative;width:960px;height:540px;max-width:100%;max-height:100%;box-shadow:0 0 0 1px var(--border),0 20px 60px rgba(0,0,0,.5);background:#000}
+  svg.stage{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  canvas.three{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:block}
+  .grid-line{stroke:var(--grid);stroke-width:1}
+  .sel-box{fill:rgba(255,59,48,.03);stroke:var(--accent);stroke-width:2;stroke-dasharray:10 6;vector-effect:non-scaling-stroke}
+  .sel-handle{fill:var(--bg);stroke:var(--accent);stroke-width:2;cursor:nwse-resize}
+  .sel-rot{fill:var(--accent);stroke:#fff;stroke-width:2;cursor:grab}
+  .asset{cursor:move}
+  .asset.locked{cursor:not-allowed}
+  .asset.three-placeholder text{font-family:'JetBrains Mono',monospace}
+  .inspector{position:absolute;top:12px;left:12px;width:270px;max-height:calc(100% - 24px);background:rgba(18,18,26,.92);border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(10px);display:flex;flex-direction:column;overflow:hidden;z-index:5;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+  .inspector.collapsed .insp-body{display:none}
+  .insp-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+  .insp-head b{font-size:12px}
+  .insp-head small{display:block;color:var(--muted);font-size:9px;font-family:'JetBrains Mono',monospace}
+  .insp-body{overflow:auto;padding:10px;display:flex;flex-direction:column;gap:10px}
+  .ctrl-group{display:flex;flex-direction:column;gap:6px}
+  .ctrl-group .g-title{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono',monospace;padding:2px 0}
+  .slider-row{display:flex;flex-direction:column;gap:5px;padding:7px 9px;background:var(--panel2);border:1px solid var(--border);border-radius:9px}
+  .slider-header{display:flex;justify-content:space-between;align-items:center;font-size:11px;gap:6px}
+  .slider-header span:first-child{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .slider-header .val{background:#0f0f18;border:1px solid var(--border);padding:1px 5px;border-radius:5px;min-width:40px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:var(--border);border-radius:2px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--text);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 0 2px var(--border)}
+  .slider-row.left-limb input[type=range]::-webkit-slider-thumb{background:var(--accent)}
+  .slider-row input[type=text],.slider-row input[type=number],.slider-row select{width:100%;background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 7px;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none}
+  .slider-row input:focus,.slider-row select:focus{border-color:var(--border2)}
+  .slider-row input[type=color]{width:100%;height:26px;border:1px solid var(--border);background:#0f0f18;border-radius:6px;padding:2px;cursor:pointer}
+  .slider-row.inline{flex-direction:row;align-items:center;justify-content:space-between}
+  .slider-row.inline input[type=checkbox]{accent-color:var(--accent)}
+  .insp-note{font-size:10px;color:var(--muted);line-height:1.4;font-family:'JetBrains Mono',monospace;padding:6px 8px;border:1px dashed var(--border);border-radius:8px}
+
+  /* ---------- RIGHT: CHOREOGRAPHY ---------- */
+  .prompt-box{display:flex;gap:6px;background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:6px}
+  .prompt-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:12.5px;min-width:0}
+  .prompt-box input::placeholder{color:var(--muted)}
+  .hint{font-size:10.5px;color:var(--muted);line-height:1.45;font-family:'JetBrains Mono',monospace}
+  .preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .preset-btn{padding:8px 9px;border-radius:9px;border:1px solid var(--border);background:var(--panel2);color:var(--text);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;text-align:left;transition:.15s;line-height:1.25}
+  .preset-btn:hover{border-color:var(--border2);transform:translateY(-1px);background:#22223a}
+  .preset-btn b{display:block;font-size:11px;margin-bottom:2px}
+  .preset-btn small{color:var(--muted)}
+  .preset-grid.disabled{opacity:.35;pointer-events:none}
+  .mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .mod-btn{padding:8px 9px;border-radius:9px;border:1px solid var(--border);background:linear-gradient(135deg,#15151f,#0f0f18);color:var(--text);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;text-align:left;line-height:1.25}
+  .mod-btn:hover{border-color:var(--green)}
+  .mod-btn b{display:block;font-size:11px;color:var(--green);margin-bottom:2px}
+  .mod-btn small{color:var(--muted)}
+  .export-box{border:1px solid var(--border);border-radius:12px;background:var(--panel2);padding:10px;display:flex;flex-direction:column;gap:8px}
+  .export-box .ex-head{display:flex;justify-content:space-between;align-items:center}
+  .export-box .ex-head b{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em}
+  .export-box .ex-stats{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;display:flex;gap:10px;flex-wrap:wrap}
+  .export-box .ex-actions{display:flex;gap:6px}
+  .export-box.json{border-left:3px solid var(--cyan)} .export-box.code{border-left:3px solid var(--green)}
+  .code-preview{background:#0a0a12;border:1px solid var(--border);border-radius:8px;padding:8px;font-family:'JetBrains Mono',monospace;font-size:9.5px;line-height:1.45;color:#c8c8d8;overflow:hidden;max-height:110px;white-space:pre;position:relative}
+  .code-preview::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(transparent,#0a0a12)}
+
+  /* ---------- BOTTOM: TIMELINE ---------- */
+  .timeline{grid-column:1 / -1;grid-row:2;border-top:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;min-height:0}
+  .tl-toolbar{height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--border);gap:8px;flex-shrink:0}
+  .tl-toolbar .grp{display:flex;align-items:center;gap:6px}
+  .tl-toolbar input[type=number],.tl-toolbar select{width:64px;background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none}
+  .tl-toolbar label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:5px}
+  .tl-scroll{flex:1;overflow:auto;position:relative}
+  .tl-grid{position:relative;min-width:100%}
+  .tl-row{display:grid;grid-template-columns:180px 1fr;height:34px;border-bottom:1px solid var(--border)}
+  .tl-row.ruler{height:28px;position:sticky;top:0;background:var(--panel);z-index:3}
+  .tl-label{padding:0 10px;display:flex;align-items:center;gap:6px;font-size:11px;border-right:1px solid var(--border);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:var(--panel)}
+  .tl-label small{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted)}
+  .tl-row.selected .tl-label{color:var(--text);background:var(--panel2);box-shadow:inset 3px 0 0 var(--accent)}
+  .tl-row.ruler .tl-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.08em}
+  .tl-lane{position:relative;background:var(--panel2);cursor:crosshair;overflow:hidden}
+  .tl-row.ruler .tl-lane{background:var(--panel);cursor:ew-resize}
+  .tl-row.selected .tl-lane{background:#1c1c2c}
+  .tl-row.hidden-asset .tl-lane{opacity:.4}
+  .tick{position:absolute;top:0;bottom:0;border-left:1px solid var(--border);pointer-events:none}
+  .tick span{position:absolute;top:4px;left:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted)}
+  .lane-tick{position:absolute;top:0;bottom:0;border-left:1px solid rgba(36,36,58,.7);pointer-events:none}
+  .kf{position:absolute;top:50%;width:11px;height:11px;background:var(--text);transform:translate(-50%,-50%) rotate(45deg);border:2px solid var(--bg);box-shadow:0 0 0 1.5px var(--border2);cursor:pointer;z-index:2;border-radius:2px}
+  .kf:hover{background:#fff;box-shadow:0 0 0 2px var(--accent)}
+  .kf.active{background:var(--accent) !important;box-shadow:0 0 0 2px var(--accent),0 0 12px var(--accent)}
+  .kf.character{background:#ffb3af}.kf.widget{background:var(--cyan)}.kf.environment{background:var(--green)}.kf.three{background:var(--violet)}.kf.text{background:var(--amber)}
+  .kf-span{position:absolute;top:50%;height:2px;background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,255,255,.25));transform:translateY(-50%);pointer-events:none}
+  .playhead{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);z-index:4;pointer-events:none;box-shadow:0 0 8px rgba(255,59,48,.6)}
+  .playhead::before{content:"";position:absolute;top:0;left:-6px;border:7px solid transparent;border-top:9px solid var(--accent);border-bottom:0}
+  .playhead-label{position:absolute;top:2px;left:6px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);white-space:nowrap}
+
+  /* ---------- MODAL ---------- */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;place-items:center;z-index:50;backdrop-filter:blur(4px)}
+  .modal-bg.open{display:grid}
+  .modal{width:min(1000px,92vw);height:min(760px,88vh);background:var(--panel);border:1px solid var(--border2);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 100px rgba(0,0,0,.7)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+  .modal-tabs{display:flex;gap:4px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--panel2);flex-wrap:wrap}
+  .modal-tabs .tab{flex:none;padding:6px 12px;border:1px solid var(--border);border-radius:7px}
+  .modal-tabs .tab.active{border-color:var(--accent);color:var(--text)}
+  .modal-body{flex:1;overflow:auto;background:#0a0a12}
+  .modal-body pre{padding:16px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.55;color:#c8c8d8;white-space:pre;tab-size:2}
+  .modal-foot{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--border);gap:8px}
+  .toast{position:fixed;bottom:28%;left:50%;transform:translateX(-50%);background:var(--panel3);border:1px solid var(--border2);padding:8px 14px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;z-index:60;opacity:0;transition:.2s;pointer-events:none}
+  .toast.show{opacity:1}
+  @media(max-width:1300px){.app{grid-template-columns:240px 1fr 300px}.inspector{width:240px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-badge">RS</div>
+    <div>
+      <div style="font-size:14px">Remotion Production Suite</div>
+      <div class="mono" style="font-size:9.5px;color:var(--muted)">MULTI-ASSET SCENE TREE • CHOREOGRAPHY TIMELINE • MCP READY</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <div class="pill mono" id="mcpPill" title="Click to set the MCP bridge WebSocket URL" style="cursor:pointer"><span class="dot"></span><span id="mcpText">MCP OFFLINE</span></div>
+    <div class="pill mono"><b id="fpsCounter">60</b> FPS • <b id="frameCounter">0</b>/<b id="totalCounter">120</b></div>
+    <button class="btn icon" id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+    <button class="btn icon" id="redoBtn" title="Redo (Ctrl+Y)">↷</button>
+    <button class="btn" id="checkBtn" title="Validate the scene: off-screen assets, floor clipping, overlaps, safe area">✓ Check</button>
+    <button class="btn" id="importBtn">⇧ Import JSON</button>
+    <button class="btn" id="exportBtn">⎙ Export</button>
+    <button class="btn green" id="renderBtn" disabled>⬇ Render</button>
+    <button class="btn primary" id="playBtn">▶ PLAY</button>
+  </div>
+</header>
+
+<div class="app">
+  <!-- ===== COLUMN A ===== -->
+  <div class="col left">
+    <div class="drawer open" id="drawerCatalog">
+      <div class="drawer-head" data-drawer="drawerCatalog">
+        <div class="section-title" style="color:var(--text)">Asset Catalog <span class="tag mono" id="catalogCount">0</span></div>
+        <span class="chev">▼</span>
+      </div>
+      <div class="drawer-body">
+        <div class="tabs" id="catalogTabs">
+          <div class="tab active" data-tab="characters">Characters</div>
+          <div class="tab" data-tab="environments">Environments</div>
+          <div class="tab" data-tab="widgets">Widgets</div>
+          <div class="tab" data-tab="three">3D</div>
+          <div class="tab" data-tab="media">Media</div>
+          <div class="tab" data-tab="community">Community</div>
+        </div>
+        <div class="catalog-list" id="catalogList"></div>
+      </div>
+    </div>
+    <div class="drawer open" id="drawerTree">
+      <div class="drawer-head" data-drawer="drawerTree">
+        <div class="section-title" style="color:var(--text)">Scene Tree <span class="tag mono" id="layerCount">0 LAYERS</span></div>
+        <span class="chev">▼</span>
+      </div>
+      <div class="drawer-body">
+        <div class="tree-list" id="treeList"></div>
+        <div class="hint" style="padding:6px 12px 12px">Top row = front layer. ▲▼ reorder • 👁 hide • 🔒 lock • double-click name to rename.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COLUMN B ===== -->
+  <div class="viewport">
+    <div class="canvas-toolbar">
+      <div class="grp">
+        <button class="btn sm" id="btnAddKF" title="Add keyframe for selected asset at current frame (K)">◆ Keyframe</button>
+        <button class="btn sm" id="btnDelKF" title="Delete selected keyframe (Del)">✕ KF</button>
+        <button class="btn sm" id="btnDupAsset" title="Duplicate selected asset">⧉ Duplicate</button>
+        <label class="chk"><input type="checkbox" id="chkGrid" checked> Grid</label>
+        <label class="chk"><input type="checkbox" id="chkGhost"> Ghost Poses</label>
+        <label class="chk"><input type="checkbox" id="chkSafe"> Safe Area</label>
+      </div>
+      <div class="grp mono" style="font-size:10px;color:var(--muted)">
+        <span id="threeStatus">3D …</span>
+        <span>•</span>
+        <label class="chk" title="Aspect ratio / composition size">ASPECT <select id="aspectSelect" style="background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:3px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;outline:none"></select></label>
+        <input type="number" id="inW" min="16" step="2" title="Width" style="width:58px;background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:3px 5px;font-family:'JetBrains Mono',monospace;font-size:10px;outline:none">×<input type="number" id="inH" min="16" step="2" title="Height" style="width:58px;background:#0f0f18;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:3px 5px;font-family:'JetBrains Mono',monospace;font-size:10px;outline:none">
+        <label class="chk" title="Re-map asset positions to the new size"><input type="checkbox" id="chkRefit" checked> Refit</label>
+        <span id="canvasSize">1920×1080</span>
+      </div>
+    </div>
+    <div class="stage-area" id="stageArea">
+      <div class="stage-box" id="stageBox">
+        <svg class="stage" id="stage" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+          <rect id="bgRect" x="0" y="0" width="1920" height="1080" fill="#0a0a0f"/>
+          <g id="grid"></g>
+          <g id="assetsLayer"></g>
+          <g id="ghostLayer" opacity="0.18"></g>
+          <g id="hitLayer"></g>
+          <g id="safeLayer"></g>
+          <g id="selLayer"></g>
+          <g id="measureLayer" visibility="hidden"></g>
+        </svg>
+        <canvas class="three" id="threeCanvas"></canvas>
+      </div>
+      <div class="inspector" id="inspector">
+        <div class="insp-head" id="inspHead">
+          <div><b id="inspTitle">No selection</b><small id="inspSub">SELECT A LAYER TO INSPECT</small></div>
+          <span class="chev mono" style="font-size:10px;color:var(--muted)">▼</span>
+        </div>
+        <div class="insp-body" id="inspBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COLUMN C ===== -->
+  <div class="col right">
+    <div class="section-title">AI Prompt Choreographer</div>
+    <div class="prompt-box">
+      <input id="aiPrompt" placeholder='Try: "crouching low sweep kick, arms flare"'/>
+      <button class="btn accent" id="btnGenerate">Generate</button>
+    </div>
+    <div class="hint">Applies to the selected character from the current frame. Understands: jab, cross, hook, uppercut, kick, roundhouse, sweep, crouch, spin, flying knee, balance, mirror.</div>
+
+    <div class="section-title">Martial Arts Presets <span class="tag" id="presetTarget">NO CHARACTER</span></div>
+    <div class="preset-grid" id="presetGrid"></div>
+
+    <div class="section-title">Component Modifiers <span class="tag" id="modTarget">—</span></div>
+    <div class="mod-grid" id="modGrid"></div>
+    <div class="hint" id="modHint">Select a layer to see context-aware motion generators.</div>
+
+    <div class="section-title">Output</div>
+    <div class="export-box json">
+      <div class="ex-head"><b>EXPORT JSON</b><span class="tag mono" style="border:1px solid var(--border);padding:2px 6px;border-radius:5px;font-size:9px">SceneState</span></div>
+      <div class="ex-stats"><span id="stAssets">0 assets</span><span id="stKfs">0 keyframes</span><span id="stBytes">0 kb</span></div>
+      <div class="code-preview" id="jsonPreview"></div>
+      <div class="ex-actions"><button class="btn sm" data-export="json" data-act="open">Open</button><button class="btn sm" data-export="json" data-act="copy">Copy</button><button class="btn sm" data-export="json" data-act="download">Download</button></div>
+    </div>
+    <div class="export-box code">
+      <div class="ex-head"><b>EXPORT REMOTION CODE</b><span class="tag mono" style="border:1px solid var(--border);padding:2px 6px;border-radius:5px;font-size:9px">TSX</span></div>
+      <div class="ex-stats"><span id="stComps">0 components</span><span id="stDur">2.0s</span></div>
+      <div class="code-preview" id="codePreview"></div>
+      <div class="ex-actions"><button class="btn sm green" data-export="code" data-act="open">Open</button><button class="btn sm" data-export="code" data-act="copy">Copy</button><button class="btn sm" data-export="code" data-act="download">Download</button></div>
+    </div>
+  </div>
+
+  <!-- ===== TIMELINE ===== -->
+  <div class="timeline">
+    <div class="tl-toolbar">
+      <div class="grp">
+        <button class="btn icon" id="tlStart" title="Go to start">⏮</button>
+        <button class="btn icon" id="tlPlay" title="Play/Pause (Space)">▶</button>
+        <button class="btn icon" id="tlEnd" title="Go to end">⏭</button>
+        <button class="btn icon active" id="tlLoop" title="Loop">⟲</button>
+        <label>FRAME <input type="number" id="inFrame" min="0" value="0"></label>
+        <label>/ <input type="number" id="inTotal" min="1" value="120"></label>
+        <label>FPS <select id="inFps"><option>24</option><option>30</option><option selected>60</option></select></label>
+        <label>SPEED <input type="range" id="inSpeed" min="0.1" max="2.5" step="0.1" value="1" style="width:70px"><span class="mono" id="vSpeed" style="min-width:26px">1x</span></label>
+      </div>
+      <div class="grp mono" style="font-size:10px;color:var(--muted)">
+        <span id="timeLabel">0.00s</span> / <span id="durationLabel">2.00s</span>
+        <span>•</span><span id="tlHint">Click a lane to scrub • drag ◆ to retime • click ◆ to load</span>
+      </div>
+    </div>
+    <div class="tl-scroll" id="tlScroll">
+      <div class="tl-grid" id="tlGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-head">
+      <div><b>Export Bundle</b> <span class="hint" style="margin-left:8px">Drop these files into a Remotion project next to the remotion/ component library.</span></div>
+      <button class="btn icon" id="modalClose">✕</button>
+    </div>
+    <div class="modal-tabs" id="modalTabs"></div>
+    <div class="modal-body"><pre id="modalCode"></pre></div>
+    <div class="modal-foot">
+      <span class="hint" id="modalInfo"></span>
+      <div style="display:flex;gap:6px"><button class="btn" id="modalCopy">Copy</button><button class="btn green" id="modalDownload">Download file</button><button class="btn" id="modalDownloadAll">Download all</button></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="catalog.js"></script>
+<script src="remotion/community/manifest.js"></script>
+<script src="studio.js"></script>
+</body>
+</html>

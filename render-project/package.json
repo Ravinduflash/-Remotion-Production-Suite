@@ -1,0 +1,29 @@
+{
+  "name": "remotion-studio-render-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Headless Remotion project used by mcp/server.mjs render_scene / render_still. The server copies ../remotion into src/remotion and writes src/MasterScene.tsx before every render.",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts MasterScene out/master.mp4",
+    "still": "remotion still src/index.ts MasterScene out/frame.png"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.17.10",
+    "@remotion/cli": "^4.0.240",
+    "@remotion/effects": "^4.0.526",
+    "@remotion/gif": "^4.0.240",
+    "@remotion/shapes": "^4.0.240",
+    "@remotion/three": "^4.0.240",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.240",
+    "three": "^0.160.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.160.0",
+    "typescript": "^5.6.3"
+  }
+}
