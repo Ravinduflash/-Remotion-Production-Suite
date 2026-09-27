@@ -1009,6 +1009,23 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - "remocn" shifting to #ff5e3a.
   - Yellow marker behind "fast"; custom "Render in one click" with a #86efac marker.
 
+### Ink Underline (remocn)
+
+- **Catalog id:** `remocn_ink_underline`
+- **Files:** `ink-underline.tsx`, plus its registry dependencies `brush.tsx` (imported as `@/components/remocn/brush`) and `stop-motion.ts` (`@/lib/remocn/stop-motion`). All three are from the remocn registry, verbatim, MIT. The page was pasted seven times; it is registered once.
+- **Size:** **`sizeMode: props`**. The stroke is an in-flow block, `width` × (`thickness` + 4), drawn at the box's top-left, and its `width` prop is the stroke length. So the layer box width is the stroke length, passed through as a prop. The default is 630 × 18 at (645, 620), under a centred 1080p title. The source's 420 px and 9 px are scaled 1.5× to 630 and 14.
+- **Controls, all whole clip:**
+  - `width` (stroke length), `thickness`, `color` (#6f7f35).
+  - `pressure` and `release` (the landing and lift-off weight; a low release gives a dry tail), and `grain` (0 gives clean edges).
+  - `delay`, `durationSteps` (poses) and `step` (frames per pose).
+  - `seed`: the same seed always draws the same wobble.
+- **Preview:** `inkunderline`. It is an exact port of the stroke shape and the stepped drag: the seeded cubic spine, the tapered ribbon and the stepped ramp. It omits the paper-grain filter, so its edges are clean.
+- **Timing:** the drag runs from `delay` to `delay` + `durationSteps` × `step`, which is 15 frames by default, in discrete stop-motion poses, then holds. It is transparent, with no exit. Set `delay` to when your text finishes; remocn pairs it with `handwrite`, which is not registered yet. `defaultDurationInFrames: 60`.
+- **Verified:** 2026-09-27, [remocn-ink-contact.png](renders/remocn-ink-contact.png), under a "remocn.dev" `text_card` on #f1eee7 with delay 6:
+  - Nothing at frame 8, which is still inside the first pose.
+  - Partial strokes at frames 12 and 16, then the full stroke with a dry, grainy tail at 30.
+  - Custom: #1d4ed8, seed "hand-2", thickness 22, release 0.05.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

@@ -8024,5 +8024,130 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_ink_underline",
+    "componentName": "InkUnderline",
+    "name": "Ink Underline (remocn)",
+    "desc": "remocn • a hand-dragged ink brush stroke draws itself across in stop-motion poses (durationSteps × step frames) • transparent, sits under a title",
+    "icon": "🖌️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ink-underline",
+      "exportName": "InkUnderline",
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 645,
+      "baseY": 620,
+      "customProperties": {
+        "width": 630,
+        "height": 18,
+        "color": "#6f7f35",
+        "thickness": 14,
+        "pressure": 1,
+        "release": 0.15,
+        "grain": 1,
+        "delay": 0,
+        "durationSteps": 5,
+        "seed": "ink",
+        "step": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Ink Underline (whole clip) • box width = stroke length; place it under your text",
+        "items": [
+          {
+            "key": "width",
+            "label": "STROKE LENGTH px (box width)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 3000,
+            "step": 1
+          },
+          {
+            "key": "thickness",
+            "label": "THICKNESS px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 0.5
+          },
+          {
+            "key": "color",
+            "label": "INK COLOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "pressure",
+            "label": "LANDING PRESSURE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "release",
+            "label": "LIFT-OFF PRESSURE (low = dry tail)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "grain",
+            "label": "GRAIN (0 = clean edges)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "delay",
+            "label": "DELAY (frames)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "durationSteps",
+            "label": "DRAG POSES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "seed",
+            "label": "SEED (same seed = same stroke)",
+            "kind": "text",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "inkunderline"
+    },
+    "defaultDurationInFrames": 60
   }
 ];
