@@ -1417,6 +1417,27 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Crumple:** "Old way" folds into shaded wedges over "New way", becomes a wad, is thrown up-right, and is gone.
   - **Cursor:** walks three points, with the ripple at the second.
 
+### Ecosystem Constellation, Infinite Bento Pan and Live Code Compilation (remocn compositions)
+
+- **Catalog ids:** `remocn_ecosystem_constellation`, `remocn_infinite_bento_pan`, `remocn_live_code_compilation`. Files verbatim, MIT, with no dependencies.
+- **Size:** all three are 1280×720 boxes at scale 1.5, because they lay out in fixed 720p pixels (Constellation uses an SVG viewBox 0 0 1280 720 plus pixel-positioned HTML).
+- **Ecosystem Constellation:**
+  - Motion: `satelliteCount` (3–8) satellites spring in from 1200× their orbit radius, staggered 4 frames apart, then orbit the pulsing hub; each fires its data line for 30 frames in turn.
+  - Logos: the eight brand marks (GitHub, Vercel, Stripe, Slack, Linear, Figma, Notion, Discord) are inline SVGs in the file.
+  - Background: transparent; the test pairs it with a dark radial Backdrop.
+- **Infinite Bento Pan:**
+  - Motion: one linear diagonal glide over a 3500×2500 card grid across the layer's length, read through `useVideoConfig`, with a built-in vignette. The data is sine-driven filler.
+  - Background: transparent; pair with #050505.
+  - Box limit: the pan distance is computed from the composition size (1920×1080), while the box shows 1280×720 at 1.5×. So the glide ends about 640 × 360 grid px short of the far corner. Cards keep their designed size relative to the frame.
+- **Live Code Compilation:** paints its own #070708 background.
+  - Motion: eight fixed code fragments type at 1.6 characters per frame, with 5-frame dwells, from frame 8. The preview button snaps (no transition) to each finished style prop and ends as "Ship it".
+  - Settings: `accentColor` recolours the prop highlight and HMR flash. Leave `speed` at 1, because the schedule is fixed frames.
+- **Preview:** kind `comps`. It uses the same orbit maths and line firing, the same pan (grid simplified), and the exact typing timeline with the button state.
+- **Verified:** 2026-09-28, [remocn-compositions-contact.png](renders/remocn-compositions-contact.png), 10 stills, 0 errors:
+  - **Constellation:** satellites arrive, then orbit with a line firing.
+  - **Bento:** the diagonal glide over the counters, charts, code, bars and gradient cards.
+  - **Live Code:** grey button at frame 40, blue once `background` is typed, the rounded bold "Ship it" at frame 240.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

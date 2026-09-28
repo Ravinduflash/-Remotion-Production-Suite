@@ -16631,5 +16631,185 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_ecosystem_constellation",
+    "componentName": "EcosystemConstellation",
+    "name": "Ecosystem Constellation (remocn)",
+    "desc": "remocn • a central product hub orbited by integration satellites (GitHub, Vercel, Stripe, Slack, Linear, Figma, Notion, Discord) that spring in, then orbit and fire data lines one at a time • transparent",
+    "icon": "🪐",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ecosystem-constellation",
+      "exportName": "EcosystemConstellation",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "satelliteCount": 6,
+        "centerLabel": "V",
+        "accentColor": "#a855f7",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Ecosystem Constellation (remocn) (whole clip) • 1280×720 layout at scale 1.5; logos are fixed in the file; pair with a dark radial backdrop",
+        "items": [
+          {
+            "key": "satelliteCount",
+            "label": "SATELLITES (3–8)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 3,
+            "max": 8,
+            "step": 1
+          },
+          {
+            "key": "centerLabel",
+            "label": "HUB LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "comps",
+      "style": "constellation"
+    },
+    "defaultDurationInFrames": 240
+  },
+  {
+    "id": "remocn_infinite_bento_pan",
+    "componentName": "InfiniteBentoPan",
+    "name": "Infinite Bento Pan (remocn)",
+    "desc": "remocn • one linear diagonal camera glide over an oversized grid of live-looking bento dashboard cards, with a vignette (filler data) • transparent",
+    "icon": "🍱",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/infinite-bento-pan",
+      "exportName": "InfiniteBentoPan",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "panSpeed": 1,
+        "accentColor": "#7c3aed",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Infinite Bento Pan (remocn) (whole clip) • 1280×720 layout at scale 1.5; glide spans the layer length; pair with #050505",
+        "items": [
+          {
+            "key": "panSpeed",
+            "label": "PAN DISTANCE (≤ 1 = one traversal)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "comps",
+      "style": "bento"
+    },
+    "defaultDurationInFrames": 300
+  },
+  {
+    "id": "remocn_live_code_compilation",
+    "componentName": "LiveCodeCompilation",
+    "name": "Live Code Compilation (remocn)",
+    "desc": "remocn • split screen: a Button component is typed on the left and the preview button on the right snaps to each finished style prop (HMR moment) • paints its own background",
+    "icon": "⚡",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/live-code-compilation",
+      "exportName": "LiveCodeCompilation",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "accentColor": "#3b82f6",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Live Code Compilation (remocn) (whole clip) • 1280×720 layout at scale 1.5; code and button are fixed in the file",
+        "items": [
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (leave at 1)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "comps",
+      "style": "livecode"
+    },
+    "defaultDurationInFrames": 260
   }
 ];
