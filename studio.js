@@ -668,7 +668,7 @@
       `export const SCENE: SceneState = ${JSON.stringify(s, null, 2)};`,
       ``,
       `// External / community components referenced by SCENE.assets[].external`,
-      `const EXTERNAL_REGISTRY = { ${externalsOf(s).map(e => e.exportName === 'default' ? e.componentName : e.exportName).join(', ')} };`,
+      `const EXTERNAL_REGISTRY = { ${[...new Set(externalsOf(s).flatMap(e => [e.exportName === 'default' ? e.componentName : e.exportName, ...(e.extraExports || [])]))].join(', ')} };`,
       ``,
       `export const MasterScene: React.FC = () => <SceneRenderer scene={SCENE} registry={EXTERNAL_REGISTRY} />;`,
       `export default MasterScene;`,
@@ -677,7 +677,7 @@
   function externalsOf(s) { const seen = new Map(); (s || store).assets.forEach(a => { if (a.external && !seen.has(a.componentName)) seen.set(a.componentName, Object.assign({ componentName: a.componentName }, a.external)); }); return [...seen.values()]; }
   function externalImports(s) {
     const groups = new Map();
-    externalsOf(s).forEach(e => { const path = e.importPath.startsWith('./') ? './remotion/' + e.importPath.slice(2) : e.importPath; if (!groups.has(path)) groups.set(path, { named: [], def: null }); if (e.exportName === 'default') groups.get(path).def = e.componentName; else groups.get(path).named.push(e.exportName); });
+    externalsOf(s).forEach(e => { const path = e.importPath.startsWith('./') ? './remotion/' + e.importPath.slice(2) : e.importPath; if (!groups.has(path)) groups.set(path, { named: [], def: null }); if (e.exportName === 'default') groups.get(path).def = e.componentName; else groups.get(path).named.push(e.exportName); (e.extraExports || []).forEach(x => { if (!groups.get(path).named.includes(x)) groups.get(path).named.push(x); }); });
     return [...groups.entries()].map(([path, g]) => `import ${[g.def, g.named.length ? `{ ${g.named.join(', ')} }` : null].filter(Boolean).join(', ')} from '${path}';`);
   }
   function buildRoot() {

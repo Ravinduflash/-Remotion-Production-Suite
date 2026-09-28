@@ -14401,5 +14401,630 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 100
+  },
+  {
+    "id": "remocn_particle_dissolve",
+    "componentName": "particleDissolve",
+    "name": "Particle Dissolve (remocn)",
+    "desc": "remocn transition • the frame grinds into drifting grey dust (bright content throws furthest) and the next scene coalesces back out of it (html-in-canvas WebGL2; desaturating-blur fallback)",
+    "icon": "🌪️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/particle-dissolve",
+      "exportName": "particleDissolve",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 36,
+        "particleSize": 4,
+        "scatter": 0.08,
+        "shimmer": 0.6,
+        "aberration": 0.5,
+        "direction": "reveal",
+        "stagger": 0.55
+      }
+    },
+    "controls": [
+      {
+        "group": "Particle Dissolve (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; give it > 1 s",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 36)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "particleSize",
+            "label": "GRAIN px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 30,
+            "step": 0.5
+          },
+          {
+            "key": "scatter",
+            "label": "SCATTER (fraction of frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.005
+          },
+          {
+            "key": "shimmer",
+            "label": "SHIMMER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "aberration",
+            "label": "RGB FRINGE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "direction",
+            "label": "SWEEP",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "reveal",
+                "Reveal (centre out)"
+              ],
+              [
+                "up",
+                "Up"
+              ],
+              [
+                "down",
+                "Down"
+              ],
+              [
+                "left",
+                "Left"
+              ],
+              [
+                "right",
+                "Right"
+              ]
+            ]
+          },
+          {
+            "key": "stagger",
+            "label": "STAGGER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "particle"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 96
+  },
+  {
+    "id": "remocn_grid_wave",
+    "componentName": "gridWave",
+    "name": "Grid Wave (remocn)",
+    "desc": "remocn transition • a wave raises the picture into lit, extruded blocks that set back down carrying the next scene (html-in-canvas WebGL2; scale-fade fallback)",
+    "icon": "🧱",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/grid-wave",
+      "exportName": "gridWave",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 36,
+        "tileSize": 90,
+        "waveWidth": 0.16,
+        "lift": 2,
+        "gap": 0.12,
+        "tint": "#8fb4ff",
+        "direction": "ripple"
+      }
+    },
+    "controls": [
+      {
+        "group": "Grid Wave (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; structured, graphic scenes",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 36)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "tileSize",
+            "label": "TILE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 16,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "waveWidth",
+            "label": "WAVE WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.02,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "lift",
+            "label": "LIFT (0 = flat grid wipe)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 6,
+            "step": 0.05
+          },
+          {
+            "key": "gap",
+            "label": "GAP (fraction of a cell)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.01
+          },
+          {
+            "key": "tint",
+            "label": "CREST TINT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "direction",
+            "label": "WAVE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "ripple",
+                "Ripple (centre out)"
+              ],
+              [
+                "left",
+                "Left"
+              ],
+              [
+                "right",
+                "Right"
+              ],
+              [
+                "up",
+                "Up"
+              ],
+              [
+                "down",
+                "Down"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "gridwave"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 96
+  },
+  {
+    "id": "remocn_displacement",
+    "componentName": "displacement",
+    "name": "Displacement (remocn)",
+    "desc": "remocn transition • every cell of a grid shears out of register at once with colour fringing and grain, hands over at the peak and slides back on the next scene (html-in-canvas WebGL2; lateral-jolt fallback)",
+    "icon": "🧩",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/displacement",
+      "exportName": "displacement",
+      "packages": [
+        "@remotion/transitions",
+        "@paper-design/shaders-react"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "from",
+          "to"
+        ]
+      },
+      "transition": true
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "transitionAt": 30,
+        "transitionFrames": 18,
+        "grid": 60,
+        "cellAspect": 1,
+        "shift": 1,
+        "aberration": 1,
+        "grain": 0.5,
+        "stagger": 0.45
+      }
+    },
+    "controls": [
+      {
+        "group": "Displacement (remocn) • TRANSITION: wrap the outgoing layers as \"from\" and the incoming as \"to\"; fast: well under a second",
+        "items": [
+          {
+            "key": "transitionAt",
+            "label": "TRANSITION STARTS (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "transitionFrames",
+            "label": "TRANSITION FRAMES (natural 18)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 10,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "grid",
+            "label": "CELLS ACROSS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 4,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "cellAspect",
+            "label": "CELL ASPECT (w / h)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 10,
+            "step": 0.05
+          },
+          {
+            "key": "shift",
+            "label": "SHIFT (cells)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "aberration",
+            "label": "RGB FRINGE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "grain",
+            "label": "GRAIN",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "stagger",
+            "label": "STAGGER",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "transition",
+      "style": "displace"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 78
+  },
+  {
+    "id": "remocn_slide_swap",
+    "componentName": "SlideSwapScenes",
+    "name": "Slide Swap (remocn)",
+    "desc": "remocn sequencer • shoves each scene off the canvas on an accelerating curve, then springs the next in from the opposite edge — no overlap, one constant canvas",
+    "icon": "➡️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/slide-swap",
+      "exportName": "SlideSwapScenes",
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "scene1",
+          "scene2",
+          "scene3",
+          "scene4",
+          "scene5",
+          "scene6"
+        ]
+      },
+      "sceneList": {
+        "prop": "scenes",
+        "durationsProp": "sceneDurations"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "sceneDurations": [
+          70,
+          70,
+          70
+        ],
+        "axis": "x",
+        "bg": "",
+        "loop": false,
+        "config": {
+          "slideFrames": 30,
+          "inDistance": 0.28,
+          "inDamping": 60,
+          "inStiffness": 300,
+          "inMass": 0.5,
+          "inFadeFrames": 24,
+          "outFrames": 22,
+          "outDistance": 0.1,
+          "outPower": 5
+        }
+      }
+    },
+    "controls": [
+      {
+        "group": "Slide Swap (remocn) • SEQUENCER: wrap each scene's layers into slots scene1…scene6 (in order); layer length = sum of scene lengths; pre-roll scene content so it is already moving when it slides in",
+        "items": [
+          {
+            "key": "sceneDurations",
+            "label": "SCENE LENGTHS (JSON array, frames; default 70)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "axis",
+            "label": "AXIS",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "x",
+                "Horizontal"
+              ],
+              [
+                "y",
+                "Vertical"
+              ]
+            ]
+          },
+          {
+            "key": "bg",
+            "label": "CANVAS COLOUR (empty = transparent)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "loop",
+            "label": "LOOP",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "config",
+            "label": "CONFIG (JSON: slideFrames, inDistance, inDamping, inStiffness, inMass, inFadeFrames, outFrames, outDistance, outPower)",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "sequencer",
+      "style": "slide"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 210
+  },
+  {
+    "id": "remocn_spring_settle",
+    "componentName": "SpringSettleScenes",
+    "name": "Spring Settle (remocn)",
+    "desc": "remocn sequencer • shrinks each scene away as one group, holds an empty beat (the stage colour changes only there), then lands the next scene’s layers from above on a staggered spring",
+    "icon": "🎈",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/spring-settle",
+      "exportName": "SpringSettleScenes",
+      "packages": [
+        "remotion"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "slots": [
+          "scene1",
+          "scene2",
+          "scene3",
+          "scene4",
+          "scene5",
+          "scene6"
+        ]
+      },
+      "sceneList": {
+        "prop": "scenes",
+        "durationsProp": "sceneDurations",
+        "fields": {
+          "bg": "sceneBgs"
+        },
+        "itemExport": "SpringSettleItem"
+      },
+      "extraExports": [
+        "SpringSettleItem"
+      ]
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "sceneDurations": [
+          70,
+          70,
+          70
+        ],
+        "sceneBgs": [
+          "#fbfbfa",
+          "#141318",
+          "#6d28d9"
+        ],
+        "loop": false,
+        "config": {
+          "gapFrames": 1,
+          "enterScale": 1.24,
+          "enterFadeFrames": 5,
+          "enterStagger": 3,
+          "enterStaggerPower": 0.8,
+          "enterStaggerJitter": 1,
+          "springDamping": 30,
+          "springStiffness": 320,
+          "springMass": 1,
+          "exitFrames": 6,
+          "exitScale": 0.84,
+          "exitPower": 5,
+          "bgFadeFrames": 4
+        }
+      }
+    },
+    "controls": [
+      {
+        "group": "Spring Settle (remocn) • SEQUENCER: wrap each scene's layers into slots scene1…scene6 (in order); each wrapped layer lands as its own item (layer order = stagger order); layer length = sum of lengths + gapFrames per scene",
+        "items": [
+          {
+            "key": "sceneDurations",
+            "label": "SCENE LENGTHS (JSON array, frames; default 70)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "sceneBgs",
+            "label": "SCENE COLOURS (JSON array; crossfade in the gap)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "loop",
+            "label": "LOOP",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "config",
+            "label": "CONFIG (JSON: gapFrames, enterScale, enterStagger…, springDamping…, exitFrames, exitScale, exitPower, bgFadeFrames)",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "sequencer",
+      "style": "settle"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 213
   }
 ];

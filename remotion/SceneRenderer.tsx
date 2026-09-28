@@ -54,6 +54,13 @@ export interface ExternalDescriptor {
    *  { waitFor: css selector }: during the transition each frame is held until that selector matches inside the layer,
    *  plus a few animation frames — for shaders that paint asynchronously (paper-design mounts after an image decode). */
   transition?: boolean | { waitFor?: string };
+  /** Scene sequencers (remocn SlideSwapScenes / SpringSettleScenes): the filled slots (children.slots, in order) become
+   *  customProperties-free `scenes` entries { name: slot, content, durationInFrames: customProperties[durationsProp][i],
+   *  <field>: customProperties[fields[field]][i] }. itemExport wraps every wrapped layer of a scene in that export (e.g.
+   *  SpringSettleItem, index = layer order, full-frame box) so each layer lands on its own staggered beat. */
+  sceneList?: { prop?: string; durationsProp?: string; fields?: Record<string, string>; itemExport?: string };
+  /** More named exports of importPath to bundle next to exportName (e.g. SpringSettleItem for sceneList.itemExport). */
+  extraExports?: string[];
   /** CSS custom properties set on this layer only, e.g. { '--font-geist-sans': 'Segoe UI, sans-serif' } so a component renders in the font it measures with. */
   cssVars?: Record<string, string>;
   /** Constant style on the layer box, e.g. { display: 'flex', alignItems: 'center', justifyContent: 'center' } to centre an inline component (remocn RolodexFlip / ValueSwap). */
@@ -295,12 +302,30 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
           if (fit === 'backdrop') { const pad = ((typeof cp.padding === 'number' ? cp.padding : 4) / 100) * W, fw = W - 2 * pad, fh = H - 2 * pad; scale = Math.max(fw / W, fh / H); left = (fw - W * scale) / 2; top = (fh - H * scale) / 2; }
           else if (fit === 'window') { const win = spec.window || { w: 1, h: 1 }, cw = typeof cp.width === 'number' ? cp.width : W, ww = win.w * cw, wh = win.h * cw; scale = Math.max(ww / W, wh / H); left = (ww - W * scale) / 2; top = (wh - H * scale) / 2; }
           else if (fit === 'stage') { const cs = cp.contentSize; h = cs && cs.width > 0 && cs.height > 0 ? W * (cs.height / cs.width) : H; scale = 0.84; }
-          const body = <div style={{ position: 'absolute', left, top, width: w, height: h, transform: `scale(${scale})`, transformOrigin: '0 0' }}>{renderLayers(kidsOf(ids), w, h, inner)}</div>;
+          const Item = asset.external && asset.external.sceneList && asset.external.sceneList.itemExport ? lookup(asset.external.sceneList.itemExport) : undefined;
+          const nodes = renderLayers(kidsOf(ids), w, h, inner);
+          const body = <div style={{ position: 'absolute', left, top, width: w, height: h, transform: `scale(${scale})`, transformOrigin: '0 0' }}>{Item ? nodes.map((n, i) => <Item key={i} index={i} style={{ position: 'absolute', inset: 0 }}>{n}</Item>) : nodes}</div>;
           // children keep composition time even though the wrapper itself sits inside <Sequence from={startFrame}>
           return asset.startFrame ? <Sequence from={-asset.startFrame} layout="none">{body}</Sequence> : body;
         };
         if (spec.slots && !Array.isArray(asset.wraps)) { for (const slot of spec.slots) { const ids = (asset.wraps as Record<string, string[]>)[slot]; if (ids && ids.length) props[slot] = canvas(ids, 'slot'); } }
         else if (Array.isArray(asset.wraps) && asset.wraps.length) props[spec.prop || 'children'] = canvas(asset.wraps, spec.fit || 'full');
+      }
+      const sl = asset.external && asset.external.sceneList;
+      if (sl && spec && spec.slots) {
+        const at = (key: string | undefined, i: number) => { const v = key ? cp[key] : undefined; return Array.isArray(v) ? v[i] : undefined; };
+        const scenes: Record<string, any>[] = [];
+        spec.slots.forEach((slot, i) => {
+          const content = props[slot]; delete props[slot];
+          if (!content) return;
+          const scene: Record<string, any> = { name: slot, content };
+          const d = at(sl.durationsProp, i); if (typeof d === 'number' && d > 0) scene.durationInFrames = d;
+          for (const [field, key] of Object.entries(sl.fields || {})) { const v = at(key, i); if (v !== undefined && v !== '') scene[field] = v; }
+          scenes.push(scene);
+        });
+        if (sl.durationsProp) delete props[sl.durationsProp];
+        for (const key of Object.values(sl.fields || {})) delete props[key];
+        props[sl.prop || 'scenes'] = scenes;
       }
       let el: React.ReactNode = <C {...props} />;
       if (asset.external && asset.external.transition) {

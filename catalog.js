@@ -341,6 +341,30 @@
   function bezierEase(x1, y1, x2, y2) {
     return t => { if (t <= 0) return 0; if (t >= 1) return 1; let u = t; for (let i = 0; i < 8; i++) { const x = 3 * (1 - u) * (1 - u) * u * x1 + 3 * (1 - u) * u * u * x2 + u * u * u - t, dx = 3 * (1 - u) * (1 - u) * x1 + 6 * (1 - u) * u * (x2 - x1) + 3 * u * u * (1 - x2); if (Math.abs(dx) < 1e-6) break; u = Math.max(0, Math.min(1, u - x / dx)); } return 3 * (1 - u) * (1 - u) * u * y1 + 3 * (1 - u) * u * u * y2 + u * u * u; };
   }
+  /** remocn SlideSwapScenes / SpringSettleScenes: per-slot live state at layer frame f (scenes = filled slots, in order). */
+  function sequencerState(cp, ctx) {
+    const entry = ctx.entry || {}, st = (entry.preview || {}).style, spec = (entry.external && entry.external.children) || {}, slotsFilled = ctx.slotFilled || {}, f = num(ctx.frame, 0), fps = num(ctx.fps, 30);
+    const cfg0 = st === 'settle' ? { sceneFrames: 70, gapFrames: 1, enterScale: 1.24, enterFadeFrames: 5, springDamping: 30, springStiffness: 320, springMass: 1, exitFrames: 6, exitScale: 0.84, exitPower: 5 } : { sceneFrames: 70, slideFrames: 30, inDistance: 0.28, inDamping: 60, inStiffness: 300, inMass: 0.5, inFadeFrames: 24, outFrames: 22, outDistance: 0.1, outPower: 5 };
+    const cfg = Object.assign({}, cfg0, cp.config && typeof cp.config === 'object' ? cp.config : {}), durs = Array.isArray(cp.sceneDurations) ? cp.sceneDurations : [], bgs = Array.isArray(cp.sceneBgs) ? cp.sceneBgs : [];
+    const all = (spec.slots || []).map((slot, i) => ({ slot, i, d: num(durs[i], cfg.sceneFrames), bg: bgs[i] })), list = all.filter(x => slotsFilled[x.slot] !== false && (Object.keys(slotsFilled).length ? slotsFilled[x.slot] : true));
+    const gap = st === 'settle' ? num(cfg.gapFrames, 1) : 0, loop = !!cp.loop, total = list.reduce((a, x) => a + x.d + gap, 0);
+    let w = loop && total > 0 ? ((f % total) + total) % total : f, idx = 0, start = 0;
+    for (let k = 0; k < list.length; k++) { if (w < start + list[k].d + gap || k === list.length - 1) { idx = k; break; } start += list[k].d + gap; }
+    const cur = list[idx], local = w - start, out = {};
+    list.forEach((x, k) => { out[x.slot] = { live: k === idx }; });
+    if (!cur) return { st, slots: out, bg: null };
+    const size = st === 'settle' ? 0 : (cp.axis === 'y' ? num(cp.height, 1080) : num(cp.width, 1920)), live = out[cur.slot];
+    if (st === 'settle') {
+      const exitT = Math.max(0, Math.min(1, (local - (cur.d - cfg.exitFrames)) / Math.max(1, cfg.exitFrames))), ex = Math.pow(exitT, cfg.exitPower);
+      const enterP = idx > 0 || loop ? springAt(local, fps, { damping: cfg.springDamping, stiffness: cfg.springStiffness, mass: cfg.springMass }) : 1, enterO = idx > 0 || loop ? Math.max(0, Math.min(1, local / Math.max(1, cfg.enterFadeFrames))) : 1;
+      live.s = (1 + (cfg.exitScale - 1) * ex) * (cfg.enterScale + (1 - cfg.enterScale) * enterP); live.o = local >= cur.d ? 0 : (1 - ex) * enterO; }
+    else {
+      const exitStart = cur.d - cfg.outFrames;
+      if (local >= exitStart && (idx < list.length - 1 || loop)) { const t = Math.max(0, Math.min(1, (local - exitStart) / Math.max(1, cfg.outFrames))), e = Math.pow(t, cfg.outPower); live.d = -cfg.outDistance * size * e; live.o = 1 - Math.pow(t, 2); }
+      else if (idx > 0 || loop) { const sp = Math.min(1, springAt(local + 1, fps, { damping: cfg.inDamping, stiffness: cfg.inStiffness, mass: cfg.inMass })); live.d = cfg.inDistance * size * (1 - sp); live.o = Math.min(1, (local + 1) / Math.max(1, cfg.inFadeFrames)); }
+      else { live.d = 0; live.o = 1; } }
+    return { st, slots: out, bg: st === 'settle' ? cur.bg : cp.bg, axis: cp.axis === 'y' ? 'y' : 'x' };
+  }
   /** remocn transition presentations: where the layer is in its transition, and each side's look at that progress. */
   function transitionState(cp, ctx) {
     const f = num(ctx.frame, 0), at = num(cp.transitionAt, 30), T = Math.max(1, Math.round(num(cp.transitionFrames, 60))), p = Math.max(0, Math.min(1, (f - at) / T)), phase = f < at ? 'before' : f >= at + T ? 'after' : 'during';
@@ -372,6 +396,7 @@
     else if (st === 'icons') { from.o = I(0.28, 0.5, 1, 0); from.s = I(0, 0.5, 1, 0.94); to.o = I(0.5, 0.68, 0, 1); to.s = I(0.5, 1, 1.06, 1, oc); field = p < 0.3 ? I(0, 0.3, 0, 1) : p < 0.62 ? 1 : I(0.62, 0.9, 1, 0); }
     else if (st === 'glitch') { from.o = p < 0.5 ? 1 : 0; to.o = p >= 0.5 ? 1 : 0; field = Math.sin(Math.PI * p); }
     else if (st === 'ember') { to.o = cl((p - 0.25) / 0.5); field = Math.max(0, Math.sin(p * Math.PI)) ** 0.6 * 0.4; }
+    else if (st === 'particle' || st === 'gridwave' || st === 'displace') { from.o = p < 0.5 ? 1 : 0; to.o = p >= 0.5 ? 1 : 0; field = 0.6 * Math.sin(Math.PI * p); }
     if (phase === 'before') { from = { o: 1, s: 1, ty: 0, tx: 0 }; to.o = 0; field = 0; }
     if (phase === 'after') { from.o = 0; to = { o: 1, s: 1, ty: 0, tx: 0 }; field = 0; }
     return { p, phase, from, to, field, extra, st };
@@ -384,11 +409,14 @@
       return { children: { transform: `translate(${pad} ${pad})`, clip: { w: fw, h: fh, r: num(cp.radius, 1) / 100 * W }, inner: `translate(${((fw - W * sc) / 2).toFixed(2)} ${((fh - H * sc) / 2).toFixed(2)}) scale(${sc.toFixed(4)})` } }; }
     if (kind === 'paperkit' && (entry.preview || {}).style === 'polaroid') { const s = W / 652, mw = 620 * s, mh = 349 * s, cw = num(ctx.compW, 1920), ch = num(ctx.compH, 1080), sc = Math.max(mw / cw, mh / ch);
       return { children: { transform: `translate(${(16 * s).toFixed(2)} ${(16 * s).toFixed(2)})`, clip: { w: mw, h: mh, r: 0 }, inner: `translate(${((mw - cw * sc) / 2).toFixed(2)} ${((mh - ch * sc) / 2).toFixed(2)}) scale(${sc.toFixed(5)})` } }; }
+    if (kind === 'sequencer') { const q = sequencerState(cp, ctx), res = {};
+      Object.entries(q.slots).forEach(([slot, v]) => { const s = v.s || 1, d = v.d || 0, tx = q.axis === 'x' ? d : 0, ty = q.axis === 'y' ? d : 0; res[slot] = v.live ? { transform: `translate(${(W / 2 + tx).toFixed(2)} ${(H / 2 + ty).toFixed(2)}) scale(${s.toFixed(4)}) translate(${-W / 2} ${-H / 2})`, opacity: +(v.o ?? 1).toFixed(3) } : { transform: '', opacity: 0 }; });
+      return res; }
     if (kind === 'transition') { const s = transitionState(cp, ctx), g = (side, fade) => { const op = +(side.o * fade).toFixed(3), ty = (side.ty || 0) / 100 * H;
         if (side.clip) { const a = side.clip[0] * W, b = side.clip[1] * W; return { transform: `translate(${a.toFixed(2)} ${ty.toFixed(2)})`, clip: { w: Math.max(0, b - a), h: H, r: 0 }, inner: `translate(${(-a).toFixed(2)} 0)`, opacity: op, z: side.z || 0 }; }
         return { transform: `translate(${(W / 2 + (side.tx || 0) / 100 * W).toFixed(2)} ${(H / 2 + ty).toFixed(2)}) scale(${side.s.toFixed(4)}) translate(${-W / 2} ${-H / 2})${side.r ? ` rotate(${side.r.toFixed(3)} ${((side.ox ?? 0.5) * W).toFixed(1)} ${((side.oy ?? 0.5) * H).toFixed(1)})` : ''}`, opacity: op, z: side.z || 0 }; };
       // the field is drawn over the exiting scene (and, in Shader Seam, over the entering one too); the preview stacks slots above it, so fade them by its opacity
-      const over = ['seam', 'dither', 'ascii', 'icons'].includes(s.st); // fields drawn above both scenes; the caret / glitch / ember stand-ins are marks, not covers
+      const over = ['seam', 'dither', 'ascii', 'icons', 'particle', 'gridwave', 'displace'].includes(s.st); // fields drawn above both scenes; the caret / glitch / ember stand-ins are marks, not covers
       return { from: g(s.from, ['caret', 'glitch', 'ember'].includes(s.st) ? 1 : 1 - s.field), to: g(s.to, over ? 1 - s.field : 1) }; }
     if (kind === 'drift') { const D = Math.max(1, num(ctx.layerDuration, 90)), sc = 1 + num(cp.grow, 0.035) * cl(f / D); return { children: { transform: `translate(${W / 2} ${H / 2}) scale(${sc.toFixed(5)}) translate(${-W / 2} ${-H / 2})` } }; }
     if (kind === 'stage') { const cs = cp.contentSize && cp.contentSize.width > 0 ? cp.contentSize : { width: W, height: H }, pw = W * 0.84, ph = pw * cs.height / cs.width;
@@ -938,6 +966,7 @@
           return stage(`<g opacity="${lg.o.toFixed(3)}" transform="translate(0 ${(lg.ty + intro.ty * 0.4).toFixed(2)})">${logo}</g><g opacity="${bf.o.toFixed(3)}" transform="translate(0 ${(bf.ty + intro.ty * 0.6).toFixed(2)})">${around(640, 327, intro.sc, box)}</g><g opacity="${hf.o.toFixed(3)}" transform="translate(0 ${hf.ty.toFixed(2)})">${hints}</g>`); }
         return '';
       }
+      case 'sequencer': { const q = sequencerState(cp, ctx); return q.bg ? `<rect width="${W}" height="${H}" fill="${esc(q.bg)}"/>` : `<rect width="${W}" height="${H}" fill="none"/>`; }
       case 'transition': { // remocn transition presentations: a stand-in for the shader field (the real ones are WebGL); the wrapped from/to scenes move per the presentation's own curves (wrapGeometry)
         const s = transitionState(cp, ctx); if (s.phase !== 'during' || s.field <= 0.001) return `<rect width="${W}" height="${H}" fill="none"/>`;
         const cols = Array.isArray(cp.colors) && cp.colors.length ? cp.colors.map(String) : ['#3a3a52', '#4a4a68', '#8f88ae'], back = esc(cp.colorBack || (s.st === 'seam' || s.st === 'spiral' ? '#07060b' : '#141318')), id = `${ctx.uid}_tr`, cx = W / 2, cy = H / 2, R = Math.hypot(W, H) / 2, k = s.extra.k || 0;
@@ -960,6 +989,9 @@
           for (let i = 0; i < n; i++) { const x = ((i % colsN) + 0.5) / colsN * W, y = (Math.floor(i / colsN) + 0.5) / rowsN * H, fly = s.p > 0.5 ? (s.p - 0.5) * 2 * num(cp.flyDistance, 260) : 0, a = i * 2.4, sz = Math.min(W / colsN, H / rowsN) * 0.35; g += `<g transform="translate(${(x + Math.cos(a) * fly).toFixed(1)} ${(y + Math.sin(a) * fly).toFixed(1)}) rotate(${(s.p * 160 * ((i % 2) * 2 - 1)).toFixed(1)})" fill="none" stroke="${col}" stroke-width="${(num(cp.strokeWidth, 2) * sz / 12).toFixed(2)}" stroke-linecap="round" stroke-linejoin="round">${i % 3 === 0 ? `<circle r="${sz.toFixed(1)}"/>` : i % 3 === 1 ? `<rect x="${(-sz).toFixed(1)}" y="${(-sz).toFixed(1)}" width="${(2 * sz).toFixed(1)}" height="${(2 * sz).toFixed(1)}" rx="${(sz * 0.3).toFixed(1)}"/>` : `<path d="M${-sz} ${sz * 0.6} L0 ${-sz} L${sz} ${sz * 0.6} Z"/>`}</g>`; } }
         else if (s.st === 'glitch') { const n = Math.max(2, Math.round(num(cp.slices, 24))); g = ''; for (let i = 0; i < n; i++) { const h = Math.abs(Math.sin(i * 12.9898 + Math.floor(s.p * 22) * 78.233) * 43758.5453) % 1, sh = (h - 0.5) * 0.24 * W * num(cp.intensity, 1) * s.field; g += `<rect x="${sh.toFixed(1)}" y="${(i / n * H).toFixed(1)}" width="${W}" height="${(H / n).toFixed(1)}" fill="${i % 2 ? '#ff0040' : '#00e5ff'}" opacity="${(0.18 * num(cp.rgbSplit, 1)).toFixed(3)}"/>`; } }
         else if (s.st === 'ember') { g = `<rect width="${W}" height="${H}" fill="${esc(cp.glowColor || '#ff7a2f')}"/>`; }
+        else if (s.st === 'particle') { g = `<rect width="${W}" height="${H}" fill="#1a1a1e"/>`; for (let i = 0; i < 900; i++) { const h1 = Math.abs(Math.sin(i * 12.9898) * 43758.5453) % 1, h2 = Math.abs(Math.sin(i * 78.233) * 12543.123) % 1, drift = s.p < 0.5 ? s.p : 1 - s.p; g += `<circle cx="${((h1 + (h2 - 0.5) * num(cp.scatter, 0.08) * 4 * drift) * W).toFixed(1)}" cy="${((h2 + (h1 - 0.5) * num(cp.scatter, 0.08) * 4 * drift) * H).toFixed(1)}" r="${(num(cp.particleSize, 4) * (0.5 + h1)).toFixed(1)}" fill="#bbbbc4" opacity="${(0.3 + 0.7 * num(cp.shimmer, 0.6) * h2).toFixed(2)}"/>`; } }
+        else if (s.st === 'gridwave') { const ts = Math.max(8, num(cp.tileSize, 90)), gp = num(cp.gap, 0.12) * ts, tint = esc(cp.tint || '#8fb4ff'); g = `<rect width="${W}" height="${H}" fill="#0b0d14"/>`; for (let y = 0; y < H; y += ts) for (let x = 0; x < W; x += ts) { const dist = Math.hypot(x + ts / 2 - W / 2, y + ts / 2 - H / 2) / Math.hypot(W / 2, H / 2), crest = Math.max(0, 1 - Math.abs(dist - s.p) / Math.max(0.02, num(cp.waveWidth, 0.16))); g += `<rect x="${(x + gp / 2).toFixed(1)}" y="${(y + gp / 2 - crest * num(cp.lift, 2) * 6).toFixed(1)}" width="${(ts - gp).toFixed(1)}" height="${(ts - gp).toFixed(1)}" fill="${tint}" opacity="${(0.15 + 0.85 * crest).toFixed(2)}"/>`; } }
+        else if (s.st === 'displace') { const n = Math.max(4, Math.round(num(cp.grid, 60) / 4)), cw = W / n, ch = cw / Math.max(0.1, num(cp.cellAspect, 1)); g = `<rect width="${W}" height="${H}" fill="#111"/>`; for (let y = 0, j = 0; y < H; y += ch, j++) for (let x = 0, i = 0; x < W; x += cw, i++) { const h = Math.abs(Math.sin((i * 31 + j * 17) * 12.9898) * 43758.5453) % 1; g += `<rect x="${(x + (h - 0.5) * cw * num(cp.shift, 1) * s.field * 2).toFixed(1)}" y="${y.toFixed(1)}" width="${(cw - 1).toFixed(1)}" height="${(ch - 1).toFixed(1)}" fill="${h > 0.66 ? '#ff3b6b' : h > 0.33 ? '#37d6ff' : '#666'}" opacity="0.55"/>`; } }
         else if (s.st === 'seam') { g += `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b1b4f"/><stop offset="0.45" stop-color="#b3447a"/><stop offset="0.7" stop-color="#f0a35c"/><stop offset="1" stop-color="#1b3b6f"/></linearGradient></defs><rect width="${W}" height="${H}" fill="url(#${id})"/>`; for (let i = 0; i < 18; i++) g += `<path d="M${-W * 0.1} ${(i / 18 * H * 1.3).toFixed(1)} C ${W * 0.3} ${(i / 18 * H - H * 0.2).toFixed(1)}, ${W * 0.7} ${(i / 18 * H + H * 0.3).toFixed(1)}, ${W * 1.1} ${(i / 18 * H).toFixed(1)}" stroke="#fff" stroke-opacity="0.08" stroke-width="${(H * 0.02).toFixed(1)}" fill="none"/>`; }
         const mask = s.st === 'spiral' && s.extra.aperture > 0 ? `<mask id="${id}_m"><rect width="${W}" height="${H}" fill="#fff"/><circle cx="${cx}" cy="${cy}" r="${((R + Math.min(W, H) * num(cp.softness, 0.12)) * s.extra.aperture).toFixed(1)}" fill="#000" style="filter:blur(${(Math.min(W, H) * 0.02).toFixed(0)}px)"/></mask>` : '';
         return `${mask}<g opacity="${s.field.toFixed(3)}" ${mask ? `mask="url(#${id}_m)"` : ''}><svg width="${W}" height="${H}" overflow="hidden">${g}</svg></g>`;

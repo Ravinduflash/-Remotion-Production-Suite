@@ -41,6 +41,13 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
     - **How TransitionLayer does it:** it passes these props and pairs the two captures with the same `drawIfSynced` logic as `@remotion/transitions`' `TransitionSeriesChildren`. Without them the canvas path throws `onElementImageRef.current is not a function`.
   - **Stacking:** a presentation may re-stack its sides. Page Turn gives the exiting wrapper `zIndex: 2`, and that works because both sides render as siblings. The studio preview now paints slots in `wrapGeometry` `z` order, so `from` can sit above `to`.
   - **Clipping and rotation:** slot geometry can also clip (Caret Wipe's bands) and rotate about an origin (Page Turn, Lens Zoom).
+- **Scene sequencers, 2026-09-28:** some remocn components own a whole list of scenes (`SlideSwapScenes`, `SpringSettleScenes`) instead of sitting between two sequences. `external.sceneList` handles them:
+  - **Slots to scenes:** the wrapper's filled slots, `scene1`…`scene6` in order, become the `scenes` prop.
+  - **Scene entries:** each entry is `{ name: slot, content, durationInFrames: customProperties[durationsProp][i], …fields }`, where `fields` maps a scene key to a JSON-array prop; Spring Settle's `bg` comes from `sceneBgs`.
+  - **Timing:** the sequencer renders content with its own frame and no inner `Sequence`, so wrapped layers keep composition time.
+  - **Per-layer items:** `sceneList.itemExport` wraps each wrapped layer of a scene in that export, which is `SpringSettleItem` with `index` = layer order and a full-frame box. That item is what applies Spring Settle's landing spring.
+  - **Stagger limit:** consecutive SVG layers such as `text_card`s share one render segment, so they land as one item. Interleave an HTML layer between them, or use HTML layers, to stagger them.
+  - **Second import:** `external.extraExports` bundles more named exports of the same file into `MasterScene`'s import line and `EXTERNAL_REGISTRY`; `SpringSettleItem` needs this.
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
@@ -1288,6 +1295,45 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Found while testing:**
   - The first two Glitch stills failed before TransitionLayer passed `onElementImage`.
   - A studio edit I made commented out a line, so `update_asset` wraps threw `kids is not defined`. Both were fixed before the verified run, and neither was ever committed.
+
+### Particle Dissolve, Grid Wave and Displacement (remocn canvas transitions)
+
+- **Catalog ids:** `remocn_particle_dissolve`, `remocn_grid_wave`, `remocn_displacement`. These are transition layers built on the shared `canvas-presentation` scaffolding, so they read real pixels through html-in-canvas.
+- **Files:** verbatim, MIT.
+- **Default lengths:** particle 36, grid 36, displacement 18.
+- **Controls:**
+  - particle: grain size, scatter, shimmer, aberration, sweep (reveal, up, down, left, right), stagger;
+  - grid: tile size, wave width, lift, gap, crest tint, wave (ripple, left, right, up, down);
+  - displacement: cells across, cell aspect, shift, aberration, grain, stagger.
+- **Preview:** a hand-over at p = 0.5 with a stand-in field: dust dots, a rising block grid, or offset fringe tiles.
+- **Verified:** 2026-09-28, [remocn-transitions4-contact.png](renders/remocn-transitions4-contact.png). The real canvas path, no errors:
+  - **Particle:** the bright title grinds to dust first, the frame is grey shimmering dust at 0.5, and B coalesces from the centre.
+  - **Grid:** a ripple of raised blocks carries B outward from the centre.
+  - **Displacement:** the whole grid shears with fringing and grain, then settles on B.
+
+### Slide Swap and Spring Settle (remocn scene sequencers)
+
+- **Catalog ids:** `remocn_slide_swap` (`SlideSwapScenes`) and `remocn_spring_settle` (`SpringSettleScenes`, plus `SpringSettleItem`). Spring Settle uses `scene-motion.ts`, which is already installed and byte-identical to the registry copy. Files verbatim, MIT.
+- **How to use:**
+  1. Add the layer.
+  2. Wrap each scene's layers into slots with `update_asset { wraps: { scene1: [...], scene2: [...] } }`, up to six scenes.
+  3. Set `sceneDurations` (a JSON array; unset entries use 70).
+  4. Make the layer as long as the sequence. For Slide Swap that's the sum of the lengths, 210 for 3 × 70. For Spring Settle it's the sum plus `gapFrames` per scene, 213 by default.
+- **Slide Swap:**
+  - Motion: the outgoing content is shoved over the last `outFrames` (22) on a power-5 curve with an accelerating fade, and is gone before the next scene's first frame. The next springs in from `inDistance` (0.28) on a clamped spring.
+  - Background: `bg` is one constant canvas; leave it empty to stay transparent over a Backdrop, as in the test.
+  - Options: `axis` x or y; `config` is a JSON object with every knob; `loop`.
+  - Content: pre-roll scene content so it's already moving when it arrives.
+- **Spring Settle:**
+  - Motion: each scene shrinks toward 0.84 as one group over `exitFrames` (6), then `gapFrames` (1) of empty stage, then the next scene's layers land from 1.24× on a stiff spring, staggered by layer order.
+  - Background: `sceneBgs` crossfade inside the gap only.
+  - Options: `config` JSON, `loop`.
+- **Preview:** kind `sequencer`. `sequencerState()` rebuilds the slot timeline and the in/out curves, and draws the stage colour; the filled slots are the scenes.
+- **`check_scene` note:** it warns `simultaneous_entrances` because the sequencer, not the layers' start frames, times the scenes. It's safe to ignore.
+- **Verified:** 2026-09-28, same contact sheet, three `text_card` scenes (Hook, Claim, Price):
+  - **Slide:** Hook holds, fades while shoved, and is gone; Claim springs in from the right and settles by frame 80.
+  - **Settle:** Hook holds and shrinks away; the stage is empty at frame 71, mid colour crossfade; Claim lands from 1.24× at frame 73; the purple Price scene follows.
+  - **Stagger limit seen:** the title and subtitle land together, because both are SVG `text_card`s in one segment; see the pipeline note.
 
 ### Typewriter Text
 
