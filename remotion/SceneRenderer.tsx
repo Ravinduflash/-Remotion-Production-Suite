@@ -38,9 +38,10 @@ export interface ExternalDescriptor {
    *  `wraps` are rendered as this component's children, on a canvas the size of the composition.
    *  fit: 'full' (1:1) | 'backdrop' (cover the inset frame; inset = customProperties.padding % of width) |
    *       'stage' (0.84 × width plane; height from customProperties.contentSize) | 'slot' (unscaled, slot-relative) |
-   *       'window' (cover a media window of window.w × window.h, as fractions of customProperties.width — remocn Polaroid).
+   *       'window' (cover a media window of window.w × window.h, as fractions of customProperties.width — remocn Polaroid) |
+   *       'box' (1:1, shifted by the layer's own position so wrapped layers stay where they are — remocn CrumpleToss clips to its box).
    *  slots: named props (e.g. ['chat','preview']); then `wraps` is { slot: ids[] } instead of ids[]. */
-  children?: { prop?: string; fit?: 'full' | 'backdrop' | 'stage' | 'slot' | 'window'; slots?: string[]; window?: { w: number; h: number } };
+  children?: { prop?: string; fit?: 'full' | 'backdrop' | 'stage' | 'slot' | 'window' | 'box'; slots?: string[]; window?: { w: number; h: number } };
   /** Containers whose children are plain text (remocn PaperSticker): children = <span style>{customProperties[prop]}</span>;
    *  styleMap maps customProperties keys to the span's CSS (e.g. { fontSize: 'fontSize' }); those keys are not forwarded. */
   textChildren?: { prop: string; styleMap?: Record<string, string> };
@@ -301,6 +302,7 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
           let left = 0, top = 0, scale = 1, w = W, h = H;
           if (fit === 'backdrop') { const pad = ((typeof cp.padding === 'number' ? cp.padding : 4) / 100) * W, fw = W - 2 * pad, fh = H - 2 * pad; scale = Math.max(fw / W, fh / H); left = (fw - W * scale) / 2; top = (fh - H * scale) / 2; }
           else if (fit === 'window') { const win = spec.window || { w: 1, h: 1 }, cw = typeof cp.width === 'number' ? cp.width : W, ww = win.w * cw, wh = win.h * cw; scale = Math.max(ww / W, wh / H); left = (ww - W * scale) / 2; top = (wh - H * scale) / 2; }
+          else if (fit === 'box') { left = -p.baseX; top = -p.baseY; }
           else if (fit === 'stage') { const cs = cp.contentSize; h = cs && cs.width > 0 && cs.height > 0 ? W * (cs.height / cs.width) : H; scale = 0.84; }
           const Item = asset.external && asset.external.sceneList && asset.external.sceneList.itemExport ? lookup(asset.external.sceneList.itemExport) : undefined;
           const nodes = renderLayers(kidsOf(ids), w, h, inner);

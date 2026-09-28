@@ -16032,5 +16032,604 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_paper_wobble",
+    "componentName": "PaperWobble",
+    "name": "Paper Wobble (remocn)",
+    "desc": "remocn • WRAPPER: holds one small offset + tilt per stop-motion pose, then snaps to the next — wrapped layers feel hand-placed on a desk",
+    "icon": "🫨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/paper-wobble",
+      "exportName": "PaperWobble",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "seed": "wobble",
+        "amp": 2.1,
+        "rotAmp": 0.35,
+        "step": 3,
+        "style": {
+          "position": "absolute",
+          "inset": 0
+        }
+      }
+    },
+    "controls": [
+      {
+        "group": "Paper Wobble (remocn) (whole clip) • wrap layers with update_asset wraps; one layer per object, each with its own seed",
+        "items": [
+          {
+            "key": "seed",
+            "label": "SEED (same seed = lockstep)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "amp",
+            "label": "MAX OFFSET px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 0.1
+          },
+          {
+            "key": "rotAmp",
+            "label": "MAX TILT °",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.01
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperfx",
+      "style": "wobble"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_ink_arrow",
+    "componentName": "InkArrow",
+    "name": "Ink Arrow (remocn)",
+    "desc": "remocn • a hand-drawn brush arrow drags itself from one point to another in stop-motion poses, then draws its head one stroke at a time • transparent",
+    "icon": "↘️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ink-arrow",
+      "exportName": "InkArrow",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 700,
+      "baseY": 350,
+      "customProperties": {
+        "width": 480,
+        "height": 345,
+        "from": {
+          "x": 30,
+          "y": 30
+        },
+        "to": {
+          "x": 450,
+          "y": 315
+        },
+        "curvature": 0.35,
+        "color": "#26242c",
+        "strokeWidth": 12,
+        "pressure": 0.2,
+        "release": 1,
+        "grain": 1,
+        "delay": 0,
+        "drawDur": 36,
+        "headSize": 36,
+        "seed": "arrow",
+        "step": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Ink Arrow (remocn) (whole clip) • from/to are px in the layer box (the box only positions it; the arrow may overflow)",
+        "items": [
+          {
+            "key": "from",
+            "label": "FROM (JSON {x, y})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "to",
+            "label": "TO (JSON {x, y}) — head lands here",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "curvature",
+            "label": "CURVATURE (± bow)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1.5,
+            "max": 1.5,
+            "step": 0.01
+          },
+          {
+            "key": "color",
+            "label": "INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "strokeWidth",
+            "label": "BRUSH WIDTH px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 0.5
+          },
+          {
+            "key": "pressure",
+            "label": "OPENING PRESSURE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "release",
+            "label": "RELEASE (weight at head)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "grain",
+            "label": "GRAIN (0 = clean)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "delay",
+            "label": "DELAY frames",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "drawDur",
+            "label": "DRAW frames",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "headSize",
+            "label": "HEAD STROKE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 4,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "headDur",
+            "label": "HEAD frames (unset = 4 poses)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "seed",
+            "label": "SEED",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperfx",
+      "style": "arrow"
+    },
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_scribble_circle",
+    "componentName": "ScribbleCircle",
+    "name": "Scribble Circle (remocn)",
+    "desc": "remocn • a brush loop sweeps once (and a bit) around a region, opening thin and closing thick with dry-brush grain • transparent; box = the loop",
+    "icon": "⭕",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/scribble-circle",
+      "exportName": "ScribbleCircle",
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 800,
+      "baseY": 440,
+      "customProperties": {
+        "width": 320,
+        "height": 190,
+        "color": "#6f7f35",
+        "strokeWidth": 21,
+        "pressure": 0.2,
+        "grain": 1,
+        "delay": 0,
+        "durationSteps": 10,
+        "laps": 1.15,
+        "seed": "scribble",
+        "step": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Scribble Circle (remocn) (whole clip) • box width/height = the loop; place it over what you are circling",
+        "items": [
+          {
+            "key": "color",
+            "label": "INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "strokeWidth",
+            "label": "BRUSH WIDTH px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 80,
+            "step": 0.5
+          },
+          {
+            "key": "pressure",
+            "label": "OPENING PRESSURE (1 = no taper)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "grain",
+            "label": "GRAIN (0 = clean)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "delay",
+            "label": "DELAY frames",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "durationSteps",
+            "label": "POSES TO DRAW",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "laps",
+            "label": "LAPS (>1 overshoots)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.2,
+            "max": 4,
+            "step": 0.01
+          },
+          {
+            "key": "seed",
+            "label": "SEED",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperfx",
+      "style": "scribble"
+    },
+    "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_crumple_toss",
+    "componentName": "CrumpleToss",
+    "name": "Crumple Toss (remocn)",
+    "desc": "remocn • WRAPPER: crushes the wrapped element into a shaded paper ball (it folds, no swap) and throws it out of frame — put the replacement behind it",
+    "icon": "🗑️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/crumple-toss",
+      "exportName": "CrumpleToss",
+      "sizeMode": "props",
+      "children": {
+        "fit": "box"
+      }
+    },
+    "defaults": {
+      "baseX": 510,
+      "baseY": 300,
+      "customProperties": {
+        "width": 900,
+        "height": 480,
+        "at": 6,
+        "segments": 9,
+        "layers": 2,
+        "randomness": 0.6,
+        "crumpleSteps": 4,
+        "tossSteps": 5,
+        "direction": -35,
+        "distance": 1350,
+        "spin": 220,
+        "crushTo": 0.34,
+        "seed": "toss",
+        "step": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Crumple Toss (remocn) (whole clip) • box = the element being thrown; wrap its layers (they keep their place); renders nothing after at + (crumple + toss) poses",
+        "items": [
+          {
+            "key": "at",
+            "label": "CRUMPLE AT (frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "segments",
+            "label": "WEDGES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 3,
+            "max": 24,
+            "step": 1
+          },
+          {
+            "key": "layers",
+            "label": "LAYERS per wedge",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 1
+          },
+          {
+            "key": "randomness",
+            "label": "RANDOMNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "crumpleSteps",
+            "label": "CRUSH POSES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "tossSteps",
+            "label": "FLIGHT POSES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "direction",
+            "label": "THROW ANGLE ° (neg = up)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -180,
+            "max": 180,
+            "step": 1
+          },
+          {
+            "key": "distance",
+            "label": "ARC SCALE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 4000,
+            "step": 10
+          },
+          {
+            "key": "spin",
+            "label": "SPIN °",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1080,
+            "max": 1080,
+            "step": 5
+          },
+          {
+            "key": "crushTo",
+            "label": "WAD SIZE (of shorter side)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.05,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "seed",
+            "label": "SEED",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "step",
+            "label": "FRAMES PER POSE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 12,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperfx",
+      "style": "crumple"
+    },
+    "defaultDurationInFrames": 45
+  },
+  {
+    "id": "remocn_simulated_cursor",
+    "componentName": "SimulatedCursor",
+    "name": "Simulated Cursor (remocn)",
+    "desc": "remocn • a synthetic mouse cursor walks waypoints (24-frame legs + holds) and fires a click ripple, for narrating a UI • transparent overlay",
+    "icon": "🖱️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/simulated-cursor",
+      "exportName": "SimulatedCursor",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "points": [
+          {
+            "x": 300,
+            "y": 225,
+            "hold": 20
+          },
+          {
+            "x": 1200,
+            "y": 540,
+            "hold": 25,
+            "click": true
+          },
+          {
+            "x": 1575,
+            "y": 840,
+            "hold": 20
+          }
+        ],
+        "color": "#ffffff",
+        "size": 48,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Simulated Cursor (remocn) (whole clip) • points are composition pixels",
+        "items": [
+          {
+            "key": "points",
+            "label": "POINTS (JSON [{x, y, hold?, click?}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "CURSOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "SIZE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 8,
+            "max": 200,
+            "step": 1
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "paperfx",
+      "style": "cursor"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150
   }
 ];

@@ -48,6 +48,9 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Per-layer items:** `sceneList.itemExport` wraps each wrapped layer of a scene in that export, which is `SpringSettleItem` with `index` = layer order and a full-frame box. That item is what applies Spring Settle's landing spring.
   - **Stagger limit:** consecutive SVG layers such as `text_card`s share one render segment, so they land as one item. Interleave an HTML layer between them, or use HTML layers, to stagger them.
   - **Second import:** `external.extraExports` bundles more named exports of the same file into `MasterScene`'s import line and `EXTERNAL_REGISTRY`; `SpringSettleItem` needs this.
+- **`box` child fit, 2026-09-28:** `external.children.fit: 'box'` draws wrapped layers 1:1, shifted by the wrapper layer's own `baseX`/`baseY`, so they stay where they are on screen.
+  - Why: this is for wrappers that clip or transform their children inside their own box. Remocn Crumple Toss clips its wedges to `width × height`.
+  - Preview: the studio's preview ctx now carries `baseX`/`baseY` for this.
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
 - **Z-order fix, 2026-09-27:** `SceneRenderer` used to draw every external component in one HTML layer above all SVG layers. A full-frame external background therefore covered the whole scene in the render, while the studio preview looked right. Layers now render in scene-tree order, with consecutive SVG assets sharing one `<svg>`. 3D layers are still always on top.
 - **Full-frame backgrounds:** register with `fullFrame: true` and `sizeMode: none`. Refit then resizes their box on aspect changes, and `check_scene` treats them as the background. Add them first so they are the back layer.
@@ -1383,6 +1386,36 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Burst:** circle, tapered ribbons, tilted ring, then the exiting ring.
   - **Confetti:** the burst and its fall.
   - **TV Power Off:** Scene A, the squash to a glowing band, the pinched line with a phosphor bloom, the dot, then black.
+
+### Paper Wobble, Ink Arrow, Scribble Circle, Crumple Toss and Simulated Cursor (remocn effects)
+
+- **Catalog ids:** `remocn_paper_wobble`, `remocn_ink_arrow`, `remocn_scribble_circle`, `remocn_crumple_toss`, `remocn_simulated_cursor`.
+- **Files:** verbatim, MIT, reusing the installed `stop-motion.ts` and `brush.tsx`, both byte-identical to the registry copies.
+- **Paper Wobble:** a WRAPPER, full frame, with the wrapper div set to `position: absolute; inset: 0` through a fixed `style` prop so the tilt pivots on the frame centre.
+  - Motion: holds one offset and tilt per pose (`amp` 2.1 px, which is 1.4 × 1.5 for 1080p; `rotAmp` 0.35°; `step` 3).
+  - Use: add one wobble layer per object, each with its own `seed`; the same seed moves in lockstep.
+- **Ink Arrow:**
+  - Placement: `from`/`to` are JSON `{x, y}` in the layer box's own pixels. The box only positions it, and the arrow overflows freely.
+  - Drawing: the shaft drags over `drawDur` (36), then the head draws one stroke at a time over `headDur` (default 4 poses).
+  - Defaults are 1.5× the 720p values: `strokeWidth` 12, `headSize` 36.
+- **Scribble Circle:**
+  - Size: `sizeMode: props`, so the box is the loop's width × height; place it over the target.
+  - Drawing: the brush opens at `pressure` 0.2 and thickens around 1.15 `laps` in `durationSteps` (10) equal-arc poses, with dry-brush `grain`. `strokeWidth` defaults to 21, 1.5× the 720p value.
+  - Layer length: 150, not the natural 30, because the mark stays after it's drawn. The first registration used 60, which hid the circle mid-annotation in the test; fixed.
+- **Crumple Toss:** a WRAPPER with `sizeMode: props` and `children.fit: 'box'`. Size the box to the element being thrown and wrap its layers, which keep their place.
+  - Motion: from `at`, the card is sliced into `segments × layers` shaded wedges that fold into a wad; the card becomes the ball, with no swap. It's thrown over `tossSteps` poses along `direction`/`distance` (default 1350 at 1080p) with `spin`, then renders nothing after `at + (crumpleSteps + tossSteps) × step`.
+  - Replacement: put the new card on a layer underneath.
+  - Cost: the wrapped layers draw once per panel, 18 copies at 9 × 2.
+- **Simulated Cursor:** full frame and transparent.
+  - Path: `points` are JSON composition pixels `{x, y, hold?, click?}`. Each leg takes 24 frames, then the point's hold (default 15), and `click` fires a ripple on arrival.
+  - Defaults are 1.5× the 720p path, and `size` is 48.
+- **Preview:** kind `paperfx`, with the stop-motion hashes, poses and draw schedules ported. The wobble and crumple child transforms come from `wrapGeometry`. The brush grain and fold shading are simplified.
+- **`check_scene` note:** it warns `simultaneous_entrances` for the annotation and crumple scenes because their timing is in `delay`/`at` props. It's safe to ignore.
+- **Verified:** 2026-09-28, [remocn-paper-effects-contact.png](renders/remocn-paper-effects-contact.png), 16 stills, 0 errors:
+  - **Wobble:** the card shifts by about a pixel per pose, measured.
+  - **Annotation:** the loop opens thin around "$29", thickens and overshoots its start, then the ink arrow drags in and draws its head.
+  - **Crumple:** "Old way" folds into shaded wedges over "New way", becomes a wad, is thrown up-right, and is gone.
+  - **Cursor:** walks three points, with the ripple at the second.
 
 ### Typewriter Text
 
