@@ -1335,6 +1335,55 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Settle:** Hook holds and shrinks away; the stage is empty at frame 71, mid colour crossfade; Claim lands from 1.24× at frame 73; the purple Price scene follows.
   - **Stagger limit seen:** the title and subtitle land together, because both are SVG `text_card`s in one segment; see the pipeline note.
 
+### GitHub Stars, GitHub Sponsors, X Follow Card, X Followers Overview and Logo Enter (remocn social)
+
+- **Catalog ids:** `remocn_github_stars`, `remocn_github_sponsors`, `remocn_x_follow_card`, `remocn_x_followers_overview`, `remocn_logo_enter`.
+- **Files:** verbatim, MIT, plus these registry dependencies:
+  - `number-wheel.tsx` (the `Odometer` behind Stars);
+  - `cursor.tsx` + `use-cursor-path.ts` (the cursor primitive for the Follow Card, using the `remocn-ui` core lib);
+  - `confetti.tsx`, which is also registered on its own, below.
+  - Sponsors reuses the installed `soft-blur-in` and `blur-out-up`, which are byte-identical to the registry copies.
+  - Stars needs `date-fns`, now in `render-project`.
+- **Size:**
+  - **Stars, Sponsors, Follow Card and Followers Overview** are full frame. Each scales its own 1280×720 stage, or 720×1280 with `orientation: vertical`, letterboxed.
+  - **Logo Enter** isn't stage-scaled, so its defaults are 1.5× the 720p values: diameter 177, overlap 57. Its logos are the four sample SVG marks in the file; edit the file to change them.
+- **Backgrounds:** Stars and Sponsors paint their `theme` background. The Follow Card is transparent (pair with #f5f7f9), and so are Followers Overview and Logo Enter (pair with white and dark respectively).
+- **Data props:** `stargazers`, `sponsors` and `notifications` are JSON arrays. Leave them unset to use the built-in samples.
+- **Avatars:** the sample avatars load from GitHub at render time, with an initial fallback on error. Followers Overview's `avatarUrl` defaults to empty (initial fallback), because the source default `/logo.svg` isn't in this project.
+- **Timing:**
+  - Stars: the counter lands at 80% of the layer and the list scrolls over the whole layer. Both read the layer length (120 by default).
+  - Sponsors: the heart draws over 0–40, docks over 52–84, the avatars run from 70, the headline from 150, the CTA from 182. Layer 270; `speed` minimum 1.
+  - Follow Card: bounce 0–25, blur-ins 20–70, the cursor travels 75–110, the click at 110. Layer 165.
+  - Followers Overview: the reveal sits at about 82% of the layer. Layer 360.
+  - Logo Enter: chips `stagger` 7 frames apart. Layer 90.
+- **Preview:** kind `socialfx`, stand-ins with the same timing. The Stars counter in the preview is linear, while the real odometer eases.
+- **Verified:** 2026-09-28, [remocn-social-effects-contact.png](renders/remocn-social-effects-contact.png), 27 stills, 0 errors:
+  - **Stars:** real GitHub avatars scroll past, and the odometer rolls to 24,813.
+  - **Sponsors:** the heart docks and 24 avatars fill the grid (some sample accounts show GitHub's default avatar), then "Thank you", "Powered by 24 sponsors" and the pink CTA.
+  - **Follow Card:** Follow → Following after the cursor click.
+  - **Followers Overview:** "dev_jay followed you · 10h", then the 1,709 reveal.
+  - **Logo Enter:** four ringed chips spring in.
+
+### Cursor Gravity, Radial Burst, TV Power Off and Confetti (remocn effects)
+
+- **Catalog ids:** `remocn_cursor_gravity`, `remocn_radial_burst`, `remocn_tv_power_off`, `remocn_confetti`. Files verbatim, MIT.
+- **Cursor Gravity:** full frame, scales with min(w/1280, h/720), paints `backgroundColor` (default #a800b7).
+  - Motion: the cursor enters over 10–39, tugs at 48–70 and 70–94, the final pull runs 94–132, the button settles at the centre, and the cursor exits by 151. Layer 180 including the hold.
+  - Not exposed: `children` (custom button content).
+- **Radial Burst:** full frame, SVG only.
+  - Motion: circle 0–18, ribbons 18–44, ring 44–84, contract 84–96, exit 96–114, then a clean tail to 120.
+  - Props: segments, radius, thickness, rotation, intensity, twist, echoes, colours, speed, loop.
+- **TV Power Off:** a WRAPPER. It's a `canvas-presentation` html-in-canvas filter, which now works because html-in-canvas is enabled.
+  - How to use: wrap the scene's layers with `update_asset { wraps: [...] }`.
+  - Timing: the scene plays untouched for `delay` frames (default 30), then collapses over `collapseFrames` (18). `collapseFrames` reaches the component as its `durationInFrames` prop via `renameProps`, so it doesn't clash with the layer's own duration.
+  - After the collapse the frame is opaque black.
+- **Confetti:** a transparent overlay. A seeded mulberry32 burst fires at `startFrame` (a layer frame), with gravity, spin and flutter, and lasts `lifetime` frames. The same seed gives the same burst.
+- **Verified:** same contact sheet:
+  - **Gravity:** the cursor and tether at the edge, the stretched tug, then the centred "Create something" button.
+  - **Burst:** circle, tapered ribbons, tilted ring, then the exiting ring.
+  - **Confetti:** the burst and its fall.
+  - **TV Power Off:** Scene A, the squash to a glowing band, the pinched line with a phosphor bloom, the dot, then black.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

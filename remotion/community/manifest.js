@@ -15026,5 +15026,1011 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 213
+  },
+  {
+    "id": "remocn_github_stars",
+    "componentName": "GitHubStars",
+    "name": "GitHub Stars (remocn)",
+    "desc": "remocn • stargazer list fly-through with a synced odometer counting up to the star total (timed from the layer length) • paints its theme background",
+    "icon": "⭐",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/github-stars",
+      "exportName": "GitHubStars",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "repo": "remotion-dev/remotion",
+        "totalStars": 24813,
+        "orientation": "horizontal",
+        "accentColor": "#ffbb00",
+        "speed": 1,
+        "theme": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "GitHub Stars (remocn) (whole clip) • scales its own stage; counter lands at 80% of the layer; avatars load from GitHub (initial fallback on error)",
+        "items": [
+          {
+            "key": "repo",
+            "label": "REPO (owner/name)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "totalStars",
+            "label": "TOTAL STARS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 10000000,
+            "step": 1
+          },
+          {
+            "key": "stargazers",
+            "label": "STARGAZERS (JSON [{login, avatarUrl, starredAt}]; unset = sample)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "repoAvatarUrl",
+            "label": "REPO AVATAR URL (optional)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "orientation",
+            "label": "ORIENTATION",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "horizontal",
+                "Horizontal (16:9 stage)"
+              ],
+              [
+                "vertical",
+                "Vertical (9:16 stage, letterboxed)"
+              ]
+            ]
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "theme",
+            "label": "THEME",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "stars"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_github_sponsors",
+    "componentName": "GitHubSponsors",
+    "name": "GitHub Sponsors (remocn)",
+    "desc": "remocn • a self-drawing heart docks to a header, sponsor avatars blur-stagger into a grid, then a thank-you headline and the Become a sponsor CTA • paints its theme background",
+    "icon": "💗",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/github-sponsors",
+      "exportName": "GitHubSponsors",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "account": "remocn",
+        "accentColor": "#db61a2",
+        "speed": 1,
+        "theme": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "GitHub Sponsors (remocn) (whole clip) • scales its own stage; grid sizes to the sponsor count",
+        "items": [
+          {
+            "key": "account",
+            "label": "ACCOUNT (github.com/sponsors/…)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "sponsors",
+            "label": "SPONSORS (JSON [{login, avatarUrl}]; unset = sample)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "theme",
+            "label": "THEME",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "sponsors"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 270
+  },
+  {
+    "id": "remocn_x_follow_card",
+    "componentName": "XFollowCard",
+    "name": "X Follow Card (remocn)",
+    "desc": "remocn • X profile card bounces in, layers blur in, a cursor clicks Follow → Following at frame 110 • transparent",
+    "icon": "🐦",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/x-follow-card",
+      "exportName": "XFollowCard",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "name": "Dmitri K",
+        "handle": "kapishdima",
+        "bio": "Building video tools with Remotion",
+        "location": "Earth",
+        "website": "remocn.dev",
+        "joined": "Joined January 2023",
+        "avatarUrl": "",
+        "coverUrl": "",
+        "verified": true,
+        "accentColor": "#1d9bf0",
+        "orientation": "horizontal",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "X Follow Card (remocn) (whole clip) • scales its own stage; pair with #f5f7f9",
+        "items": [
+          {
+            "key": "name",
+            "label": "NAME",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "handle",
+            "label": "HANDLE (no @)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "bio",
+            "label": "BIO",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "location",
+            "label": "LOCATION",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "website",
+            "label": "WEBSITE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "joined",
+            "label": "JOINED LINE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "avatarUrl",
+            "label": "AVATAR URL (empty = gradient)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "coverUrl",
+            "label": "COVER URL (empty = accent gradient)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "verified",
+            "label": "VERIFIED BADGE",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "orientation",
+            "label": "ORIENTATION",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "horizontal",
+                "Horizontal (16:9 stage)"
+              ],
+              [
+                "vertical",
+                "Vertical (9:16 stage, letterboxed)"
+              ]
+            ]
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "followcard"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 165
+  },
+  {
+    "id": "remocn_x_followers_overview",
+    "componentName": "XFollowersOverview",
+    "name": "X Followers Overview (remocn)",
+    "desc": "remocn • follow notifications flip through on a 3D carousel, then the total follower count pops in with avatar, handle and a confetti burst (timed from the layer length) • transparent",
+    "icon": "📈",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/x-followers-overview",
+      "exportName": "XFollowersOverview",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "totalFollowers": 1709,
+        "handle": "remocn",
+        "avatarUrl": "",
+        "accentColor": "#1d9bf0",
+        "orientation": "horizontal",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "X Followers Overview (remocn) (whole clip) • scales its own stage; pair with white",
+        "items": [
+          {
+            "key": "notifications",
+            "label": "NOTIFICATIONS (JSON [{name, verified, time}]; unset = sample)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "totalFollowers",
+            "label": "TOTAL FOLLOWERS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 100000000,
+            "step": 1
+          },
+          {
+            "key": "handle",
+            "label": "HANDLE (no @)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "avatarUrl",
+            "label": "AVATAR URL (empty = initial)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT (verified badge)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "orientation",
+            "label": "ORIENTATION",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "horizontal",
+                "Horizontal (16:9 stage)"
+              ],
+              [
+                "vertical",
+                "Vertical (9:16 stage, letterboxed)"
+              ]
+            ]
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (≥ 1)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "followers"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 360
+  },
+  {
+    "id": "remocn_logo_enter",
+    "componentName": "LogoEnter",
+    "name": "Logo Enter (remocn)",
+    "desc": "remocn • a stacked group of round ring-bordered brand chips springs in one by one, then holds (sample AI-tool marks; edit the file for your own) • transparent",
+    "icon": "🔵",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/logo-enter",
+      "exportName": "LogoEnter",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "diameter": 177,
+        "overlap": 57,
+        "ringColor": "#ffffff",
+        "orientation": "horizontal",
+        "stagger": 7,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Logo Enter (remocn) (whole clip) • px at composition scale (1.5 × the 720p defaults); logos are fixed in the file",
+        "items": [
+          {
+            "key": "diameter",
+            "label": "CHIP DIAMETER px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "overlap",
+            "label": "OVERLAP px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "ringColor",
+            "label": "RING",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "orientation",
+            "label": "STACK",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "horizontal",
+                "Row"
+              ],
+              [
+                "vertical",
+                "Column"
+              ]
+            ]
+          },
+          {
+            "key": "stagger",
+            "label": "STAGGER (frames)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "logos"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_cursor_gravity",
+    "componentName": "CursorGravity",
+    "name": "Cursor Gravity (remocn)",
+    "desc": "remocn • a rounded triangular cursor tugs a CTA button out of the right edge with pulsed elastic resistance, then it settles centre • paints its background",
+    "icon": "🧲",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/cursor-gravity",
+      "exportName": "CursorGravity",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "label": "Create something",
+        "tension": 1,
+        "cursorColor": "#fffaf0",
+        "color": "#fffaf0",
+        "textColor": "#32153c",
+        "backgroundColor": "#a800b7",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Cursor Gravity (remocn) (whole clip) • reveal done at 151, hold to 180",
+        "items": [
+          {
+            "key": "label",
+            "label": "BUTTON LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "tension",
+            "label": "TENSION (0–1.5)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1.5,
+            "step": 0.01
+          },
+          {
+            "key": "cursorColor",
+            "label": "CURSOR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "BUTTON",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "textColor",
+            "label": "LABEL",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND (CSS, or transparent)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "gravity"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 180
+  },
+  {
+    "id": "remocn_radial_burst",
+    "componentName": "RadialBurst",
+    "name": "Radial Burst (remocn)",
+    "desc": "remocn • a circle bursts into twisting ribbons that close into a tilted ring, contract, then sweep out through contour echoes, leaving a clean field for the title • paints its background",
+    "icon": "🌸",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/radial-burst",
+      "exportName": "RadialBurst",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "segments": 8,
+        "radius": 210,
+        "thickness": 30,
+        "rotation": 135,
+        "intensity": 1,
+        "twist": 110,
+        "echoes": 3,
+        "accentColor": "#f4e4a7",
+        "color": "#ffffff",
+        "backgroundColor": "#a800b7",
+        "speed": 1,
+        "loop": false
+      }
+    },
+    "controls": [
+      {
+        "group": "Radial Burst (remocn) (whole clip) • shapes gone at 114; drop the title in around 108",
+        "items": [
+          {
+            "key": "segments",
+            "label": "SEGMENTS (4–16)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 4,
+            "max": 16,
+            "step": 1
+          },
+          {
+            "key": "radius",
+            "label": "RADIUS (720p ref)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 100,
+            "max": 280,
+            "step": 1
+          },
+          {
+            "key": "thickness",
+            "label": "THICKNESS (720p ref)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 8,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "rotation",
+            "label": "ROTATION °",
+            "kind": "range",
+            "keyframable": false,
+            "min": -720,
+            "max": 720,
+            "step": 1
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY (0–1.5)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1.5,
+            "step": 0.01
+          },
+          {
+            "key": "twist",
+            "label": "TWIST °",
+            "kind": "range",
+            "keyframable": false,
+            "min": -180,
+            "max": 180,
+            "step": 1
+          },
+          {
+            "key": "echoes",
+            "label": "ECHOES (0–5)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 1
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "color",
+            "label": "RIBBONS",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND (CSS, or transparent)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED (0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "loop",
+            "label": "LOOP",
+            "kind": "checkbox",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "burst"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_tv_power_off",
+    "componentName": "TvPowerOff",
+    "name": "TV Power Off (remocn)",
+    "desc": "remocn • WRAPPER: the wrapped scene collapses into a glowing line, pinches to a phosphor dot, and leaves dead black (html-in-canvas filter; CSS fallback)",
+    "icon": "📺",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/tv-power-off",
+      "exportName": "TvPowerOff",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      },
+      "renameProps": {
+        "collapseFrames": "durationInFrames"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "delay": 30,
+        "collapseFrames": 18,
+        "gain": 1,
+        "afterglow": 1,
+        "phosphor": "#d8ecff"
+      }
+    },
+    "controls": [
+      {
+        "group": "TV Power Off (remocn) (whole clip) • wrap the scene with update_asset wraps; black after the dot",
+        "items": [
+          {
+            "key": "delay",
+            "label": "DELAY (frames of untouched scene)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "collapseFrames",
+            "label": "COLLAPSE FRAMES (18 = hard cut, ~30 = dying tube)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 4,
+            "max": 120,
+            "step": 1
+          },
+          {
+            "key": "gain",
+            "label": "GAIN (line blow-out)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "afterglow",
+            "label": "AFTERGLOW",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.05
+          },
+          {
+            "key": "phosphor",
+            "label": "PHOSPHOR",
+            "kind": "color",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "tvoff"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 60
+  },
+  {
+    "id": "remocn_confetti",
+    "componentName": "Confetti",
+    "name": "Confetti (remocn)",
+    "desc": "remocn • deterministic seeded confetti burst with gravity, spin and flutter, fired at startFrame • transparent overlay",
+    "icon": "🎉",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/confetti",
+      "exportName": "Confetti",
+      "packages": [
+        "@remotion/google-fonts",
+        "date-fns"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "particleCount": 140,
+        "originX": 0.5,
+        "originY": 0.5,
+        "startFrame": 0,
+        "lifetime": 90,
+        "power": 17,
+        "gravity": 0.45,
+        "size": 13,
+        "seed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Confetti (remocn) (whole clip) • same seed = same burst",
+        "items": [
+          {
+            "key": "particleCount",
+            "label": "PIECES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 1000,
+            "step": 1
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array; unset = 6 brand colours)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "originX",
+            "label": "ORIGIN X (0–1)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "originY",
+            "label": "ORIGIN Y (0–1)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "startFrame",
+            "label": "FIRES AT (layer frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "lifetime",
+            "label": "LIFETIME frames",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "power",
+            "label": "POWER (720p px/frame)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 60,
+            "step": 0.5
+          },
+          {
+            "key": "gravity",
+            "label": "GRAVITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          },
+          {
+            "key": "size",
+            "label": "SIZE (720p px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 60,
+            "step": 1
+          },
+          {
+            "key": "seed",
+            "label": "SEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 9999,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "socialfx",
+      "style": "confetti"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90
   }
 ];

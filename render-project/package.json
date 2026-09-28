@@ -28,6 +28,7 @@
     "@turf/turf": "^7.4.0",
     "@types/culori": "^4.0.1",
     "culori": "^4.0.2",
+    "date-fns": "^4.4.0",
     "maplibre-gl": "^6.11.2",
     "opentype.js": "^2.0.0",
     "react": "^19.1.0",
