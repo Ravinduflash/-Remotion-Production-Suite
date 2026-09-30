@@ -1,5 +1,6 @@
 // Authored for this project (not a remocn file): timeline wrappers around the verbatim remocn-ui state atoms
-// (accordion, alert-dialog, blur-in, button, checkbox, dialog, drawer, context-menu, combobox, command-menu) and the cursor. State atoms never read the frame, so each wrapper takes a JSON `steps`
+// (accordion, alert-dialog, blur-in, button, checkbox, dialog, drawer, sheet, context-menu, dropdown-menu, combobox, command-menu,
+// input, message-bubble, popover), the field layout family, and the value-channel cursor and progress bar. State atoms never read the frame, so each wrapper takes a JSON `steps`
 // array and resolves it with useCurrentState (smooth=false, snap) or the atom's own use<Name>Transition hook (smooth).
 // `mode: "dark"` passes the full dark palette as the theme override: the atoms call useRemocnTheme(override, "light"),
 // so a plain mode would only reach the hook's colours and leave the atom's borders and text light.
@@ -34,6 +35,19 @@ import { type CommandMenuItemState, commandMenuItemStyle, commandMenuItemStyleCo
 import { tweenCommandMenuItemStyle } from "./use-command-menu-item-transition";
 import { Cursor, type CursorVariant } from "./cursor";
 import { type CursorWaypoint, useCursorPath } from "./use-cursor-path";
+import { Sheet, type SheetState } from "./sheet";
+import { useSheetTransition } from "./use-sheet-transition";
+import { DropdownMenu, type DropdownMenuState } from "./dropdown-menu";
+import { useDropdownMenuTransition } from "./use-dropdown-menu-transition";
+import { Field, FieldControl, FieldDescription, FieldGroup, FieldLabel } from "./field";
+import { Input, type InputState, inputStyle, inputStyleContext } from "./input";
+import { tweenInputStyle, useInputTransition } from "./use-input-transition";
+import { MessageBubble, type MessageBubbleState, messageBubbleReactionStyle } from "./message-bubble";
+import { useMessageBubbleTransition } from "./use-message-bubble-transition";
+import { Popover, type PopoverSide, type PopoverState } from "./popover";
+import { usePopoverTransition } from "./use-popover-transition";
+import { Progress } from "./progress";
+import { type ProgressStep, useProgressTransition } from "./use-progress-transition";
 
 type Mode = "light" | "dark";
 interface Timed<S extends string> { steps?: Step<S>[]; smooth?: boolean; speed?: number }
@@ -191,4 +205,107 @@ export function CursorTimeline({ path, speed = 1, mode, theme, variant = "arrow"
   const wp = Array.isArray(path) ? path.filter((w) => w && typeof w.at === "number" && typeof w.x === "number" && typeof w.y === "number") : [];
   const style = useCursorPath(wp, { speed });
   return <Cursor style={style} variant={variant} size={size} rippleColor={rippleColor || undefined} theme={themeFor(mode, theme)} className={className} />;
+}
+
+export function SheetTimeline({ steps, smooth = true, speed = 1, mode, theme, ...rest }: Timed<SheetState> & Themed & ModalText) {
+  const s = stepsOf<SheetState>(steps), th = themeFor(mode, theme);
+  const snap = useCurrentState(s, "closed", speed);
+  const style = useSheetTransition(s, { theme: th, mode, speed });
+  return <Sheet {...rest} theme={th} state={snap} style={smooth ? style : undefined} />;
+}
+
+/** `triggerSteps` script the outline trigger (a Button timeline: idle | hover | press); rows take `rowSteps` like ContextMenu. */
+export function DropdownMenuTimeline({ steps, smooth = true, speed = 1, mode, theme, rowSteps, triggerSteps, items, ...rest }: Timed<DropdownMenuState> & Themed & {
+  label?: string; items?: string[]; highlightedIndex?: number; pressedIndex?: number; rowSteps?: RowStep[]; triggerSteps?: Step<ButtonState>[]; className?: string;
+}) {
+  const s = stepsOf<DropdownMenuState>(steps), th = themeFor(mode, theme), rt = useRemocnTheme(th, mode);
+  const list = Array.isArray(items) && items.length ? items : undefined, ctx = dropdownMenuItemStyleContext(rt), ts = stepsOf<ButtonState>(triggerSteps);
+  const snap = useCurrentState(s, "closed", speed);
+  const style = useDropdownMenuTransition(s, { theme: th, mode, speed });
+  const trigger = useButtonTransition(ts, { variant: "outline", theme: th, mode, speed, defaultDuration: smooth ? undefined : 0 });
+  const itemStyles = useRowStyles<DropdownMenuItemState, ReturnType<typeof dropdownMenuItemStyle>>(rowSteps, (list || ["", "", "", ""]).length, "idle", speed, smooth,
+    (st) => dropdownMenuItemStyle(st, ctx), tweenDropdownMenuItemStyle);
+  return <DropdownMenu {...rest} items={list} itemStyles={itemStyles} triggerStyle={ts.length ? trigger : undefined} theme={th} state={snap} style={smooth ? style : undefined} />;
+}
+
+export function InputTimeline({ steps, smooth = true, speed = 1, mode, theme, primary, ...rest }: Timed<InputState> & Themed & {
+  placeholder?: string; value?: string; size?: "sm" | "default" | "lg"; primary?: string; className?: string;
+}) {
+  const s = stepsOf<InputState>(steps), th = themeFor(mode, theme), p = primary || undefined;
+  const snap = useCurrentState(s, "idle", speed);
+  const style = useInputTransition(s, { theme: th, mode, primary: p, speed });
+  return <Input {...rest} theme={th} primary={p} state={snap} style={smooth ? style : undefined} />;
+}
+
+/** One labelled form row: its Input runs its own `steps` (idle | hover | active | typing | blur | invalid). */
+export interface FieldSpec { label?: string; placeholder?: string; value?: string; description?: string; steps?: Step<InputState>[] }
+const FIELD_HEIGHT = { sm: 36, default: 40, lg: 48 } as const;
+/** A FieldGroup column filling the layer box: label ▸ Input (in a FieldControl slot) ▸ description, per entry of `fields`. */
+export function FieldTimeline({ fields, gap = 16, fieldGap = 6, size = "default", smooth = true, speed = 1, mode, theme, primary }: Themed & {
+  fields?: FieldSpec[]; gap?: number; fieldGap?: number; size?: "sm" | "default" | "lg"; smooth?: boolean; speed?: number; primary?: string;
+}) {
+  const th = themeFor(mode, theme), rt = useRemocnTheme({ ...th, ...(primary ? { primary } : {}) }, mode), ctx = inputStyleContext(rt);
+  const frame = useCurrentFrame() * speed;
+  const list = Array.isArray(fields) ? fields.filter((f) => f && typeof f === "object") : [];
+  return (
+    <div style={{ position: "absolute", inset: 0, fontFamily: "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif" }}>
+      <FieldGroup gap={gap}>
+        {list.map((f, i) => {
+          const { from, to, progress } = transitionAt(stepsOf<InputState>(f.steps), "idle", frame, 8);
+          const style = tweenInputStyle(inputStyle(from, ctx), inputStyle(to, ctx), smooth ? easings.out(progress) : 1);
+          return (
+            <Field key={i} gap={fieldGap}>
+              {f.label ? <FieldLabel theme={th}>{f.label}</FieldLabel> : null}
+              <FieldControl height={FIELD_HEIGHT[size] ?? 40}>
+                <Input fullWidth size={size} theme={th} primary={primary || undefined} placeholder={f.placeholder} value={f.value} style={style} />
+              </FieldControl>
+              {f.description ? <FieldDescription theme={th}>{f.description}</FieldDescription> : null}
+            </Field>
+          );
+        })}
+      </FieldGroup>
+    </div>
+  );
+}
+
+/** The bubble fills the layer box width (incoming aligns left, outgoing right); `reactionSteps` pop the emoji badge separately. */
+export function MessageBubbleTimeline({ steps, smooth = true, speed = 1, mode, theme, text, variant = "incoming", reaction, reactionSteps, maxWidth }: Timed<MessageBubbleState> & Themed & {
+  text?: string; variant?: "incoming" | "outgoing"; reaction?: string; reactionSteps?: Step<MessageBubbleState>[]; maxWidth?: number;
+}) {
+  const s = stepsOf<MessageBubbleState>(steps), rs = stepsOf<MessageBubbleState>(reactionSteps), th = themeFor(mode, theme);
+  const frame = useCurrentFrame() * speed;
+  const snap = useCurrentState(s, "hidden", speed);
+  const style = useMessageBubbleTransition(s, { speed });
+  const r = transitionAt(rs, "hidden", frame, 10), a = messageBubbleReactionStyle(r.from), b = messageBubbleReactionStyle(r.to), k = smooth ? easings.out(r.progress) : 1;
+  const reactionStyle = rs.length ? { opacity: a.opacity + (b.opacity - a.opacity) * k, scale: a.scale + (b.scale - a.scale) * k } : undefined;
+  return (
+    <div style={{ position: "absolute", inset: 0 }}>
+      <MessageBubble variant={variant} reaction={reaction || undefined} reactionStyle={reactionStyle} maxWidth={maxWidth && maxWidth > 0 ? maxWidth : undefined}
+        theme={th} state={snap} style={smooth ? style : undefined}>{text}</MessageBubble>
+    </div>
+  );
+}
+
+/** The card's top-left sits at the layer box top-left; `width` is the card width (sizeMode props). */
+export function PopoverTimeline({ steps, smooth = true, speed = 1, mode, theme, title, description, side = "bottom", width = 288 }: Timed<PopoverState> & Themed & {
+  title?: string; description?: string; side?: PopoverSide; width?: number; height?: number;
+}) {
+  const s = stepsOf<PopoverState>(steps), th = themeFor(mode, theme);
+  const snap = useCurrentState(s, "closed", speed);
+  const style = usePopoverTransition(s, { speed });
+  return <Popover title={title || undefined} description={description || undefined} side={side} width={width} theme={th} state={snap} style={smooth ? style : undefined} />;
+}
+
+/** Value channel: `valueSteps` [{at (arrival frame), value 0–100, duration?, easing?}]; the track is `width` wide (sizeMode props). */
+export function ProgressTimeline({ valueSteps, value = 0, speed = 1, mode, theme, primary, width = 320, showLabel = true }: Themed & {
+  valueSteps?: ProgressStep[]; value?: number; speed?: number; primary?: string; width?: number; height?: number; showLabel?: boolean;
+}) {
+  const vs = Array.isArray(valueSteps) ? valueSteps.filter((v) => v && typeof v.at === "number" && typeof v.value === "number") : [];
+  const style = useProgressTransition(vs, { speed });
+  const th = { ...themeFor(mode, theme), ...(primary ? { primary } : {}) };
+  return (
+    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center" }}>
+      <Progress value={value} style={vs.length ? style : undefined} width={width} showLabel={showLabel} theme={th} />
+    </div>
+  );
 }

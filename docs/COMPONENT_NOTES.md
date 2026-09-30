@@ -45,7 +45,11 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
     - Rows take `rowSteps: [{at, index, state, duration?}]`, with `index` into the filtered list. `ui-timeline.tsx` resolves each row with a pure twin of `useStateTransition` plus the row atom's exported `<row>Style` / `tween<Row>Style`, because hooks can't run in a loop over rows.
     - Rows without steps fall back to the `selectedIndex` / `highlightedIndex` / `pressedIndex` props.
     - Typing: `query` + `typeStart` (layer frame; -1 shows it at once) + `cps` feed `revealCount`, which also filters the list.
-  - **Registry-only dependency atoms:** `input`, `select-item`, `command-menu-item` and `dropdown-menu-item` are installed verbatim for the list atoms but aren't catalog entries yet. Register them when their pages arrive; the files are already there.
+  - **Registry-only dependency atoms:** `select-item`, `command-menu-item` and `dropdown-menu-item` are installed verbatim for the list atoms but aren't catalog entries yet. Register them when their pages arrive; the files are already there. `input` became `remocn_ui_input` on 2026-09-30.
+  - **Inline atoms (Message Bubble, Popover, Progress, and the Field family):** these aren't `position: absolute; inset: 0`; they render inline. The wrappers put them in an `inset: 0` div so the layer box positions and sizes them.
+    - Popover, Progress and Field use `sizeMode: props`: box width = card / track / column width, and `height` is dropped or ignored.
+    - Message Bubble fills its box width, which acts as the chat column.
+  - **Value channels:** Cursor (`path` waypoints) and Progress (`valueSteps`) have no string states. `at` is the ARRIVAL frame, and the move runs over `[at − duration, at)`.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
   - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
@@ -1522,6 +1526,46 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Combobox:** "ba" types in and filters to Banana, which hovers, presses and is selected with a check.
   - **Command Menu:** "settings" filters to Settings, which hovers and is selected.
   - **Cursor + Button:** the hand pointer glides to the button, clicks into press → spinner → check.
+
+### Sheet, Dropdown Menu, Field, Input, Message Bubble, Popover and Progress (remocn-ui)
+
+- **Catalog ids:** `remocn_ui_sheet`, `remocn_ui_dropdown_menu`, `remocn_ui_field` ("Form Fields"), `remocn_ui_input`, `remocn_ui_message_bubble`, `remocn_ui_popover`, `remocn_ui_progress`.
+- **Files:**
+  - Verbatim, MIT, each with its hook; `field.tsx` has no hook.
+  - `input.tsx` + `use-input-transition.ts` were already installed (combobox dependency) and are byte-identical to `r/input.json`; only their header note changed.
+  - Dropdown Menu reuses the installed `button` + `dropdown-menu-item`.
+- **Sheet:** 1280×720 box at 1.5. A 400 px full-height panel flush to the box's right edge slides in by translateX 400 → 0 over a 50% backdrop. It has a close ✕ and a primary action. Default steps: open 32, close 92 (12).
+- **Dropdown Menu:** 1280×720 box at 1.5. A 240 px outline trigger sits centred 220 px from the top, and the panel opens 48 px below it with the chevron flipping.
+  - `triggerSteps` script the trigger as an outline Button (idle | hover | press); `rowSteps` script the rows (idle | hover | press, no selected).
+  - Defaults: trigger hover 18 → press 26 → idle 32; open 32, close 92; row 1 hover 54 → press 66 → idle 74.
+- **Input:** 1280×720 box at 1.5, a 320 px field.
+  - States: idle | hover | active (ring + caret) | typing | blur (filled, unfocused) | invalid (destructive border + ring).
+  - A typing step's `duration` is its typing time (the value reveals over the transition, ease-out). With `smooth` off, typing shows the whole value at once.
+  - Defaults: hover 10 → active 24 → typing 40 (22) → invalid 78.
+- **Form Fields (`remocn_ui_field`):** the static Field family (FieldGroup ▸ Field ▸ FieldLabel / FieldControl / FieldDescription) wrapped as a labelled form, `sizeMode: props`.
+  - Layout: box width = the column (320 at 1.5); fields stack from the box top.
+  - `fields` JSON is `[{label?, placeholder?, value?, description?, steps}]`, and each Input runs its own steps, resolved with the pure `inputStyle` + `tweenInputStyle`.
+  - The default fills "Name" then "Email" in turn.
+  - Also: `gap` (16), `fieldGap` (6), `size` (the slot height follows it: 36/40/48).
+- **Message Bubble:** `sizeMode: none`, box 640×100 at 1.5; the box width is the chat column. Incoming bubbles sit left on `muted`, outgoing right on `primary`.
+  - Motion: it rises 12 px from 0.94 scale, anchored at its bottom corner.
+  - Reaction: `reaction` emoji with its own `reactionSteps`; empty follows the bubble.
+  - `maxWidth` 0 = the source's 80%. The docs say 460, but the code defaults to 80%.
+  - Default: visible at 20 and it stays, rather than the docs' hide at 80, so bubbles can stack into a conversation.
+- **Popover:** `sizeMode: props`, so the box is the card (width 288). `side` sets the 6 px slide direction toward the anchor, and placement is the box.
+  - Steps: open 36, close 100 (10).
+  - Hover-card pattern: time the steps to a Cursor's arrival and departure.
+- **Progress:** `sizeMode: props`, box width = track (320). The % label (tabular) sits right of the box.
+  - `valueSteps` default `[{0,0},{40,62,d36},{130,100,d30}]` (ease-out; a hold = two steps at the same value). Layer 150 so the fill reaches 100.
+- **Verified:** 2026-09-30, [remocn-ui-atoms3-contact.png](renders/remocn-ui-atoms3-contact.png), 31 stills, 0 errors:
+  - **Sheet:** slides in from the right over an outline "Edit profile" trigger, with the buttons at the panel bottom.
+  - **Dropdown Menu:** the trigger hovers and presses, the panel drops, "Billing" hovers then presses, the panel closes.
+  - **Input:** hover → focus ring + caret → types "remotion@remocn.dev" → invalid (red); dark mode verified.
+  - **Form Fields:** Name types and blurs, then Email types.
+  - **Message Bubble:** a three-bubble thread with the 🔥 reaction popping at 96.
+  - **Popover:** opens at 36 under a Cursor and has closed by 110.
+  - **Progress:** reaches 60% at f30, holds 62%, 100% at f149.
+  - `check_scene` warns `simultaneous_entrances` for stacked bubbles, because their timing is in `steps`; safe to ignore.
 
 ### Typewriter Text
 

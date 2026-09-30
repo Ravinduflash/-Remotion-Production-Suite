@@ -18577,5 +18577,1011 @@ window.CommunityManifest = [
     },
     "fullFrame": true,
     "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_sheet",
+    "componentName": "SheetTimeline",
+    "name": "Sheet (remocn-ui)",
+    "desc": "remocn-ui • a full-height right-edge side panel (close ✕, primary action) that slides in over a 50% backdrop on scripted steps • transparent, compose over a scene",
+    "icon": "📑",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "SheetTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 32,
+            "state": "opened",
+            "duration": 16
+          },
+          {
+            "at": 92,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "title": "Edit profile",
+        "description": "Make changes to your profile here. Click save when you're done.",
+        "actionLabel": "Save changes",
+        "cancelLabel": "Cancel"
+      }
+    },
+    "controls": [
+      {
+        "group": "Sheet (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; 400 px panel flush to the box right edge; the backdrop dims the whole box — keep it full frame",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "actionLabel",
+            "label": "ACTION (primary)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "cancelLabel",
+            "label": "CANCEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "sheet"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_dropdown_menu",
+    "componentName": "DropdownMenuTimeline",
+    "name": "Dropdown Menu (remocn-ui)",
+    "desc": "remocn-ui • an outline trigger button whose action panel drops open below it (chevron flips); trigger and rows hover / press on scripted steps • transparent",
+    "icon": "🔻",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "DropdownMenuTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 32,
+            "state": "opened",
+            "duration": 16
+          },
+          {
+            "at": 92,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "label": "Options",
+        "items": [
+          "Profile",
+          "Billing",
+          "Settings",
+          "Log out"
+        ],
+        "triggerSteps": [
+          {
+            "at": 18,
+            "state": "hover"
+          },
+          {
+            "at": 26,
+            "state": "press",
+            "duration": 4
+          },
+          {
+            "at": 32,
+            "state": "idle"
+          }
+        ],
+        "rowSteps": [
+          {
+            "at": 54,
+            "index": 1,
+            "state": "hover"
+          },
+          {
+            "at": 66,
+            "index": 1,
+            "state": "press",
+            "duration": 6
+          },
+          {
+            "at": 74,
+            "index": 1,
+            "state": "idle"
+          }
+        ],
+        "highlightedIndex": -1,
+        "pressedIndex": -1
+      }
+    },
+    "controls": [
+      {
+        "group": "Dropdown Menu (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; 240 px trigger, centred, 220 px from the box top; the panel opens below",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "label",
+            "label": "TRIGGER LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "items",
+            "label": "ITEMS (JSON string array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "triggerSteps",
+            "label": "TRIGGER STEPS (JSON [{at, state: idle|hover|press, duration?}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "rowSteps",
+            "label": "ROW STEPS (JSON [{at, index, state, duration?}] — index into the list; idle | hover | press)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "highlightedIndex",
+            "label": "HOVERED ROW (used when no row steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "pressedIndex",
+            "label": "PRESSED ROW",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "dropdown"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_input",
+    "componentName": "InputTimeline",
+    "name": "Input (remocn-ui)",
+    "desc": "remocn-ui • a shadcn text field scripted through idle → hover → active (focus ring + caret) → typing (value types in) → blur / invalid • transparent",
+    "icon": "⌨️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "InputTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 10,
+            "state": "hover",
+            "duration": 8
+          },
+          {
+            "at": 24,
+            "state": "active",
+            "duration": 10
+          },
+          {
+            "at": 40,
+            "state": "typing",
+            "duration": 22
+          },
+          {
+            "at": 78,
+            "state": "invalid",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "placeholder": "you@example.com",
+        "value": "remotion@remocn.dev",
+        "size": "default",
+        "primary": ""
+      }
+    },
+    "controls": [
+      {
+        "group": "Input (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; 320 px field, centred",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: idle | hover | active | typing | blur | invalid — a typing step's duration is the typing time)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "placeholder",
+            "label": "PLACEHOLDER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "value",
+            "label": "VALUE (typed)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "SIZE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "sm",
+                "Small (36)"
+              ],
+              [
+                "default",
+                "Default (40)"
+              ],
+              [
+                "lg",
+                "Large (48)"
+              ]
+            ]
+          },
+          {
+            "key": "primary",
+            "label": "PRIMARY (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "input"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_field",
+    "componentName": "FieldTimeline",
+    "name": "Form Fields (remocn-ui Field)",
+    "desc": "remocn-ui • the Field layout family as a labelled form: each entry is label ▸ Input ▸ description, and each Input runs its own scripted steps (focus, type, blur, invalid) • transparent",
+    "icon": "📝",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "FieldTimeline",
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 720,
+      "baseY": 390,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 320,
+        "height": 170,
+        "fields": [
+          {
+            "label": "Name",
+            "placeholder": "Jane Doe",
+            "value": "Jane Cooper",
+            "steps": [
+              {
+                "at": 10,
+                "state": "active",
+                "duration": 6
+              },
+              {
+                "at": 14,
+                "state": "typing",
+                "duration": 20
+              },
+              {
+                "at": 44,
+                "state": "blur",
+                "duration": 8
+              }
+            ]
+          },
+          {
+            "label": "Email",
+            "placeholder": "m@example.com",
+            "value": "jane@acme.com",
+            "description": "We'll never share your email.",
+            "steps": [
+              {
+                "at": 48,
+                "state": "active",
+                "duration": 6
+              },
+              {
+                "at": 52,
+                "state": "typing",
+                "duration": 24
+              },
+              {
+                "at": 90,
+                "state": "blur",
+                "duration": 8
+              }
+            ]
+          }
+        ],
+        "gap": 16,
+        "fieldGap": 6,
+        "size": "default",
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "primary": ""
+      }
+    },
+    "controls": [
+      {
+        "group": "Form Fields (remocn-ui Field) (whole clip) • box width = the form column (320 px layout at scale 1.5); fields stack from the box top",
+        "items": [
+          {
+            "key": "fields",
+            "label": "FIELDS (JSON [{label?, placeholder?, value?, description?, steps: [{at, state: idle|hover|active|typing|blur|invalid, duration?}]}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "gap",
+            "label": "GAP BETWEEN FIELDS px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 80,
+            "step": 1
+          },
+          {
+            "key": "fieldGap",
+            "label": "LABEL / CONTROL / HINT GAP px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 30,
+            "step": 1
+          },
+          {
+            "key": "size",
+            "label": "INPUT SIZE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "sm",
+                "Small (36)"
+              ],
+              [
+                "default",
+                "Default (40)"
+              ],
+              [
+                "lg",
+                "Large (48)"
+              ]
+            ]
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "primary",
+            "label": "PRIMARY (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "field"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_message_bubble",
+    "componentName": "MessageBubbleTimeline",
+    "name": "Message Bubble (remocn-ui)",
+    "desc": "remocn-ui • a themed chat bubble (incoming left on muted, outgoing right on primary) that rises in on scripted steps, with an optional emoji reaction badge that pops separately • transparent",
+    "icon": "💬",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "MessageBubbleTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 480,
+      "baseY": 460,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 640,
+        "height": 100,
+        "text": "Hey — ready for the demo?",
+        "variant": "incoming",
+        "steps": [
+          {
+            "at": 20,
+            "state": "visible",
+            "duration": 14
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "reaction": "",
+        "reactionSteps": [
+          {
+            "at": 50,
+            "state": "visible",
+            "duration": 10
+          }
+        ],
+        "maxWidth": 0,
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Message Bubble (remocn-ui) (whole clip) • box width = the chat column (640 px layout at scale 1.5); stack one layer per message",
+        "items": [
+          {
+            "key": "text",
+            "label": "MESSAGE",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "variant",
+            "label": "SIDE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "incoming",
+                "Incoming (left, muted)"
+              ],
+              [
+                "outgoing",
+                "Outgoing (right, primary)"
+              ]
+            ]
+          },
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state: hidden|visible, duration?}] — layer frames)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "reaction",
+            "label": "REACTION EMOJI (blank = none)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "reactionSteps",
+            "label": "REACTION STEPS (JSON [{at, state: hidden|visible}] — empty = follows the bubble)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "maxWidth",
+            "label": "MAX WIDTH px (0 = 80% of the box)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1280,
+            "step": 1
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "bubble"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_popover",
+    "componentName": "PopoverTimeline",
+    "name": "Popover (remocn-ui)",
+    "desc": "remocn-ui • a floating hover card (title + description) that fades in at 0.97 scale sliding 6 px toward its anchor on scripted steps • transparent",
+    "icon": "🗨️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "PopoverTimeline",
+      "sizeMode": "props",
+      "omitProps": [
+        "height"
+      ]
+    },
+    "defaults": {
+      "baseX": 744,
+      "baseY": 400,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 288,
+        "height": 96,
+        "steps": [
+          {
+            "at": 36,
+            "state": "opened",
+            "duration": 10
+          },
+          {
+            "at": 100,
+            "state": "closed",
+            "duration": 10
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "title": "Alex Smith",
+        "description": "Product designer. Building in public.",
+        "side": "bottom",
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Popover (remocn-ui) (whole clip) • the box is the card (width = card width, 288 px layout at scale 1.5); place it beside its anchor",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state: opened|closed, duration?}] — layer frames)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "side",
+            "label": "SIDE OF ANCHOR (slide direction)",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "bottom",
+                "Bottom"
+              ],
+              [
+                "top",
+                "Top"
+              ],
+              [
+                "left",
+                "Left"
+              ],
+              [
+                "right",
+                "Right"
+              ]
+            ]
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "popover"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_progress",
+    "componentName": "ProgressTimeline",
+    "name": "Progress (remocn-ui)",
+    "desc": "remocn-ui • a progress bar that fills along scripted value steps (arrival frames, ease-out; hold = two steps at one value) with a tabular % label • transparent",
+    "icon": "📶",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ProgressTimeline",
+      "sizeMode": "props",
+      "omitProps": [
+        "height"
+      ]
+    },
+    "defaults": {
+      "baseX": 680,
+      "baseY": 522,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 320,
+        "height": 24,
+        "valueSteps": [
+          {
+            "at": 0,
+            "value": 0
+          },
+          {
+            "at": 40,
+            "value": 62,
+            "duration": 36
+          },
+          {
+            "at": 130,
+            "value": 100,
+            "duration": 30
+          }
+        ],
+        "value": 0,
+        "showLabel": true,
+        "speed": 1,
+        "primary": "",
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Progress (remocn-ui) (whole clip) • box width = track width (320 px layout at scale 1.5); the % label sits right of the box",
+        "items": [
+          {
+            "key": "valueSteps",
+            "label": "VALUE STEPS (JSON [{at (arrival), value 0–100, duration? (24), easing?: linear|in|out|inOut}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "value",
+            "label": "FIXED VALUE (used when no steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "key": "showLabel",
+            "label": "SHOW % LABEL",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "primary",
+            "label": "FILL (blank = theme primary)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "progress"
+    },
+    "defaultDurationInFrames": 150
   }
 ];

@@ -1,5 +1,5 @@
 // Source: remocn — https://remocn.dev/r/input.json (registry/remocn-ui/input/use-input-transition.ts), MIT License, Copyright (c) 2026 Remocn.
-// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency of combobox; not registered on its own yet.
+// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; transition hook for "remocn_ui_input" (driven by ui-timeline.tsx); also a combobox dependency.
 // Path aliases @/lib/remocn, @/lib/remocn-ui and @/components/remocn resolve to this folder (render-project/remotion.config.ts + tsconfig paths).
 "use client";
 
