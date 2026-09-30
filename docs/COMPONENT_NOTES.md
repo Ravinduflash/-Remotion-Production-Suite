@@ -49,7 +49,9 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Inline atoms (Message Bubble, Popover, Progress, and the Field family):** these aren't `position: absolute; inset: 0`; they render inline. The wrappers put them in an `inset: 0` div so the layer box positions and sizes them.
     - Popover, Progress and Field use `sizeMode: props`: box width = card / track / column width, and `height` is dropped or ignored.
     - Message Bubble fills its box width, which acts as the chat column.
-  - **Value channels:** Cursor (`path` waypoints) and Progress (`valueSteps`) have no string states. `at` is the ARRIVAL frame, and the move runs over `[at − duration, at)`.
+  - **Value channels:** Cursor (`path` waypoints), Progress (`valueSteps`) and Slider (`sliderSteps`) have no string states. `at` is the ARRIVAL frame, and the move runs over `[at − duration, at)`.
+    - Slider folds two channels independently: steps with `value` move the fill, steps with `thumbState` move the thumb.
+  - **Context-only atoms:** SkeletonBlock calls `useRemocnTheme()` with no override, so its wrappers add a `RemocnUIProvider` (mode + theme) to make dark mode reach it.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
   - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
@@ -71,6 +73,9 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Stagger limit:** consecutive SVG layers such as `text_card`s share one render segment, so they land as one item. Interleave an HTML layer between them, or use HTML layers, to stagger them.
   - **Second import:** `external.extraExports` bundles more named exports of the same file into `MasterScene`'s import line and `EXTERNAL_REGISTRY`; `SpringSettleItem` needs this.
 - **`box` child fit, 2026-09-28:** `external.children.fit: 'box'` draws wrapped layers 1:1, shifted by the wrapper layer's own `baseX`/`baseY`, so they stay where they are on screen.
+  - **Scale-aware, 2026-09-30:** the fit also divides by the wrapper layer's `scale` (offset −base/scale, content scale 1/scale), so a 1.5× wrapper (remocn-ui Skeleton) doesn't magnify its children.
+    - The studio preview ctx now carries `scale` for the matching `inner` transform.
+    - Crumple Toss (scale 1) is unchanged.
   - Why: this is for wrappers that clip or transform their children inside their own box. Remocn Crumple Toss clips its wedges to `width × height`.
   - Preview: the studio's preview ctx now carries `baseX`/`baseY` for this.
 - **Previews are approximations:** the studio draws a stand-in from the schema. Only `render_still` or `render_scene` shows the real component.
@@ -1566,6 +1571,31 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Popover:** opens at 36 under a Cursor and has closed by 110.
   - **Progress:** reaches 60% at f30, holds 62%, 100% at f149.
   - `check_scene` warns `simultaneous_entrances` for stacked bubbles, because their timing is in `steps`; safe to ignore.
+
+### Radio, Skeleton, Skeleton Block and Slider (remocn-ui)
+
+- **Catalog ids:** `remocn_ui_radio`, `remocn_ui_skeleton`, `remocn_ui_skeleton_block`, `remocn_ui_slider`.
+  - Files verbatim, MIT, with hooks; `skeleton-block` has none.
+  - The Radio page was pasted four times; it's registered once.
+- **Radio:** 1280×720 box at 1.5, centred; no `align` prop in the source.
+  - Motion: the ring turns primary and the inner dot scales 0.4 → 1 and fades in. Steps: checked 18, unchecked 78 (10).
+  - Group: one layer per option, offsetting `baseY`, and uncheck the old option on the frame the new one checks. The rows centre individually, so labels of similar length line up best.
+- **Skeleton:** a WRAPPER with `sizeMode: props` and `children.fit: 'box'`. Wrap the real content, which keeps its place; the placeholder (`layout` lines | card) draws at the box top-left at 1.5×.
+  - Crossfade: skeleton + content opacities always sum to 1. Default: loaded at 45 (16).
+  - `shimmerSpeed` drives the sweep (60 f / speed). With nothing wrapped, it's a loading placeholder that fades out.
+- **Skeleton Block:** `sizeMode: props`, so the box is the block (360×24, radius 9 = 1.5× 240×16/6) at scale 1.
+  - The sweep loops every 60 frames, and all blocks stay in phase.
+  - `baseColor` / `highlightColor` blank use the theme.
+- **Slider:** `sizeMode: props`, box width = track (320 at 1.5), with the value label above the thumb.
+  - `sliderSteps` default to the docs' drag: 20 → hover 30 → press 44 → value 80 at 100 (56) → idle 108.
+  - Cursor sync: thumb x = baseX + 1.5 × width × value / 100 and y = baseY + 30. With the defaults, 20% is 816, 540 and 80% is 1104, 540.
+    - Put `easing: "out"` on the cursor's drag waypoint. The slider value eases out but the cursor defaults to inOut, so the docs' own example lets the pointer trail the thumb mid-drag (value 73 at f72, cursor well behind). With matching easing they stay together; verified.
+- **Preview:** kind `uiatom`. The shimmer is an SVG gradient band with the same 60-frame sweep. The skeleton content opacity and scale-compensated `inner` come from `wrapGeometry`.
+- **Verified:** 2026-09-30, [remocn-ui-atoms4-contact.png](renders/remocn-ui-atoms4-contact.png), 16 stills, 0 errors:
+  - **Radio:** a Monthly/Yearly pair hands the checked dot over at 50.
+  - **Skeleton:** the card shimmers, crossfades at 45–61 to the wrapped Popover card, which keeps its place and size at 1.5×; dark placeholder verified.
+  - **Skeleton Block:** an avatar + two-line row shimmers in phase.
+  - **Slider:** the pointer drags the thumb 20 → 80 with hover and press rings, synced once the cursor uses ease-out.
 
 ### Typewriter Text
 

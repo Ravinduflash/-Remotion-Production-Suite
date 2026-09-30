@@ -19583,5 +19583,492 @@ window.CommunityManifest = [
       "style": "progress"
     },
     "defaultDurationInFrames": 150
+  },
+  {
+    "id": "remocn_ui_radio",
+    "componentName": "RadioTimeline",
+    "name": "Radio (remocn-ui)",
+    "desc": "remocn-ui • a shadcn radio whose ring turns primary and inner dot scales in on scripted steps (checked ↔ unchecked), optional label • transparent",
+    "icon": "🔘",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "RadioTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 18,
+            "state": "checked",
+            "duration": 14
+          },
+          {
+            "at": 78,
+            "state": "unchecked",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "label": "Subscribe to updates",
+        "size": "default",
+        "primary": ""
+      }
+    },
+    "controls": [
+      {
+        "group": "Radio (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; centred in the box; for a group, one layer per option (uncheck the old one on the frame the new one checks)",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: unchecked | checked)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "label",
+            "label": "LABEL (blank = bare ring)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "SIZE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "sm",
+                "Small (16)"
+              ],
+              [
+                "default",
+                "Default (20)"
+              ],
+              [
+                "lg",
+                "Large (24)"
+              ]
+            ]
+          },
+          {
+            "key": "primary",
+            "label": "PRIMARY (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "radio"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_skeleton",
+    "componentName": "SkeletonTimeline",
+    "name": "Skeleton (remocn-ui)",
+    "desc": "remocn-ui • WRAPPER: a shimmer placeholder (lines or avatar card) that crossfades to the wrapped layers — the real content — on scripted steps (loading → loaded) • transparent",
+    "icon": "🦴",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "SkeletonTimeline",
+      "sizeMode": "props",
+      "children": {
+        "fit": "box"
+      }
+    },
+    "defaults": {
+      "baseX": 720,
+      "baseY": 460,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 288,
+        "height": 96,
+        "steps": [
+          {
+            "at": 45,
+            "state": "loaded",
+            "duration": 16
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "layout": "lines",
+        "shimmerSpeed": 1,
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Skeleton (remocn-ui) (whole clip) • wrap the real content with update_asset wraps (it keeps its place); the placeholder draws at the box top-left at scale 1.5",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state: loading|loaded, duration?}] — layer frames)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (crossfade; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "layout",
+            "label": "PLACEHOLDER",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "lines",
+                "Three lines"
+              ],
+              [
+                "card",
+                "Avatar + two lines"
+              ]
+            ]
+          },
+          {
+            "key": "shimmerSpeed",
+            "label": "SHIMMER SPEED (sweep = 60 f / speed)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 6,
+            "step": 0.05
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "skeleton"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_skeleton_block",
+    "componentName": "SkeletonBlockTimeline",
+    "name": "Skeleton Block (remocn-ui)",
+    "desc": "remocn-ui • one always-shimmering placeholder rectangle (a highlight band sweeps every 60 frames, in phase with every other block) • the box is the block",
+    "icon": "▭",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "SkeletonBlockTimeline",
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 780,
+      "baseY": 528,
+      "scale": 1,
+      "customProperties": {
+        "width": 360,
+        "height": 24,
+        "radius": 9,
+        "speed": 1,
+        "baseColor": "",
+        "highlightColor": "",
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Skeleton Block (remocn-ui) (whole clip) • box = the block; defaults are 1.5× the 720p 240×16 block",
+        "items": [
+          {
+            "key": "radius",
+            "label": "RADIUS px (half the height = pill)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 0.5
+          },
+          {
+            "key": "speed",
+            "label": "SWEEP SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 6,
+            "step": 0.05
+          },
+          {
+            "key": "baseColor",
+            "label": "BASE (blank = theme muted)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "highlightColor",
+            "label": "HIGHLIGHT (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "skeletonblock"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_slider",
+    "componentName": "SliderTimeline",
+    "name": "Slider (remocn-ui)",
+    "desc": "remocn-ui • a range slider on two scripted channels: the fill value eases between arrival frames while the thumb hovers / presses on its own (grab ring) • transparent",
+    "icon": "🎚️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "SliderTimeline",
+      "sizeMode": "props",
+      "omitProps": [
+        "height"
+      ]
+    },
+    "defaults": {
+      "baseX": 720,
+      "baseY": 510,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 320,
+        "height": 40,
+        "sliderSteps": [
+          {
+            "at": 0,
+            "value": 20,
+            "thumbState": "idle"
+          },
+          {
+            "at": 30,
+            "thumbState": "hover",
+            "duration": 8
+          },
+          {
+            "at": 44,
+            "thumbState": "press",
+            "duration": 6
+          },
+          {
+            "at": 44,
+            "value": 20
+          },
+          {
+            "at": 100,
+            "value": 80,
+            "duration": 56
+          },
+          {
+            "at": 108,
+            "thumbState": "idle",
+            "duration": 8
+          }
+        ],
+        "value": 0,
+        "thumbState": "idle",
+        "showValue": true,
+        "speed": 1,
+        "primary": "",
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Slider (remocn-ui) (whole clip) • box width = track (320 px layout at scale 1.5); thumb x = baseX + 1.5 × width × value / 100",
+        "items": [
+          {
+            "key": "sliderSteps",
+            "label": "STEPS (JSON [{at (arrival), value? 0–100, thumbState?: idle|hover|press, duration? (18), easing?}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "value",
+            "label": "FIXED VALUE (used when no steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "key": "thumbState",
+            "label": "FIXED THUMB",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "idle",
+                "Idle"
+              ],
+              [
+                "hover",
+                "Hover"
+              ],
+              [
+                "press",
+                "Press"
+              ]
+            ]
+          },
+          {
+            "key": "showValue",
+            "label": "SHOW VALUE ABOVE THUMB",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "primary",
+            "label": "FILL (blank = theme primary)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "slider"
+    },
+    "defaultDurationInFrames": 120
   }
 ];

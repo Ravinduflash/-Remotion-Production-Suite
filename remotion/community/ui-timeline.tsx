@@ -1,12 +1,13 @@
 // Authored for this project (not a remocn file): timeline wrappers around the verbatim remocn-ui state atoms
 // (accordion, alert-dialog, blur-in, button, checkbox, dialog, drawer, sheet, context-menu, dropdown-menu, combobox, command-menu,
-// input, message-bubble, popover), the field layout family, and the value-channel cursor and progress bar. State atoms never read the frame, so each wrapper takes a JSON `steps`
+// input, message-bubble, popover, radio, skeleton), the field layout family, the skeleton-block shimmer, and the value-channel
+// cursor, progress bar and slider. State atoms never read the frame, so each wrapper takes a JSON `steps`
 // array and resolves it with useCurrentState (smooth=false, snap) or the atom's own use<Name>Transition hook (smooth).
 // `mode: "dark"` passes the full dark palette as the theme override: the atoms call useRemocnTheme(override, "light"),
 // so a plain mode would only reach the hook's colours and leave the atom's borders and text light.
 import type { ReactNode } from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
-import { type RemocnTheme, type Step, clamp01, defaultDarkTheme, easings, revealCount, useCurrentState, useRemocnTheme } from "./remocn-ui";
+import { type RemocnTheme, RemocnUIProvider, type Step, clamp01, defaultDarkTheme, easings, revealCount, useCurrentState, useRemocnTheme } from "./remocn-ui";
 import { Accordion, type AccordionState } from "./accordion";
 import { useAccordionTransition } from "./use-accordion-transition";
 import { AlertDialog, type AlertDialogState } from "./alert-dialog";
@@ -48,6 +49,13 @@ import { Popover, type PopoverSide, type PopoverState } from "./popover";
 import { usePopoverTransition } from "./use-popover-transition";
 import { Progress } from "./progress";
 import { type ProgressStep, useProgressTransition } from "./use-progress-transition";
+import { Radio, type RadioState } from "./radio";
+import { useRadioTransition } from "./use-radio-transition";
+import { Skeleton, type SkeletonLayout, type SkeletonState } from "./skeleton";
+import { useSkeletonTransition } from "./use-skeleton-transition";
+import { SkeletonBlock } from "./skeleton-block";
+import { Slider, type SliderThumbState } from "./slider";
+import { type SliderStep, useSliderTransition } from "./use-slider-transition";
 
 type Mode = "light" | "dark";
 interface Timed<S extends string> { steps?: Step<S>[]; smooth?: boolean; speed?: number }
@@ -306,6 +314,59 @@ export function ProgressTimeline({ valueSteps, value = 0, speed = 1, mode, theme
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center" }}>
       <Progress value={value} style={vs.length ? style : undefined} width={width} showLabel={showLabel} theme={th} />
+    </div>
+  );
+}
+
+export function RadioTimeline({ steps, smooth = true, speed = 1, mode, theme, primary, label, ...rest }: Timed<RadioState> & Themed & {
+  label?: string; size?: "sm" | "default" | "lg"; primary?: string; className?: string;
+}) {
+  const s = stepsOf<RadioState>(steps), th = themeFor(mode, theme), p = primary || undefined;
+  const snap = useCurrentState(s, "unchecked", speed);
+  const style = useRadioTransition(s, { theme: th, mode, primary: p, speed });
+  return <Radio {...rest} label={label || undefined} theme={th} primary={p} state={snap} style={smooth ? style : undefined} />;
+}
+
+/** WRAPPER: the wrapped layers are the real content (children fit "box", so they keep their place and size) and fade in over
+ *  the shimmer placeholder drawn at the box top-left. The provider hands the mode to SkeletonBlock, which reads only context. */
+export function SkeletonTimeline({ steps, smooth = true, speed = 1, mode, theme, layout = "lines", shimmerSpeed = 1, width = 320, height = 80, children }: Timed<SkeletonState> & Themed & {
+  layout?: SkeletonLayout; shimmerSpeed?: number; width?: number; height?: number; children?: ReactNode;
+}) {
+  const s = stepsOf<SkeletonState>(steps), th = themeFor(mode, theme);
+  const snap = useCurrentState(s, "loading", speed);
+  const style = useSkeletonTransition(s, { speed });
+  return (
+    <RemocnUIProvider mode={mode} theme={th}>
+      <div style={{ position: "absolute", left: 0, top: 0 }}>
+        <Skeleton layout={layout} speed={shimmerSpeed} theme={th} state={snap} style={smooth ? style : undefined}>
+          <div style={{ position: "relative", width, height }}>{children}</div>
+        </Skeleton>
+      </div>
+    </RemocnUIProvider>
+  );
+}
+
+/** One always-shimmering block; the layer box is the block (sizeMode props). */
+export function SkeletonBlockTimeline({ mode, theme, width = 120, height = 16, radius = 6, speed = 1, baseColor, highlightColor }: Themed & {
+  width?: number; height?: number; radius?: number; speed?: number; baseColor?: string; highlightColor?: string;
+}) {
+  return (
+    <RemocnUIProvider mode={mode} theme={themeFor(mode, theme)}>
+      <SkeletonBlock width={width} height={height} radius={radius} speed={speed} baseColor={baseColor || undefined} highlightColor={highlightColor || undefined} />
+    </RemocnUIProvider>
+  );
+}
+
+/** Dual value channel: `sliderSteps` [{at (arrival), value?, thumbState?: idle|hover|press, duration?, easing?}]; box width = track (sizeMode props). */
+export function SliderTimeline({ sliderSteps, value = 0, thumbState = "idle", speed = 1, mode, theme, primary, width = 320, showValue = true }: Themed & {
+  sliderSteps?: SliderStep[]; value?: number; thumbState?: SliderThumbState; speed?: number; primary?: string; width?: number; height?: number; showValue?: boolean;
+}) {
+  const ss = Array.isArray(sliderSteps) ? sliderSteps.filter((v) => v && typeof v.at === "number") : [];
+  const style = useSliderTransition(ss, { speed });
+  const th = { ...themeFor(mode, theme), ...(primary ? { primary } : {}) };
+  return (
+    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center" }}>
+      <Slider value={value} thumbState={thumbState} style={ss.length ? style : undefined} width={width} showValue={showValue} theme={th} />
     </div>
   );
 }
