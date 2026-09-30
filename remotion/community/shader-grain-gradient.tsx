@@ -1,5 +1,5 @@
 // Source: remocn — https://remocn.dev/r/shader-grain-gradient.json (registry/remocn/shader-grain-gradient/index.tsx), MIT License, Copyright (c) 2026 Remocn.
-// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-grain-gradient by grain-dissolve, wave-wipe and ripple-zoom; not a catalog entry.
+// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-grain-gradient by grain-dissolve, wave-wipe and ripple-zoom; also registered as catalog id "remocn_shader_grain_gradient" (full-frame backdrop).
 // Path aliases @/lib/remocn and @/components/remocn resolve to this folder (render-project/remotion.config.ts + tsconfig paths).
 "use client";
 

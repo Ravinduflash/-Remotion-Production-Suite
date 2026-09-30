@@ -55,6 +55,10 @@ export interface ExternalDescriptor {
    *  { waitFor: css selector }: during the transition each frame is held until that selector matches inside the layer,
    *  plus a few animation frames — for shaders that paint asynchronously (paper-design mounts after an image decode). */
   transition?: boolean | { waitFor?: string };
+  /** Plain layers that paint asynchronously (remocn shader backdrops wrap paper-design, which mounts after an image decode and
+   *  applies each frame's uniforms a frame late): every frame is held until `waitFor` matches inside the layer, plus a few
+   *  animation frames — the same gate transition layers use. */
+  paintGate?: { waitFor: string };
   /** Scene sequencers (remocn SlideSwapScenes / SpringSettleScenes): the filled slots (children.slots, in order) become
    *  customProperties-free `scenes` entries { name: slot, content, durationInFrames: customProperties[durationsProp][i],
    *  <field>: customProperties[fields[field]][i] }. itemExport wraps every wrapped layer of a scene in that export (e.g.
@@ -183,6 +187,33 @@ export function externalProps(asset: SceneAsset, p: Sampled): Record<string, any
 /** Plays a TransitionPresentation between two already-built scenes, the way TransitionSeries + linearTiming does:
  *  `from` alone before `at`, both (exiting under entering) for `frames` frames, then `to` alone. Inside the
  *  transition the presentation sees its own frame 0 at `at`; the scenes are shifted back to keep their own time. */
+/** Holds each frame (delayRender) until `waitFor` matches inside the box, then four animation frames more; gives up after 15 s
+ *  of no match (still settling) and never outlives 90 s. Shared by transition layers and external.paintGate layers. */
+function usePaintGate(box: React.RefObject<HTMLDivElement | null>, frame: number, waitFor: string | undefined, active: boolean) {
+  React.useLayoutEffect(() => {
+    if (!active || !waitFor) return;
+    const handle = delayRender(`paint ${waitFor} ${frame}`, { timeoutInMilliseconds: 110000 });
+    let raf = 0, done = false, settle = -1; const t0 = performance.now();
+    const finish = () => { if (!done) { done = true; continueRender(handle); } };
+    const tick = () => {
+      if (done) return;
+      if (settle < 0 && ((box.current && box.current.querySelector(waitFor)) || performance.now() - t0 > 15000)) settle = 4;
+      if (settle === 0) return finish();
+      if (settle > 0) settle--;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    const fallback = setTimeout(finish, 90000); // never outlive the render's delayRender budget, even if the shader never mounts
+    return () => { cancelAnimationFrame(raf); clearTimeout(fallback); finish(); };
+  }, [frame, active, waitFor]);
+}
+
+const PaintGate: React.FC<{ waitFor: string; children: React.ReactNode }> = ({ waitFor, children }) => {
+  const frame = useCurrentFrame(), box = React.useRef<HTMLDivElement>(null);
+  usePaintGate(box, frame, waitFor, true);
+  return <div ref={box} style={{ position: 'absolute', inset: 0 }}>{children}</div>;
+};
+
 const TransitionLayer: React.FC<{ factory: (props: Record<string, any>) => { component: React.ComponentType<any>; props: Record<string, any> }; passedProps: Record<string, any>; at: number; frames: number; from?: React.ReactNode; to?: React.ReactNode; waitFor?: string }> = ({ factory, passedProps, at, frames, from, to, waitFor }) => {
   const frame = useCurrentFrame();
   const T = Math.max(1, Math.round(frames));
@@ -204,22 +235,7 @@ const TransitionLayer: React.FC<{ factory: (props: Record<string, any>) => { com
   }, []);
   // paper-design shaders apply each frame's uniforms after an async image decode and paint on the next animation frame;
   // remocn's wrappers only hold the first render for two frames, so the capture could miss the field. Hold every frame.
-  React.useLayoutEffect(() => {
-    if (!during || !waitFor) return;
-    const handle = delayRender(`transition paint ${frame}`, { timeoutInMilliseconds: 110000 });
-    let raf = 0, done = false, settle = -1; const t0 = performance.now();
-    const finish = () => { if (!done) { done = true; continueRender(handle); } };
-    const tick = () => {
-      if (done) return;
-      if (settle < 0 && ((box.current && box.current.querySelector(waitFor)) || performance.now() - t0 > 15000)) settle = 4;
-      if (settle === 0) return finish();
-      if (settle > 0) settle--;
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    const fallback = setTimeout(finish, 90000); // never outlive the render's delayRender budget, even if the shader never mounts
-    return () => { cancelAnimationFrame(raf); clearTimeout(fallback); finish(); };
-  }, [frame, during, waitFor]);
+  usePaintGate(box, frame, waitFor, during);
   if (frame < at) return <AbsoluteFill>{from}</AbsoluteFill>;
   if (frame >= at + T) return <AbsoluteFill>{to}</AbsoluteFill>;
   const pres = factory(passedProps), P = pres.component;
@@ -330,6 +346,7 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, registry = 
         props[sl.prop || 'scenes'] = scenes;
       }
       let el: React.ReactNode = <C {...props} />;
+      if (asset.external && asset.external.paintGate && asset.external.paintGate.waitFor) el = <PaintGate waitFor={asset.external.paintGate.waitFor}>{el}</PaintGate>;
       if (asset.external && asset.external.transition) {
         const { from, to, transitionAt, transitionFrames, ...passed } = props;
         const tr = asset.external.transition;

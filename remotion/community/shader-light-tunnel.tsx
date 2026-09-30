@@ -1,5 +1,5 @@
 // Source: remocn — https://remocn.dev/r/shader-light-tunnel.json (registry/remocn/shader-light-tunnel/index.tsx), MIT License, Copyright (c) 2026 Remocn.
-// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-light-tunnel by shader-spiral-pass; not a catalog entry.
+// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-light-tunnel by shader-spiral-pass; also registered as catalog id "remocn_shader_light_tunnel" (full-frame backdrop).
 // Path aliases @/lib/remocn and @/components/remocn resolve to this folder (render-project/remotion.config.ts + tsconfig paths).
 "use client";
 

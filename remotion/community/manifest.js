@@ -21800,5 +21800,1551 @@ window.CommunityManifest = [
       "style": "settings"
     },
     "defaultDurationInFrames": 320
+  },
+  {
+    "id": "remocn_shader_mesh_gradient",
+    "componentName": "ShaderMeshGradient",
+    "name": "Mesh Gradient (remocn shader)",
+    "desc": "remocn shader • paper-design mesh gradient: slow, living colour blobs, frame-driven for deterministic renders • opaque backdrop",
+    "icon": "🌈",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-mesh-gradient",
+      "exportName": "ShaderMeshGradient",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "distortion": 0.6,
+        "swirl": 0.1
+      }
+    },
+    "controls": [
+      {
+        "group": "Mesh Gradient (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; set colors to make it lead",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "distortion",
+            "label": "DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "swirl",
+            "label": "SWIRL",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "mesh"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_grain_gradient",
+    "componentName": "ShaderGrainGradient",
+    "name": "Grain Gradient (remocn shader)",
+    "desc": "remocn shader • paper-design grainy multi-stop gradient drifting under film grain • opaque backdrop",
+    "icon": "🎞️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-grain-gradient",
+      "exportName": "ShaderGrainGradient",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "softness": 0.6,
+        "intensity": 0.2,
+        "noise": 0.15
+      }
+    },
+    "controls": [
+      {
+        "group": "Grain Gradient (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; lower grain behind small text",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "noise",
+            "label": "GRAIN",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "shape",
+            "label": "SHAPE (unset = paper default; blob / dots / truchet render EMPTY on software WebGL here)",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "corners",
+                "Corners"
+              ],
+              [
+                "wave",
+                "Wave"
+              ],
+              [
+                "sphere",
+                "Sphere"
+              ],
+              [
+                "ripple",
+                "Ripple"
+              ],
+              [
+                "blob",
+                "Blob"
+              ],
+              [
+                "dots",
+                "Dots"
+              ],
+              [
+                "truchet",
+                "Truchet"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "grain"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_warp",
+    "componentName": "ShaderWarp",
+    "name": "Warp (remocn shader)",
+    "desc": "remocn shader • paper-design domain-warped colour field folding and stretching like liquid • opaque backdrop",
+    "icon": "🌊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-warp",
+      "exportName": "ShaderWarp",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "proportion": 0.5,
+        "softness": 1,
+        "distortion": 0.2,
+        "swirl": 0.4
+      }
+    },
+    "controls": [
+      {
+        "group": "Warp (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; keep distortion low under text",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "proportion",
+            "label": "PROPORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "distortion",
+            "label": "DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "swirl",
+            "label": "SWIRL",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "warp"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_swirl",
+    "componentName": "ShaderSwirl",
+    "name": "Swirl (remocn shader)",
+    "desc": "remocn shader • paper-design concentric bands swirling around the centre • opaque backdrop",
+    "icon": "🌀",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-swirl",
+      "exportName": "ShaderSwirl",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "bandCount": 4,
+        "twist": 0.1,
+        "softness": 0.2
+      }
+    },
+    "controls": [
+      {
+        "group": "Swirl (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; the centre draws the eye",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "bandCount",
+            "label": "BANDS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 15,
+            "step": 1
+          },
+          {
+            "key": "twist",
+            "label": "TWIST",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "swirl"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_water",
+    "componentName": "ShaderWater",
+    "name": "Water (remocn shader)",
+    "desc": "remocn shader • paper-design caustic water-surface ripples with subtle refraction, cool and dark by default • opaque backdrop",
+    "icon": "💧",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-water",
+      "exportName": "ShaderWater",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#16202b",
+        "colorHighlight": "#5a6a7a",
+        "highlights": 0.06,
+        "waves": 0.3,
+        "caustic": 0.08
+      }
+    },
+    "controls": [
+      {
+        "group": "Water (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; lower caustic under small text",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorHighlight",
+            "label": "HIGHLIGHT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "highlights",
+            "label": "HIGHLIGHTS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "waves",
+            "label": "WAVES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "caustic",
+            "label": "CAUSTIC",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "water"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_spiral",
+    "componentName": "ShaderSpiral",
+    "name": "Spiral (remocn shader)",
+    "desc": "remocn shader • paper-design duotone spiral arms rotating out of the centre • opaque backdrop",
+    "icon": "🐚",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-spiral",
+      "exportName": "ShaderSpiral",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "colorFront": "#52527a",
+        "density": 1,
+        "strokeWidth": 0.5,
+        "softness": 0.2
+      }
+    },
+    "controls": [
+      {
+        "group": "Spiral (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; the centre draws the eye",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorFront",
+            "label": "ARMS",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "density",
+            "label": "DENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "strokeWidth",
+            "label": "ARM WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "spiral"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_liquid_metal",
+    "componentName": "ShaderLiquidMetal",
+    "name": "Liquid Metal (remocn shader)",
+    "desc": "remocn shader • paper-design molten metal surface with flowing specular highlights, full-bleed (shape none) • opaque backdrop",
+    "icon": "🪙",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-liquid-metal",
+      "exportName": "ShaderLiquidMetal",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#2a2a30",
+        "colorTint": "#8a8a95",
+        "distortion": 0.1,
+        "repetition": 1.5,
+        "contour": 0.4,
+        "softness": 0.05,
+        "shape": "none",
+        "scale": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Liquid Metal (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; tonal, not colourful; scale 1 fills the frame",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorTint",
+            "label": "TINT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "distortion",
+            "label": "DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "repetition",
+            "label": "REPETITION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 10,
+            "step": 0.1
+          },
+          {
+            "key": "contour",
+            "label": "CONTOUR",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "shape",
+            "label": "SHAPE (none = full bleed; others are centred emblems)",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "none",
+                "None (full bleed)"
+              ],
+              [
+                "circle",
+                "Circle"
+              ],
+              [
+                "daisy",
+                "Daisy"
+              ],
+              [
+                "diamond",
+                "Diamond"
+              ],
+              [
+                "metaballs",
+                "Metaballs"
+              ]
+            ]
+          },
+          {
+            "key": "scale",
+            "label": "SCALE (paper default 0.6 leaves a centred panel; 1 = full bleed)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 6,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "metal"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_light_tunnel",
+    "componentName": "ShaderLightTunnel",
+    "name": "Light Tunnel (remocn shader)",
+    "desc": "remocn shader • the OpenShaders hero field mapped into a cylindrical light tunnel: straight forward flight, ribbons twisting round a centred vanishing point (own WebGL2, no package) • opaque backdrop",
+    "icon": "🚇",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-light-tunnel",
+      "exportName": "ShaderLightTunnel",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "twist": 0.7,
+        "spirals": 3,
+        "glow": 1,
+        "depth": 1,
+        "timeOffset": 0
+      }
+    },
+    "controls": [
+      {
+        "group": "Light Tunnel (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; not a seamless loop; no fades",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "twist",
+            "label": "TWIST (0 = no rotation, travel continues)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "spirals",
+            "label": "RIBBON REPEATS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 6,
+            "step": 1
+          },
+          {
+            "key": "glow",
+            "label": "GLOW",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          },
+          {
+            "key": "depth",
+            "label": "DEPTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "timeOffset",
+            "label": "START TIME s (another part of the path)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 120,
+            "step": 0.1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "tunnel"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 90,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_color_panels",
+    "componentName": "ShaderColorPanels",
+    "name": "Color Panels (remocn shader)",
+    "desc": "remocn shader • paper-design translucent colour panes sliding past each other — glassy, architectural depth • opaque backdrop",
+    "icon": "🪟",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-color-panels",
+      "exportName": "ShaderColorPanels",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "density": 3,
+        "length": 1.1
+      }
+    },
+    "controls": [
+      {
+        "group": "Color Panels (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; lower density under dense content",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "density",
+            "label": "PANELS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 10,
+            "step": 0.1
+          },
+          {
+            "key": "length",
+            "label": "PANEL LENGTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "panels"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_neuro_noise",
+    "componentName": "ShaderNeuroNoise",
+    "name": "Neuro Noise (remocn shader)",
+    "desc": "remocn shader • paper-design neural-web noise: slowly morphing filaments that read as \"intelligence\" • opaque backdrop",
+    "icon": "🧠",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-neuro-noise",
+      "exportName": "ShaderNeuroNoise",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorFront": "#8a8a95",
+        "colorMid": "#4a4a68",
+        "colorBack": "#12121a",
+        "brightness": 0.05,
+        "contrast": 0.3
+      }
+    },
+    "controls": [
+      {
+        "group": "Neuro Noise (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; keep brightness low under text",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colorFront",
+            "label": "FILAMENTS",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorMid",
+            "label": "MID",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "brightness",
+            "label": "BRIGHTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "contrast",
+            "label": "CONTRAST",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "neuro"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_perlin_noise",
+    "componentName": "ShaderPerlinNoise",
+    "name": "Perlin Noise (remocn shader)",
+    "desc": "remocn shader • paper-design duotone Perlin clouds drifting across the frame — calm, soft fog • opaque backdrop",
+    "icon": "☁️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-perlin-noise",
+      "exportName": "ShaderPerlinNoise",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "colorFront": "#6a6a85",
+        "proportion": 0.35,
+        "softness": 0.1,
+        "scale": 3
+      }
+    },
+    "controls": [
+      {
+        "group": "Perlin Noise (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; duotone",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colorFront",
+            "label": "CLOUDS",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "proportion",
+            "label": "PROPORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "scale",
+            "label": "PATTERN SCALE (bigger = larger clouds; 1 reads as fine speckle at 1080p)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 6,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "perlin"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_simplex_noise",
+    "componentName": "ShaderSimplexNoise",
+    "name": "Simplex Noise (remocn shader)",
+    "desc": "remocn shader • paper-design simplex flow field — the smoothest noise, gentle multi-stop drift with posterised banding control • opaque backdrop",
+    "icon": "🌫️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-simplex-noise",
+      "exportName": "ShaderSimplexNoise",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "stepsPerColor": 2,
+        "softness": 0.1
+      }
+    },
+    "controls": [
+      {
+        "group": "Simplex Noise (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; multi-stop colours",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "stepsPerColor",
+            "label": "STEPS PER COLOUR (banding)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 10,
+            "step": 1
+          },
+          {
+            "key": "softness",
+            "label": "SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "simplex"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_voronoi",
+    "componentName": "ShaderVoronoi",
+    "name": "Voronoi (remocn shader)",
+    "desc": "remocn shader • paper-design Voronoi cells shifting and re-tessellating with dark gaps — crystalline, technical • opaque backdrop",
+    "icon": "🔷",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-voronoi",
+      "exportName": "ShaderVoronoi",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorGap": "#12121a",
+        "distortion": 0.4,
+        "gap": 0.04,
+        "glow": 0
+      }
+    },
+    "controls": [
+      {
+        "group": "Voronoi (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; lower distortion under dense content",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorGap",
+            "label": "GAP",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "distortion",
+            "label": "DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.01
+          },
+          {
+            "key": "gap",
+            "label": "GAP WIDTH",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.1,
+            "step": 0.001
+          },
+          {
+            "key": "glow",
+            "label": "GLOW (keep low)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "voronoi"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_dot_orbit",
+    "componentName": "ShaderDotOrbit",
+    "name": "Dot Orbit (remocn shader)",
+    "desc": "remocn shader • paper-design dot grid whose dots orbit on small concentric paths — reads as network / system • opaque backdrop",
+    "icon": "⚛️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-dot-orbit",
+      "exportName": "ShaderDotOrbit",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "size": 1,
+        "spreading": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Dot Orbit (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; regular pattern",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "DOT SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "spreading",
+            "label": "SPREADING",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "dots"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_dithering",
+    "componentName": "ShaderDithering",
+    "name": "Dithering (remocn shader)",
+    "desc": "remocn shader • paper-design ordered (bayer) dither over an animated gradient field — retro / print / lo-fi, full-bleed wave by default • opaque backdrop",
+    "icon": "▦",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-dithering",
+      "exportName": "ShaderDithering",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "colorFront": "#6a6a85",
+        "shape": "wave",
+        "type": "4x4",
+        "size": 2
+      }
+    },
+    "controls": [
+      {
+        "group": "Dithering (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; raise size behind small text",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colorFront",
+            "label": "INK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "type",
+            "label": "MATRIX",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "random",
+                "Random"
+              ],
+              [
+                "2x2",
+                "2×2"
+              ],
+              [
+                "4x4",
+                "4×4"
+              ],
+              [
+                "8x8",
+                "8×8"
+              ]
+            ]
+          },
+          {
+            "key": "size",
+            "label": "DOT SIZE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 0.5
+          },
+          {
+            "key": "shape",
+            "label": "FIELD SHAPE (wave = full bleed)",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "wave",
+                "Wave"
+              ],
+              [
+                "simplex",
+                "Simplex"
+              ],
+              [
+                "warp",
+                "Warp"
+              ],
+              [
+                "dots",
+                "Dots"
+              ],
+              [
+                "ripple",
+                "Ripple"
+              ],
+              [
+                "swirl",
+                "Swirl"
+              ],
+              [
+                "sphere",
+                "Sphere (centred)"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "dither"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_god_rays",
+    "componentName": "ShaderGodRays",
+    "name": "God Rays (remocn shader)",
+    "desc": "remocn shader • paper-design volumetric light rays from an off-screen corner source with a soft bloom — cinematic reveal atmosphere • opaque backdrop",
+    "icon": "🌅",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-god-rays",
+      "exportName": "ShaderGodRays",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "colorBloom": "#3a3a5c",
+        "intensity": 0.8,
+        "density": 0.3,
+        "bloom": 0.4
+      }
+    },
+    "controls": [
+      {
+        "group": "God Rays (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; keep bloom restrained",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "colorBloom",
+            "label": "BLOOM",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "density",
+            "label": "DENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "bloom",
+            "label": "BLOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "rays"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
   }
 ];

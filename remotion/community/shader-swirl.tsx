@@ -1,5 +1,5 @@
 // Source: remocn — https://remocn.dev/r/shader-swirl.json (registry/remocn/shader-swirl/index.tsx), MIT License, Copyright (c) 2026 Remocn.
-// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-swirl by swirl-dissolve; not a catalog entry.
+// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-swirl by swirl-dissolve; also registered as catalog id "remocn_shader_swirl" (full-frame backdrop).
 // Path aliases @/lib/remocn and @/components/remocn resolve to this folder (render-project/remotion.config.ts + tsconfig paths).
 "use client";
 

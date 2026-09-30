@@ -62,10 +62,12 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Props: a `speed` control, a few shader-specific props, and every other paper-design prop passed through. Defaults are muted, so set a palette to make one lead.
   - Registration: full-frame backdrops go BEHIND content, at scale 1, 1920×1080, as the bottom layer.
   - Registry, checked 2026-09-30: 26 `shader-*` items.
-    - **Installed, byte-identical, not yet catalog backdrops** (they came in as transition dependencies): `dithering`, `grain-gradient`, `light-tunnel`, `perlin-noise`, `smoke-ring`, `swirl`, `warp`.
+    - **Installed as transition dependencies:** `dithering`, `grain-gradient`, `light-tunnel`, `perlin-noise`, `smoke-ring`, `swirl`, `warp`. All but `smoke-ring` became catalog backdrops on 2026-09-30; see below.
     - **Already registered:** `seam`, `spiral-pass`, `text-reveal`.
-    - **New:** `mesh-gradient`, `water`, `spiral`, `liquid-metal`, `color-panels`, `neuro-noise`, `simplex-noise`, `voronoi`, `dot-orbit`, `god-rays`, `metaballs`, `pulsing-border`, `caustics`, `gem-smoke`, `strata`, `weave`.
+    - **Remaining (not yet installed):** `metaballs`, `pulsing-border`, `caustics`, `gem-smoke`, `strata`, `weave`, plus `smoke-ring` (installed, not registered).
   - **Render caveats:** see the SwiftShader note under Transition layers. Software WebGL is slow here (30–145 s a still), and some paper-design shapes render empty on it (GrainGradient blob, dots and truchet). Verify each new shader with a real still before trusting it, and keep the 120 s delayRender timeout.
+- **`external.paintGate: {waitFor}`, 2026-09-30:** plain layers that paint asynchronously get the same per-frame hold transition layers use (`usePaintGate` in `SceneRenderer`, now shared). Every frame waits until the selector matches inside the layer, plus four animation frames; it gives up after 15 s and never outlives 90 s.
+  - The paper-design shader backdrops use `'[data-paper-shader] canvas'`. remocn's own gate only holds two animation frames once, at mount.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
   - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
@@ -1685,6 +1687,30 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Onboarding:** Account ✓ → Plan ✓ → switches → Finish ✓.
   - **AI Prompt:** loading → skeleton → answer + "Response ready".
   - **Settings:** switch, select panel, slider drag, Save ✓ + toast.
+
+### Shader backdrops (remocn shaders): Mesh Gradient, Grain Gradient, Warp, Swirl, Water, Spiral, Liquid Metal, Light Tunnel, Color Panels, Neuro Noise, Perlin Noise, Simplex Noise, Voronoi, Dot Orbit, Dithering and God Rays
+
+- **Catalog ids:** `remocn_shader_<name>` (`mesh_gradient`, `grain_gradient`, `warp`, `swirl`, `water`, `spiral`, `liquid_metal`, `light_tunnel`, `color_panels`, `neuro_noise`, `perlin_noise`, `simplex_noise`, `voronoi`, `dot_orbit`, `dithering`, `god_rays`).
+- **Files:**
+  - New verbatim, MIT: `mesh-gradient`, `water`, `spiral`, `liquid-metal`, `color-panels`, `neuro-noise`, `simplex-noise`, `voronoi`, `dot-orbit`, `god-rays`.
+  - Already installed (transition dependencies) and still byte-identical: `grain-gradient`, `warp`, `swirl`, `light-tunnel`, `perlin-noise`, `dithering`. Only their header note changed.
+- **Registration:** all are full-frame opaque backdrops at scale 1 (1920×1080, `fullFrame`), `sizeMode: none`, and read their size from `useVideoConfig`. Put them on the BOTTOM layer.
+  - The paper-design ones carry `external.paintGate` (see the pipeline note). Light Tunnel is its own WebGL2 (no package) and needs no gate.
+  - `renderTimeoutMs` is 120000.
+- **Controls:** `speed` (0 = frozen) plus the shader-specific props from each wrapper's defaults. `colors` is a JSON hex array where the wrapper has one. Any other paper-design prop can be added to `customProperties` and is forwarded.
+  - The defaults are the wrappers' muted indigo sets, so set `colors` to make one lead.
+- **Per shader:**
+  - **Grain Gradient:** `shape` is exposed; blob, dots and truchet render EMPTY on software WebGL here (see Transition layers).
+  - **Liquid Metal:** `shape: none` is full bleed ONLY at `scale: 1`. paper-design's default `scale` is 0.6 and the wrapper doesn't override it, so the "full-bleed" default rendered as a centred panel at about 60% of the frame. The catalog default is now `scale: 1` (verified), and the other shapes are centred emblems.
+  - **Dithering:** `type` random | 2x2 | 4x4 | 8x8; `shape` wave (full bleed) … sphere (centred).
+  - **Voronoi:** `glow` defaults to 0 on purpose.
+  - **Perlin Noise:** at paper-design's pattern `scale` 1 it reads as fine speckle at 1080p, not the docs' "clouds". The catalog default is `scale: 3`, which gives soft cloud islands (verified); larger = bigger features.
+  - **Dithering:** the 2 px bayer dots vanish in half-scale proof stills; judge dithering at full resolution.
+  - **Light Tunnel:** `twist` 0–2, `spirals` 1–6, `glow` 0–3, `depth` 0.5–2, `timeOffset` s. Forward flight, not a seamless loop, no fades; natural length 90.
+- **Preview:** kind `shaderbg`, animated SVG stand-ins that use the same palette props. The real field is WebGL, so judge a look from a render still.
+- **Verified:** 2026-09-30, [remocn-shaders-contact.png](renders/remocn-shaders-contact.png), 36 stills, 0 errors, on software WebGL (33–90 s a still).
+  - Every backdrop paints through the paint gate and moves between frames 10 and 120 (mean pixel change 8–53), including a brand-coloured Mesh Gradient.
+  - Light Tunnel flies forward with its ribbons twisting. God Rays fan down from the top edge.
 
 ### Typewriter Text
 
