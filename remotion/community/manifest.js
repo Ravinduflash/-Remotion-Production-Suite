@@ -20070,5 +20070,965 @@ window.CommunityManifest = [
       "style": "slider"
     },
     "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_stepper",
+    "componentName": "StepperTimeline",
+    "name": "Stepper (remocn-ui)",
+    "desc": "remocn-ui • a numbered multi-step indicator: as the scripted position advances each circle fills primary, its check draws in and the connector fills • transparent",
+    "icon": "🪜",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "StepperTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "labels": [
+          "Account",
+          "Plan",
+          "Done"
+        ],
+        "stepperSteps": [
+          {
+            "at": 0,
+            "index": 0
+          },
+          {
+            "at": 50,
+            "index": 1,
+            "duration": 24
+          },
+          {
+            "at": 110,
+            "index": 2,
+            "duration": 24
+          }
+        ],
+        "activeIndex": 0,
+        "speed": 1,
+        "primary": "",
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Stepper (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; horizontal only (the source falls back from vertical)",
+        "items": [
+          {
+            "key": "labels",
+            "label": "STEP LABELS (JSON string array — the count is the number of steps)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "stepperSteps",
+            "label": "POSITION STEPS (JSON [{at (arrival), index, duration? (24), easing?}] — keep an {at:0,index:0} anchor)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "activeIndex",
+            "label": "FIXED STEP (used when no steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 10,
+            "step": 0.01
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "primary",
+            "label": "PRIMARY (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "stepper"
+    },
+    "defaultDurationInFrames": 130
+  },
+  {
+    "id": "remocn_ui_switch",
+    "componentName": "SwitchTimeline",
+    "name": "Switch (remocn-ui)",
+    "desc": "remocn-ui • a shadcn switch whose track fills primary as the thumb slides across on scripted steps (checked ↔ unchecked), optional label • transparent",
+    "icon": "🔛",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "SwitchTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 18,
+            "state": "checked",
+            "duration": 14
+          },
+          {
+            "at": 78,
+            "state": "unchecked",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "label": "Enable notifications",
+        "size": "default",
+        "primary": ""
+      }
+    },
+    "controls": [
+      {
+        "group": "Switch (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; centred in the box; stack layers for a settings list",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: unchecked | checked)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "label",
+            "label": "LABEL (blank = bare switch)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "SIZE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "sm",
+                "Small"
+              ],
+              [
+                "default",
+                "Default"
+              ],
+              [
+                "lg",
+                "Large"
+              ]
+            ]
+          },
+          {
+            "key": "primary",
+            "label": "PRIMARY (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "switch"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_tabs",
+    "componentName": "TabsTimeline",
+    "name": "Tabs (remocn-ui)",
+    "desc": "remocn-ui • a 440 px tabs widget: the pill / underline indicator slides to the scripted tab and its panel crossfades in • transparent",
+    "icon": "🗂️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "TabsTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 18,
+            "state": "Account",
+            "duration": 16
+          },
+          {
+            "at": 58,
+            "state": "Password",
+            "duration": 18
+          },
+          {
+            "at": 94,
+            "state": "Settings",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "items": [
+          "Account",
+          "Password",
+          "Settings"
+        ],
+        "contents": [
+          "Make changes to your account here.",
+          "Change your password here.",
+          "Manage your notification settings."
+        ],
+        "contentHeight": 72,
+        "variant": "pill"
+      }
+    },
+    "controls": [
+      {
+        "group": "Tabs (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; 440 px widget, centred",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: tab labels from ITEMS)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "items",
+            "label": "TABS (JSON string array — labels are the step states)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "contents",
+            "label": "PANEL TEXT (JSON string array, parallel to TABS)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "contentHeight",
+            "label": "PANEL HEIGHT px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 24,
+            "max": 400,
+            "step": 1
+          },
+          {
+            "key": "variant",
+            "label": "INDICATOR",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "pill",
+                "Pill (muted track)"
+              ],
+              [
+                "underline",
+                "Underline"
+              ]
+            ]
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "tabs"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_toast",
+    "componentName": "ToastTimeline",
+    "name": "Toast (remocn-ui)",
+    "desc": "remocn-ui • a notification card (default / success / error icon, title + optional description) that rises in from 16 px below, holds, then dismisses on scripted steps • transparent",
+    "icon": "🍞",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ToastTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 1350,
+      "baseY": 933,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 356,
+        "height": 74,
+        "steps": [
+          {
+            "at": 30,
+            "state": "visible",
+            "duration": 12
+          },
+          {
+            "at": 90,
+            "state": "hidden",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "title": "Changes saved",
+        "description": "Your profile has been updated.",
+        "variant": "success",
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Toast (remocn-ui) (whole clip) • the box is the 356 px toast at scale 1.5 (default: bottom-right, 24 px in)",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state: hidden|visible, duration?}] — layer frames)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION (blank = title only)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "variant",
+            "label": "ICON",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "default",
+                "Default (info dot)"
+              ],
+              [
+                "success",
+                "Success (check)"
+              ],
+              [
+                "error",
+                "Error (!)"
+              ]
+            ]
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "toast"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_toggle_group",
+    "componentName": "ToggleGroupTimeline",
+    "name": "Toggle Group (remocn-ui)",
+    "desc": "remocn-ui • a segmented control whose thumb slides between segments (labels crossfade to active) on scripted steps — pricing toggles, view switches • transparent",
+    "icon": "🎛️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ToggleGroupTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 46,
+            "state": "Yearly",
+            "duration": 14
+          },
+          {
+            "at": 92,
+            "state": "Monthly",
+            "duration": 14
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "items": [
+          {
+            "value": "Monthly",
+            "label": "Monthly"
+          },
+          {
+            "value": "Yearly",
+            "label": "Yearly"
+          }
+        ],
+        "size": "default",
+        "align": "center"
+      }
+    },
+    "controls": [
+      {
+        "group": "Toggle Group (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; centred in the box",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: item values)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "items",
+            "label": "SEGMENTS (JSON [{value, label}] or strings)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "SIZE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "default",
+                "Default (36)"
+              ],
+              [
+                "sm",
+                "Small (32)"
+              ]
+            ]
+          },
+          {
+            "key": "align",
+            "label": "ALIGN IN BOX",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "start",
+                "Start"
+              ],
+              [
+                "center",
+                "Centre"
+              ],
+              [
+                "end",
+                "End"
+              ]
+            ]
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "togglegroup"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_tooltip",
+    "componentName": "TooltipTimeline",
+    "name": "Tooltip (remocn-ui)",
+    "desc": "remocn-ui • a one-line floating label with an arrow that fades in at 0.96 scale sliding 4 px toward its anchor on scripted steps • transparent",
+    "icon": "💡",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "TooltipTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 847,
+      "baseY": 429,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 150,
+        "height": 40,
+        "steps": [
+          {
+            "at": 30,
+            "state": "visible",
+            "duration": 8
+          },
+          {
+            "at": 90,
+            "state": "hidden",
+            "duration": 8
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "label": "Keyboard shortcut ⌘K",
+        "side": "top",
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Tooltip (remocn-ui) (whole clip) • the box top-left is the tooltip top-left (scale 1.5); place it beside its anchor",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state: hidden|visible, duration?}] — layer frames)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "label",
+            "label": "LABEL (single line)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "side",
+            "label": "SIDE OF ANCHOR (arrow + slide)",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "top",
+                "Top"
+              ],
+              [
+                "bottom",
+                "Bottom"
+              ],
+              [
+                "left",
+                "Left"
+              ],
+              [
+                "right",
+                "Right"
+              ]
+            ]
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "tooltip"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_typing_indicator",
+    "componentName": "TypingIndicatorTimeline",
+    "name": "Typing Indicator (remocn-ui)",
+    "desc": "remocn-ui • N dots bouncing on staggered sines; by default inside an incoming message bubble that enters and leaves on scripted steps, ready to hand over to the reply • transparent",
+    "icon": "💭",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "TypingIndicatorTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 480,
+      "baseY": 460,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 640,
+        "height": 60,
+        "inBubble": true,
+        "variant": "incoming",
+        "steps": [
+          {
+            "at": 0,
+            "state": "visible",
+            "duration": 14
+          },
+          {
+            "at": 60,
+            "state": "hidden",
+            "duration": 10
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "color": "",
+        "dotCount": 3,
+        "size": 8,
+        "gap": 5,
+        "amplitude": 5,
+        "cyclesPerSecond": 1.1,
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Typing Indicator (remocn-ui) (whole clip) • box width = chat column (640 px layout at scale 1.5), like Message Bubble",
+        "items": [
+          {
+            "key": "inBubble",
+            "label": "IN A MESSAGE BUBBLE",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "variant",
+            "label": "BUBBLE SIDE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "incoming",
+                "Incoming (left)"
+              ],
+              [
+                "outgoing",
+                "Outgoing (right)"
+              ]
+            ]
+          },
+          {
+            "key": "steps",
+            "label": "BUBBLE STEPS (JSON [{at, state: hidden|visible}] — empty = always visible)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "color",
+            "label": "DOTS (blank = muted foreground)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "dotCount",
+            "label": "DOTS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 8,
+            "step": 1
+          },
+          {
+            "key": "size",
+            "label": "DOT SIZE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 30,
+            "step": 0.5
+          },
+          {
+            "key": "gap",
+            "label": "GAP px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 30,
+            "step": 0.5
+          },
+          {
+            "key": "amplitude",
+            "label": "BOUNCE px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 30,
+            "step": 0.5
+          },
+          {
+            "key": "cyclesPerSecond",
+            "label": "BOUNCES / s",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.2,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "typing"
+    },
+    "defaultDurationInFrames": 90
   }
 ];

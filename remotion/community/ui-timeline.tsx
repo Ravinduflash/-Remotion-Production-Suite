@@ -1,7 +1,7 @@
 // Authored for this project (not a remocn file): timeline wrappers around the verbatim remocn-ui state atoms
 // (accordion, alert-dialog, blur-in, button, checkbox, dialog, drawer, sheet, context-menu, dropdown-menu, combobox, command-menu,
-// input, message-bubble, popover, radio, skeleton), the field layout family, the skeleton-block shimmer, and the value-channel
-// cursor, progress bar and slider. State atoms never read the frame, so each wrapper takes a JSON `steps`
+// input, message-bubble, popover, radio, skeleton, switch, tabs, toast, toggle-group, tooltip), the field layout family, the
+// skeleton-block shimmer and typing indicator, and the value-channel cursor, progress bar, slider and stepper. State atoms never read the frame, so each wrapper takes a JSON `steps`
 // array and resolves it with useCurrentState (smooth=false, snap) or the atom's own use<Name>Transition hook (smooth).
 // `mode: "dark"` passes the full dark palette as the theme override: the atoms call useRemocnTheme(override, "light"),
 // so a plain mode would only reach the hook's colours and leave the atom's borders and text light.
@@ -56,6 +56,19 @@ import { useSkeletonTransition } from "./use-skeleton-transition";
 import { SkeletonBlock } from "./skeleton-block";
 import { Slider, type SliderThumbState } from "./slider";
 import { type SliderStep, useSliderTransition } from "./use-slider-transition";
+import { Stepper } from "./stepper";
+import { type StepperStep, useStepperTransition } from "./use-stepper-transition";
+import { Switch, type SwitchState } from "./switch";
+import { useSwitchTransition } from "./use-switch-transition";
+import { Tabs } from "./tabs";
+import { useTabsTransition } from "./use-tabs-transition";
+import { Toast, type ToastState } from "./toast";
+import { useToastTransition } from "./use-toast-transition";
+import { ToggleGroup, type ToggleGroupItem } from "./toggle-group";
+import { useToggleGroupTransition } from "./use-toggle-group-transition";
+import { Tooltip, type TooltipSide, type TooltipState } from "./tooltip";
+import { useTooltipTransition } from "./use-tooltip-transition";
+import { TypingIndicator } from "./typing-indicator";
 
 type Mode = "light" | "dark";
 interface Timed<S extends string> { steps?: Step<S>[]; smooth?: boolean; speed?: number }
@@ -367,6 +380,97 @@ export function SliderTimeline({ sliderSteps, value = 0, thumbState = "idle", sp
   return (
     <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center" }}>
       <Slider value={value} thumbState={thumbState} style={ss.length ? style : undefined} width={width} showValue={showValue} theme={th} />
+    </div>
+  );
+}
+
+/** Value channel: `stepperSteps` [{at (arrival), index, duration? (24), easing?}]; `labels` are the step names (the source's `steps`). */
+export function StepperTimeline({ stepperSteps, activeIndex = 0, labels, speed = 1, mode, theme, primary }: Themed & {
+  stepperSteps?: StepperStep[]; activeIndex?: number; labels?: string[]; speed?: number; primary?: string;
+}) {
+  const ss = Array.isArray(stepperSteps) ? stepperSteps.filter((v) => v && typeof v.at === "number" && typeof v.index === "number") : [];
+  const style = useStepperTransition(ss, { speed });
+  const th = { ...themeFor(mode, theme), ...(primary ? { primary } : {}) };
+  const names = Array.isArray(labels) && labels.length ? labels.map(String) : undefined;
+  return <Stepper steps={names} activeIndex={activeIndex} style={ss.length ? style : undefined} theme={th} />;
+}
+
+export function SwitchTimeline({ steps, smooth = true, speed = 1, mode, theme, primary, label, ...rest }: Timed<SwitchState> & Themed & {
+  label?: string; size?: "sm" | "default" | "lg"; primary?: string; className?: string;
+}) {
+  const s = stepsOf<SwitchState>(steps), th = themeFor(mode, theme), p = primary || undefined;
+  const snap = useCurrentState(s, "unchecked", speed);
+  const style = useSwitchTransition(s, { theme: th, mode, primary: p, speed });
+  return <Switch {...rest} label={label || undefined} theme={th} primary={p} state={snap} style={smooth ? style : undefined} />;
+}
+
+/** `steps` states are tab labels (one of `items`). */
+export function TabsTimeline({ steps, smooth = true, speed = 1, mode, theme, items, contents, variant = "pill", ...rest }: Timed<string> & Themed & {
+  items?: string[]; contents?: string[]; contentHeight?: number; variant?: "pill" | "underline"; className?: string;
+}) {
+  const list = Array.isArray(items) && items.length ? items.map(String) : undefined, th = themeFor(mode, theme);
+  const s = stepsOf<string>(steps), first = (list || ["Account"])[0];
+  const snap = useCurrentState(s, first, speed);
+  const style = useTabsTransition(s, { items: list, variant, theme: th, mode, speed });
+  const body = Array.isArray(contents) && contents.length ? contents.map(String) : undefined;
+  return <Tabs {...rest} items={list} contents={body} variant={variant} theme={th} state={snap} style={smooth ? style : undefined} />;
+}
+
+/** Inline 356 px toast; its top-left sits at the layer box top-left. */
+export function ToastTimeline({ steps, smooth = true, speed = 1, mode, theme, title = "Changes saved", description, variant = "default" }: Timed<ToastState> & Themed & {
+  title?: string; description?: string; variant?: "default" | "success" | "error";
+}) {
+  const s = stepsOf<ToastState>(steps), th = themeFor(mode, theme);
+  const snap = useCurrentState(s, "hidden", speed);
+  const style = useToastTransition(s, { speed });
+  return (
+    <div style={{ position: "absolute", left: 0, top: 0 }}>
+      <Toast title={title} description={description || undefined} variant={variant} theme={th} state={snap} style={smooth ? style : undefined} />
+    </div>
+  );
+}
+
+/** `items` accept [{value, label}] or plain strings; `steps` states are item values. */
+export function ToggleGroupTimeline({ steps, smooth = true, speed = 1, mode, theme, items, ...rest }: Timed<string> & Themed & {
+  items?: (ToggleGroupItem | string)[]; size?: "default" | "sm"; align?: "start" | "center" | "end"; className?: string;
+}) {
+  const list: ToggleGroupItem[] | undefined = Array.isArray(items) && items.length
+    ? items.map((it) => (typeof it === "string" ? { value: it, label: it } : { value: String(it.value), label: String(it.label ?? it.value) })) : undefined;
+  const th = themeFor(mode, theme), s = stepsOf<string>(steps), first = list ? list[0].value : "Monthly";
+  const snap = useCurrentState(s, first, speed);
+  const style = useToggleGroupTransition(s, { items: list, theme: th, mode, speed });
+  return <ToggleGroup {...rest} items={list} theme={th} state={snap} style={smooth ? style : undefined} />;
+}
+
+/** Inline tooltip (single line + arrow on the anchor side); its top-left sits at the layer box top-left. */
+export function TooltipTimeline({ steps, smooth = true, speed = 1, mode, theme, label = "Keyboard shortcut ⌘K", side = "top" }: Timed<TooltipState> & Themed & {
+  label?: string; side?: TooltipSide;
+}) {
+  const s = stepsOf<TooltipState>(steps), th = themeFor(mode, theme);
+  const snap = useCurrentState(s, "hidden", speed);
+  const style = useTooltipTransition(s, { speed });
+  return (
+    <div style={{ position: "absolute", left: 0, top: 0 }}>
+      <Tooltip label={label} side={side} theme={th} state={snap} style={smooth ? style : undefined} />
+    </div>
+  );
+}
+
+/** Bouncing dots; with `inBubble` they sit in an incoming MessageBubble (box width = chat column) that enters / leaves on `steps`. */
+export function TypingIndicatorTimeline({ inBubble = true, steps, smooth = true, speed = 1, mode, theme, variant = "incoming", color, dotCount = 3, size = 8, gap = 5, amplitude = 5, cyclesPerSecond = 1.1 }: Timed<MessageBubbleState> & Themed & {
+  inBubble?: boolean; variant?: "incoming" | "outgoing"; color?: string; dotCount?: number; size?: number; gap?: number; amplitude?: number; cyclesPerSecond?: number;
+}) {
+  const th = themeFor(mode, theme), rt = useRemocnTheme(th, mode), s = stepsOf<MessageBubbleState>(steps);
+  const snap = useCurrentState(s, "hidden", speed);
+  const style = useMessageBubbleTransition(s, { speed });
+  const dots = <TypingIndicator dotCount={dotCount} size={size} gap={gap} amplitude={amplitude} speed={speed} cyclesPerSecond={cyclesPerSecond}
+    color={color || (inBubble && variant === "outgoing" ? rt.primaryForeground : rt.mutedForeground)} />;
+  if (!inBubble) return <div style={{ position: "absolute", left: 0, top: 0 }}>{dots}</div>;
+  return (
+    <div style={{ position: "absolute", inset: 0 }}>
+      <MessageBubble variant={variant} theme={th} state={s.length ? snap : "visible"} style={s.length && smooth ? style : undefined}>
+        <div style={{ display: "flex", alignItems: "center", height: 22 }}>{dots}</div>
+      </MessageBubble>
     </div>
   );
 }

@@ -49,7 +49,7 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Inline atoms (Message Bubble, Popover, Progress, and the Field family):** these aren't `position: absolute; inset: 0`; they render inline. The wrappers put them in an `inset: 0` div so the layer box positions and sizes them.
     - Popover, Progress and Field use `sizeMode: props`: box width = card / track / column width, and `height` is dropped or ignored.
     - Message Bubble fills its box width, which acts as the chat column.
-  - **Value channels:** Cursor (`path` waypoints), Progress (`valueSteps`) and Slider (`sliderSteps`) have no string states. `at` is the ARRIVAL frame, and the move runs over `[at − duration, at)`.
+  - **Value channels:** Cursor (`path` waypoints), Progress (`valueSteps`), Slider (`sliderSteps`) and Stepper (`stepperSteps`) have no string states. `at` is the ARRIVAL frame, and the move runs over `[at − duration, at)`.
     - Slider folds two channels independently: steps with `value` move the fill, steps with `thumbState` move the thumb.
   - **Context-only atoms:** SkeletonBlock calls `useRemocnTheme()` with no override, so its wrappers add a `RemocnUIProvider` (mode + theme) to make dark mode reach it.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
@@ -1596,6 +1596,43 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Skeleton:** the card shimmers, crossfades at 45–61 to the wrapped Popover card, which keeps its place and size at 1.5×; dark placeholder verified.
   - **Skeleton Block:** an avatar + two-line row shimmers in phase.
   - **Slider:** the pointer drags the thumb 20 → 80 with hover and press rings, synced once the cursor uses ease-out.
+
+### Stepper, Switch, Tabs, Toast, Toggle Group, Tooltip and Typing Indicator (remocn-ui)
+
+- **Catalog ids:** `remocn_ui_stepper`, `remocn_ui_switch`, `remocn_ui_tabs`, `remocn_ui_toast`, `remocn_ui_toggle_group`, `remocn_ui_tooltip`, `remocn_ui_typing_indicator`.
+  - Files verbatim, MIT, with hooks; `typing-indicator` has none.
+  - The Spinner page was in this paste too, but `remocn_ui_spinner` was already registered (2026-09-30) and `spinner.tsx` is still byte-identical to `r/spinner.json`, so nothing changed.
+- **Stepper:** a value channel. `stepperSteps: [{at (arrival), index, duration? (24), easing? (out)}]` drive one float `position`, and each circle, check and connector derives from it.
+  - The catalog's `labels` become the source's `steps` prop, to avoid clashing with the steps convention.
+  - The source holds the FIRST step's index before its arrival. The docs' example (first step `{at: 50, index: 1}`) would therefore open on step 1, so the default adds an `{at: 0, index: 0}` anchor. Keep one.
+  - Horizontal only (vertical falls back). 1280×720 box at 1.5. Layer 130.
+  - At `index` = n−1 the last step is *active* (ringed number), not checked. To end with every step checked, add a final step to `index: n`, the step count (e.g. `{at: 150, index: 3}` for three labels).
+- **Switch:** 1280×720 box at 1.5, centred. The track fills primary and the thumb slides. Steps: checked 18, unchecked 78 (10).
+- **Tabs:** 1280×720 box at 1.5, 440 px widget.
+  - `steps` states are tab labels from `items`; `contents` is the parallel panel text; `contentHeight` (72) must fit it.
+  - Variants: `pill` (muted track) or `underline`. The indicator slides and the panels crossfade.
+  - Defaults: Account 18 → Password 58 → Settings 94.
+- **Toast:** inline 356 px card at the box top-left, `sizeMode: none`, box 356×74 at 1.5, default bottom-right 24 px in (1350, 933).
+  - Motion: it rises 16 px from 0.97 scale.
+  - `variant`: default (info dot) | success (green check) | error (destructive).
+  - Steps: visible 30, hidden 90 (12).
+- **Toggle Group:** 1280×720 box at 1.5, with `align` supported. `items` are `[{value, label}]` or plain strings, and `steps` states are item values. The thumb slides and the labels crossfade.
+  - Steps: Yearly 46 → Monthly 92 (14).
+- **Tooltip:** inline one-line pill with an arrow on the `side` edge, at the box top-left (scale 1.5). Place it next to its anchor; the default sits above a centred Button.
+  - Steps: visible 30, hidden 90 (8).
+- **Typing Indicator:** a motion atom (staggered sine dots, `cyclesPerSecond` 1.1). The wrapper puts it in an incoming MessageBubble by default: box = chat column (640×60 at 1.5), like Message Bubble.
+  - Steps: visible 0, hidden 60. Hand over by entering the reply bubble in the same slot a few frames after.
+  - The dot colour defaults to muted foreground, or primaryForeground in an outgoing bubble.
+  - `inBubble: false` gives bare dots at the box top-left.
+- **Verified:** 2026-09-30, [remocn-ui-atoms5-contact.png](renders/remocn-ui-atoms5-contact.png), 30 stills, 0 errors:
+  - **Stepper:** Account checks with the connector fill by 50, then Plan by 110, with Done active.
+  - **Switch:** slides on and off; dark mode verified.
+  - **Tabs:** the pill and the underline slide to Password with the panel crossfade.
+  - **Toast:** the success toast rises in at the bottom-right and is gone by 100.
+  - **Toggle Group:** Monthly → Yearly thumb slide.
+  - **Tooltip:** appears above a hovered outline "Hover me" Button.
+  - **Typing Indicator:** a typing bubble under an outgoing question hands over at 60–64 to the reply bubble in the same slot.
+  - The chat scene's `simultaneous_entrances` warning is the usual steps false positive.
 
 ### Typewriter Text
 
