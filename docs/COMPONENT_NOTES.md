@@ -31,6 +31,9 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **remocn `ui` tier (Button, Input, Checkbox, Switch, Spinner…), 2026-09-30:** read from remocn.dev/docs/ui (introduction, concepts, installation). The core `remocn-ui/` lib is already installed; all six files are byte-identical to `https://remocn.dev/r/remocn-ui.json`, checked 2026-09-30. Rules for registering these components:
   - **State atoms** (Button, Input, Checkbox, Switch) never read the frame. They take a named `state` (snaps) or an interpolated `style` (smooth). The caller resolves it from `steps: Step[]` (`{at, state, duration?}`, latest step wins) via `useCurrentState` or a `use<Name>Transition` hook (`DEFAULT_DURATION` 8 unless the file says otherwise).
     - Registration: install `use-<name>-transition.ts` next to the atom and register a small wrapper scene that calls the hook, so the catalog control is just a JSON `steps` array. The atom alone would only show one frozen state.
+      - The wrappers live in `remotion/community/ui-timeline.tsx`, which is project code, not a remocn file. Add a `<Name>Timeline` export there for each new state atom.
+      - Each wrapper takes `steps`, `smooth` (true = the transition hook; false = `useCurrentState` snap) and `speed`, and passes every other prop through.
+  - **Dark mode fix:** the atoms call `useRemocnTheme(override, "light")`, so a `mode` prop or provider alone never reaches them. `mode: "dark"` in a wrapper therefore sends the full `defaultDarkTheme` (plus `theme`) as the override, so the atom and its hook agree. The source files are untouched.
   - **Motion atoms** (Spinner) loop on the frame and register directly.
   - **Timing:** `at` is Sequence-local, so it counts from the layer's own start; the effective frame is `frame × speed`.
   - **Theme:**
@@ -1447,6 +1450,40 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Constellation:** satellites arrive, then orbit with a line firing.
   - **Bento:** the diagonal glide over the counters, charts, code, bars and gradient cards.
   - **Live Code:** grey button at frame 40, blue once `background` is typed, the rounded bold "Ship it" at frame 240.
+
+### Accordion, Alert Dialog, Blur In, Button, Spinner and Caret (remocn-ui)
+
+- **Catalog ids:** `remocn_ui_accordion`, `remocn_ui_alert_dialog`, `remocn_ui_button`, `remocn_ui_blur_in`, `remocn_ui_spinner`, `remocn_ui_caret`.
+- **Files:**
+  - Verbatim, MIT: each atom plus its `use-*-transition.ts` hook, and `spinner.tsx` (Button's registry dependency).
+  - `caret.tsx` was already installed and is byte-identical to `r/caret.json`.
+  - The four state atoms are driven through `ui-timeline.tsx` (see the ui tier pipeline note).
+  - The alert-dialog registry item lists only `remocn-ui`, not `button` as its docs say. The dialog draws its own buttons; the docs' Button is only a trigger.
+- **Layout:** Accordion, Alert Dialog and Button are 1280×720 boxes at scale 1.5, with the atom centred in the box.
+  - Accordion card is 440 px, the dialog popup 400 px.
+  - The dialog's backdrop dims the whole box, so keep it full frame.
+  - Button has `align: start|center|end` inside the box; shrink the box to place it on a UI.
+- **Steps:** `steps` is a JSON `[{at, state, duration?}]` in layer frames. The latest step wins, and `duration` overrides the hook default: Accordion 14, Alert Dialog 12, Blur In 18, Button 8.
+  - The defaults are the docs' examples: accordion opens 18 / closes 78; dialog opens 32 / closes 92; button hover 12 → press 30 → loading 48 → success 96; blur-in revealed at 8.
+- **Accordion:** `contentHeight` (64) must match the text, because Remotion can't measure auto height. `variant: ghost` has no border and a lighter fill.
+- **Button:**
+  - States: idle | hover | press | loading (Spinner, spun by `speed`) | success (check).
+  - `primary` overrides one token. In dark mode the label uses the dark `primaryForeground` (#171717), so with a custom dark-mode primary also set `theme: {"primaryForeground":"#ffffff"}`.
+- **Blur In:** a WRAPPER, full frame, `children.fit: full`. It wraps layers with `update_asset { assetId, wraps: [...] }`.
+  - Motion: the wrapped layers start blurred, transparent and offset opposite `direction`, then settle into place.
+  - Defaults are 1.5× the 720p values: `blur` 12, `distance` 18.
+  - To stagger, use one wrapper per element with offset `at` values.
+- **Spinner:** `sizeMode: props` with `renameProps {width: size}`, so the box width is the spinner size (48). It turns 6° per frame × `speed`.
+- **Caret:** `sizeMode: props`, so the box is the bar (3 × 42, 1.5× the 720p defaults).
+  - `blink` is on by default at `blinkPerSecond` 1; a set `opacity` overrides it.
+- **Preview:** kind `uiatom`. It uses the same step resolution and state presets with ease-out cubic, and shadcn tokens as hex. Text metrics are approximate. The Blur In child offset and opacity come from `wrapGeometry`, without the blur.
+- **Verified:** 2026-09-30, [remocn-ui-atoms-contact.png](renders/remocn-ui-atoms-contact.png), 28 stills, 0 errors:
+  - **Accordion:** opens with the chevron flip and fill, closes again; dark ghost verified.
+  - **Alert Dialog:** fades and zooms in over a destructive trigger Button with the 50% backdrop, then clears.
+  - **Button:** idle → press (scaled) → spinner → check; dark mode with a blue primary.
+  - **Blur In:** the wrapped accordion goes from hidden to blurred and rising, lands sharp, then opens on its own steps.
+  - **Spinner and caret:** turn and blink.
+  - The first attempt at one still failed with a Remotion browser-connect timeout on a cold start; the re-run passed.
 
 ### Typewriter Text
 

@@ -1,0 +1,58 @@
+// Source: remocn — https://remocn.dev/r/blur-in.json (registry/remocn-ui/blur-in/use-blur-in-transition.ts), MIT License, Copyright (c) 2026 Remocn.
+// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; transition hook for "remocn_ui_blur_in" (driven by ui-timeline.tsx).
+// Path aliases @/lib/remocn, @/lib/remocn-ui and @/components/remocn resolve to this folder (render-project/remotion.config.ts + tsconfig paths).
+"use client";
+
+import {
+  type BlurInDirection,
+  type BlurInState,
+  type BlurInStyle,
+  blurInStyle,
+  blurInStyleContext,
+} from "@/components/remocn/blur-in";
+import { easings, type Step, useStateTransition } from "@/lib/remocn-ui";
+
+export const DEFAULT_DURATION = 18;
+
+export function tweenBlurInStyle(
+  a: BlurInStyle,
+  b: BlurInStyle,
+  t: number,
+): BlurInStyle {
+  return {
+    blur: a.blur + (b.blur - a.blur) * t,
+    opacity: a.opacity + (b.opacity - a.opacity) * t,
+    translateX: a.translateX + (b.translateX - a.translateX) * t,
+    translateY: a.translateY + (b.translateY - a.translateY) * t,
+  };
+}
+
+export interface BlurInTransitionOptions {
+  blur?: number;
+  direction?: BlurInDirection;
+  distance?: number;
+  speed?: number;
+  defaultDuration?: number;
+}
+
+export function useBlurInTransition(
+  steps: Step<BlurInState>[],
+  opts: BlurInTransitionOptions = {},
+): BlurInStyle {
+  const {
+    blur = 8,
+    direction = "up",
+    distance = 12,
+    speed = 1,
+    defaultDuration = DEFAULT_DURATION,
+  } = opts;
+  const ctx = blurInStyleContext(blur, direction, distance);
+  const { from, to, progress } = useStateTransition(
+    steps,
+    "hidden",
+    speed,
+    defaultDuration,
+  );
+  const t = easings.out(progress);
+  return tweenBlurInStyle(blurInStyle(from, ctx), blurInStyle(to, ctx), t);
+}

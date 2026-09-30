@@ -16811,5 +16811,713 @@ window.CommunityManifest = [
       "style": "livecode"
     },
     "defaultDurationInFrames": 260
+  },
+  {
+    "id": "remocn_ui_accordion",
+    "componentName": "AccordionTimeline",
+    "name": "Accordion (remocn-ui)",
+    "desc": "remocn-ui • a shadcn accordion item whose panel opens and closes on scripted timeline steps (chevron flips, item fills) • transparent",
+    "icon": "🪗",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "AccordionTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 18,
+            "state": "opened",
+            "duration": 16
+          },
+          {
+            "at": 78,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "title": "Is it accessible?",
+        "content": "Yes. It adheres to the WAI-ARIA design pattern.",
+        "contentHeight": 64,
+        "variant": "default"
+      }
+    },
+    "controls": [
+      {
+        "group": "Accordion (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; card is 440 px wide, centred",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "content",
+            "label": "CONTENT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "contentHeight",
+            "label": "PANEL HEIGHT px (Remotion cannot measure auto height)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 20,
+            "max": 300,
+            "step": 1
+          },
+          {
+            "key": "variant",
+            "label": "VARIANT",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "default",
+                "Default (bordered, fills)"
+              ],
+              [
+                "ghost",
+                "Ghost"
+              ]
+            ]
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "accordion"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_alert_dialog",
+    "componentName": "AlertDialogTimeline",
+    "name": "Alert Dialog (remocn-ui)",
+    "desc": "remocn-ui • a destructive \"are you sure?\" modal: backdrop dims to 50% black, popup fades in and zooms 0.95 → 1 on scripted steps • transparent, compose over a scene",
+    "icon": "⚠️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "AlertDialogTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 32,
+            "state": "opened",
+            "duration": 16
+          },
+          {
+            "at": 92,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "title": "Delete account?",
+        "description": "This action cannot be undone. This will permanently remove your data from our servers.",
+        "actionLabel": "Delete",
+        "cancelLabel": "Cancel"
+      }
+    },
+    "controls": [
+      {
+        "group": "Alert Dialog (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; the backdrop dims this whole box — keep it full frame",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "actionLabel",
+            "label": "ACTION (destructive)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "cancelLabel",
+            "label": "CANCEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "alertdialog"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_button",
+    "componentName": "ButtonTimeline",
+    "name": "Button (remocn-ui)",
+    "desc": "remocn-ui • a shadcn button scripted through idle → hover → press → loading (spinner) → success (check) • transparent",
+    "icon": "🔘",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ButtonTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 12,
+            "state": "hover"
+          },
+          {
+            "at": 30,
+            "state": "press"
+          },
+          {
+            "at": 48,
+            "state": "loading",
+            "duration": 6
+          },
+          {
+            "at": 96,
+            "state": "success",
+            "duration": 16
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "label": "Continue",
+        "variant": "default",
+        "size": "default",
+        "primary": "",
+        "align": "center"
+      }
+    },
+    "controls": [
+      {
+        "group": "Button (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; SPEED also spins the loading spinner",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: idle | hover | press | loading | success)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "label",
+            "label": "LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "variant",
+            "label": "VARIANT",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "default",
+                "Default"
+              ],
+              [
+                "secondary",
+                "Secondary"
+              ],
+              [
+                "destructive",
+                "Destructive"
+              ],
+              [
+                "outline",
+                "Outline"
+              ],
+              [
+                "ghost",
+                "Ghost"
+              ]
+            ]
+          },
+          {
+            "key": "size",
+            "label": "SIZE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "sm",
+                "Small (32)"
+              ],
+              [
+                "default",
+                "Default (40)"
+              ],
+              [
+                "lg",
+                "Large (48)"
+              ]
+            ]
+          },
+          {
+            "key": "align",
+            "label": "ALIGN IN BOX",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "start",
+                "Start"
+              ],
+              [
+                "center",
+                "Centre"
+              ],
+              [
+                "end",
+                "End"
+              ]
+            ]
+          },
+          {
+            "key": "primary",
+            "label": "PRIMARY (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "button"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_blur_in",
+    "componentName": "BlurInTimeline",
+    "name": "Blur In (remocn-ui)",
+    "desc": "remocn-ui • WRAPPER: reveals the wrapped layers with blur + opacity + a directional offset on scripted steps (hidden → revealed) • theme-free",
+    "icon": "🌫️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "BlurInTimeline",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "steps": [
+          {
+            "at": 0,
+            "state": "hidden"
+          },
+          {
+            "at": 8,
+            "state": "revealed",
+            "duration": 18
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "blur": 12,
+        "direction": "up",
+        "distance": 18
+      }
+    },
+    "controls": [
+      {
+        "group": "Blur In (remocn-ui) (whole clip) • wrap layers with update_asset wraps; one wrapper per element to stagger; blur/offset are 1.5× the 720p defaults",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: hidden | revealed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "blur",
+            "label": "HIDDEN BLUR px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 60,
+            "step": 0.5
+          },
+          {
+            "key": "direction",
+            "label": "TRAVELS INTO PLACE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "up",
+                "Up (starts below)"
+              ],
+              [
+                "down",
+                "Down"
+              ],
+              [
+                "left",
+                "Left"
+              ],
+              [
+                "right",
+                "Right"
+              ]
+            ]
+          },
+          {
+            "key": "distance",
+            "label": "OFFSET px (0 = in place)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 200,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "blurin"
+    },
+    "defaultDurationInFrames": 120,
+    "fullFrame": true
+  },
+  {
+    "id": "remocn_ui_spinner",
+    "componentName": "Spinner",
+    "name": "Spinner (remocn-ui)",
+    "desc": "remocn-ui • motion atom: a quarter-arc loading spinner turning 6° per frame (× speed) • the box width is its size",
+    "icon": "🌀",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/spinner",
+      "exportName": "Spinner",
+      "sizeMode": "props",
+      "omitProps": [
+        "height"
+      ],
+      "renameProps": {
+        "width": "size"
+      }
+    },
+    "defaults": {
+      "baseX": 936,
+      "baseY": 516,
+      "scale": 1,
+      "customProperties": {
+        "width": 48,
+        "height": 48,
+        "color": "#0a0a0a",
+        "speed": 1,
+        "strokeWidth": 2.5
+      }
+    },
+    "controls": [
+      {
+        "group": "Spinner (remocn-ui) (whole clip) • box width = size",
+        "items": [
+          {
+            "key": "color",
+            "label": "COLOUR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 6,
+            "step": 0.05
+          },
+          {
+            "key": "strokeWidth",
+            "label": "STROKE (24-unit viewBox)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 6,
+            "step": 0.1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "spinner"
+    },
+    "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_ui_caret",
+    "componentName": "Caret",
+    "name": "Caret (remocn-ui)",
+    "desc": "remocn-ui • a text insertion caret: blinks on the timeline, or holds a controlled opacity • the box is the bar",
+    "icon": "▏",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/caret",
+      "exportName": "Caret",
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 958,
+      "baseY": 519,
+      "scale": 1,
+      "customProperties": {
+        "width": 3,
+        "height": 42,
+        "radius": 1.5,
+        "color": "#0a0a0a",
+        "blink": true,
+        "blinkPerSecond": 1,
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Caret (remocn-ui) (whole clip) • box = bar size; defaults are 1.5× the 720p bar",
+        "items": [
+          {
+            "key": "color",
+            "label": "COLOUR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "blink",
+            "label": "BLINK",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "blinkPerSecond",
+            "label": "BLINKS / SECOND",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 6,
+            "step": 0.05
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "radius",
+            "label": "RADIUS px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 10,
+            "step": 0.5
+          },
+          {
+            "key": "opacity",
+            "label": "CONTROLLED OPACITY (overrides blink)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "caret"
+    },
+    "defaultDurationInFrames": 90
   }
 ];
