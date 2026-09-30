@@ -23346,5 +23346,676 @@ window.CommunityManifest = [
     "fullFrame": true,
     "defaultDurationInFrames": 150,
     "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_smoke_ring",
+    "componentName": "ShaderSmokeRing",
+    "name": "Smoke Ring (remocn shader)",
+    "desc": "remocn shader • paper-design single soft smoke ring curling and dissipating in the centre of a dark field • opaque backdrop (centred object)",
+    "icon": "⭕",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-smoke-ring",
+      "exportName": "ShaderSmokeRing",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "radius": 0.25,
+        "thickness": 0.65,
+        "scale": 0.8
+      }
+    },
+    "controls": [
+      {
+        "group": "Smoke Ring (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; a centred ring — keep key text off the centre",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "radius",
+            "label": "RADIUS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "thickness",
+            "label": "THICKNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.01,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "scale",
+            "label": "SCALE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 4,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "smokering"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_metaballs",
+    "componentName": "ShaderMetaballs",
+    "name": "Metaballs (remocn shader)",
+    "desc": "remocn shader • paper-design organic blobs merging and splitting like a lava lamp — playful • opaque backdrop",
+    "icon": "🫧",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-metaballs",
+      "exportName": "ShaderMetaballs",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "count": 10,
+        "size": 0.83
+      }
+    },
+    "controls": [
+      {
+        "group": "Metaballs (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; lower count / size under dense content",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "count",
+            "label": "BLOBS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "size",
+            "label": "SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "metaballs"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_pulsing_border",
+    "componentName": "ShaderPulsingBorder",
+    "name": "Pulsing Border (remocn shader)",
+    "desc": "remocn shader • paper-design glowing frame pulsing around the edges; the interior stays the back colour for text • opaque backdrop",
+    "icon": "🔲",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-pulsing-border",
+      "exportName": "ShaderPulsingBorder",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#12121a",
+        "roundness": 0.25,
+        "thickness": 0.1,
+        "intensity": 0.2,
+        "bloom": 0.25
+      }
+    },
+    "controls": [
+      {
+        "group": "Pulsing Border (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; the centre stays clear",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK (interior)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "roundness",
+            "label": "ROUNDNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "thickness",
+            "label": "THICKNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "bloom",
+            "label": "BLOOM (keep restrained)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "border"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_caustics",
+    "componentName": "ShaderCaustics",
+    "name": "Caustics (remocn shader)",
+    "desc": "remocn shader • custom WebGL refracted-light filaments through a rippling surface, denser toward the bottom — calm, elegant • opaque backdrop",
+    "icon": "🪼",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-caustics",
+      "exportName": "ShaderCaustics",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colors": [
+          "#0a0a0a",
+          "#2e2e33"
+        ],
+        "accent": "#7F57FF",
+        "accentAmount": 0,
+        "scale": 5.2,
+        "intensity": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Caustics (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; own WebGL, no package",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON exactly 2: [floor, filament light])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accent",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "accentAmount",
+            "label": "ACCENT AMOUNT (tints the brightest filaments)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "scale",
+            "label": "WEB FREQUENCY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 20,
+            "step": 0.1
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "caustics"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_gem_smoke",
+    "componentName": "ShaderGemSmoke",
+    "name": "Gem Smoke (remocn shader)",
+    "desc": "remocn shader • paper-design colour smoke flowing behind and inside a glassy silhouette of your logo (image) — brand reveals • opaque backdrop",
+    "icon": "💎",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-gem-smoke",
+      "exportName": "ShaderGemSmoke",
+      "sizeMode": "none",
+      "paintGate": {
+        "waitFor": "[data-paper-shader] canvas"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colorBack": "#0a0a10",
+        "innerDistortion": 0.8,
+        "outerDistortion": 0.6,
+        "outerGlow": 0.55,
+        "innerGlow": 1,
+        "size": 0.8,
+        "image": ""
+      }
+    },
+    "controls": [
+      {
+        "group": "Gem Smoke (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; feed a logo as image",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "image",
+            "label": "LOGO IMAGE (URL or data: URI of an SVG/PNG mark)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON array of hex — the default is a muted indigo set)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "colorBack",
+            "label": "BACK",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "MARK SIZE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "innerDistortion",
+            "label": "INNER DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "outerDistortion",
+            "label": "OUTER DISTORTION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "innerGlow",
+            "label": "INNER GLOW",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "outerGlow",
+            "label": "OUTER GLOW",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "gem"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_strata",
+    "componentName": "ShaderStrata",
+    "name": "Strata (remocn shader)",
+    "desc": "remocn shader • custom WebGL horizontal sediment layers displaced by fbm noise, each drifting at its own depth — grounded, geological • opaque backdrop",
+    "icon": "🪨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-strata",
+      "exportName": "ShaderStrata",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colors": [
+          "#050507",
+          "#0a0a0d",
+          "#111014",
+          "#17161b"
+        ],
+        "accent": "#6733FF",
+        "accentAmount": 0,
+        "layers": 14,
+        "amplitude": 0.16
+      }
+    },
+    "controls": [
+      {
+        "group": "Strata (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; own WebGL, no package; very dark by default",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON exactly 4, deepest → surface)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accent",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "accentAmount",
+            "label": "ACCENT AMOUNT (tints the deep strata)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "layers",
+            "label": "LAYERS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "amplitude",
+            "label": "EDGE WAVINESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.5,
+            "step": 0.005
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "strata"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_shader_weave",
+    "componentName": "ShaderWeave",
+    "name": "Weave (remocn shader)",
+    "desc": "remocn shader • custom WebGL woven warp-and-weft threads on a domain-warped grid with a slow sheen of light across the cloth • opaque backdrop",
+    "icon": "🧶",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/shader-weave",
+      "exportName": "ShaderWeave",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "speed": 1,
+        "colors": [
+          "#050506",
+          "#0a0a0c",
+          "#111015",
+          "#1b1a22"
+        ],
+        "accent": "#6733FF",
+        "accentAmount": 0,
+        "scale": 22,
+        "warp": 0.03
+      }
+    },
+    "controls": [
+      {
+        "group": "Weave (remocn shader) (whole clip) • full-frame opaque backdrop — put it on the bottom layer; own WebGL; speed drives only the sheen",
+        "items": [
+          {
+            "key": "speed",
+            "label": "SPEED (frame-driven; 0 = frozen)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "colors",
+            "label": "COLORS (JSON exactly 4: shadow, mid, warm, thread highlight)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accent",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "accentAmount",
+            "label": "ACCENT AMOUNT (tints the threads)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "scale",
+            "label": "THREAD DENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 4,
+            "max": 80,
+            "step": 0.5
+          },
+          {
+            "key": "warp",
+            "label": "HAND-WOVEN WARP",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 0.2,
+            "step": 0.001
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "shaderbg",
+      "style": "weave"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
   }
 ];

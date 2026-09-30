@@ -64,7 +64,7 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Registry, checked 2026-09-30: 26 `shader-*` items.
     - **Installed as transition dependencies:** `dithering`, `grain-gradient`, `light-tunnel`, `perlin-noise`, `smoke-ring`, `swirl`, `warp`. All but `smoke-ring` became catalog backdrops on 2026-09-30; see below.
     - **Already registered:** `seam`, `spiral-pass`, `text-reveal`.
-    - **Remaining (not yet installed):** `metaballs`, `pulsing-border`, `caustics`, `gem-smoke`, `strata`, `weave`, plus `smoke-ring` (installed, not registered).
+    - **All 26 now installed:** 23 are catalog backdrops and 3 are registered as transitions / text effects (`seam`, `spiral-pass`, `text-reveal`), as of 2026-09-30.
   - **Render caveats:** see the SwiftShader note under Transition layers. Software WebGL is slow here (30–145 s a still), and some paper-design shapes render empty on it (GrainGradient blob, dots and truchet). Verify each new shader with a real still before trusting it, and keep the 120 s delayRender timeout.
 - **`external.paintGate: {waitFor}`, 2026-09-30:** plain layers that paint asynchronously get the same per-frame hold transition layers use (`usePaintGate` in `SceneRenderer`, now shared). Every frame waits until the selector matches inside the layer, plus four animation frames; it gives up after 15 s and never outlives 90 s.
   - The paper-design shader backdrops use `'[data-paper-shader] canvas'`. remocn's own gate only holds two animation frames once, at mount.
@@ -1711,6 +1711,29 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Verified:** 2026-09-30, [remocn-shaders-contact.png](renders/remocn-shaders-contact.png), 36 stills, 0 errors, on software WebGL (33–90 s a still).
   - Every backdrop paints through the paint gate and moves between frames 10 and 120 (mean pixel change 8–53), including a brand-coloured Mesh Gradient.
   - Light Tunnel flies forward with its ribbons twisting. God Rays fan down from the top edge.
+
+### Shader backdrops II (remocn shaders): Smoke Ring, Metaballs, Pulsing Border, Caustics, Gem Smoke, Strata and Weave
+
+- **Catalog ids:** `remocn_shader_smoke_ring`, `remocn_shader_metaballs`, `remocn_shader_pulsing_border`, `remocn_shader_caustics`, `remocn_shader_gem_smoke`, `remocn_shader_strata`, `remocn_shader_weave`.
+- **Registration:** the same as the first shader batch: full-frame opaque backdrops at scale 1 on the bottom layer, `renderTimeoutMs` 120000.
+  - The paper-design ones (Smoke Ring, Metaballs, Pulsing Border, Gem Smoke) carry `external.paintGate`.
+  - Caustics, Strata and Weave are remocn's own WebGL shaders (no package, their own delayRender gate), so they get no paint gate.
+- **Files:** verbatim, MIT. `smoke-ring` was already installed (transition dependency) and is byte-identical; only its header changed.
+- **Smoke Ring:** a centred object, not full bleed (`radius`, `thickness`, `scale` 0.8).
+- **Pulsing Border:** the interior stays `colorBack`, so it's a frame for centred text. The lit frame sits INSET from the frame edge (about 15%), not on it; paper-design's `scale` prop moves it outward. Keep `bloom` / `intensity` restrained.
+- **Gem Smoke:** needs `image`, a URL or a `data:` URI of an SVG/PNG mark.
+  - The catalog field is a string. `staticFile()` isn't available from the studio, so use a full URL, or a path the render-project serves.
+  - paper-design processes the image once (Suspense, `suspendWhenProcessingImage`), and the paint gate holds the frame until the canvas exists.
+  - Tested with an inline data-URI diamond. With no `image`, paper-design falls back to its own built-in square mark, so it never renders blank.
+- **Custom WebGL palettes:** `colors` must be exactly 2 stops for Caustics (floor, filament light) and exactly 4 for Strata (deepest → surface) and Weave (shadow, mid, warm, thread highlight).
+  - `accentAmount` 0–1 tints the filaments / deep strata / threads with `accent`.
+  - Strata and Weave are near-black by default, so lift `colors` for anything but a very dark base.
+  - Weave's `speed` drives only the sheen, never the grid.
+- **Preview:** kind `shaderbg`, SVG stand-ins.
+- **Verified:** 2026-09-30, [remocn-shaders2-contact.png](renders/remocn-shaders2-contact.png), 18 stills, 0 errors:
+  - Smoke Ring curls (mean frame change 17). Metaballs merge in custom colours (61).
+  - The border pulses. Gem Smoke flows inside the diamond mark (23).
+  - On their DEFAULT palettes, Caustics, Strata and Weave are near-black and barely move (frame change 0.6–1.4; Weave's speed drives only the sheen). Lifted palettes read clearly: teal caustics with accent, violet strata, a brown woven grid. Set `colors` for anything but a very dark base.
 
 ### Typewriter Text
 

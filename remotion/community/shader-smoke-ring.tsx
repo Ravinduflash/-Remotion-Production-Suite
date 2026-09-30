@@ -1,5 +1,5 @@
 // Source: remocn — https://remocn.dev/r/shader-smoke-ring.json (registry/remocn/shader-smoke-ring/index.tsx), MIT License, Copyright (c) 2026 Remocn.
-// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-smoke-ring by smoke-dissolve; not a catalog entry.
+// Full license: docs/licenses/remocn-LICENSE.txt. Saved verbatim via MCP write_component_file; registry dependency imported as @/components/remocn/shader-smoke-ring by smoke-dissolve; also registered as catalog id "remocn_shader_smoke_ring" (full-frame backdrop).
 // Path aliases @/lib/remocn and @/components/remocn resolve to this folder (render-project/remotion.config.ts + tsconfig paths).
 "use client";
 
