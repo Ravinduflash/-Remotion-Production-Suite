@@ -21030,5 +21030,775 @@ window.CommunityManifest = [
       "style": "typing"
     },
     "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_ui_chat_flow",
+    "componentName": "ChatFlowScene",
+    "name": "Chat Flow (remocn-ui)",
+    "desc": "remocn-ui block • a themed messaging thread: outgoing text types into the composer and sends, a typing bubble precedes each reply, reactions pop in • transparent",
+    "icon": "💬",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ChatFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "contact": {
+          "name": "Alex"
+        },
+        "accentColor": "",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Chat Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — 460 px mobile column, full height; follows your theme tokens",
+        "items": [
+          {
+            "key": "messages",
+            "label": "MESSAGES (JSON [{from: me|them, text, reaction?}] — empty = demo script)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "contact",
+            "label": "CONTACT (JSON {name, avatar?})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "OUTGOING / ACCENT (blank = default)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "chat"
+    },
+    "defaultDurationInFrames": 360
+  },
+  {
+    "id": "remocn_ui_telegram_chat_flow",
+    "componentName": "TelegramChatFlowScene",
+    "name": "Telegram Chat Flow (remocn-ui)",
+    "desc": "remocn-ui block • a Telegram-skinned thread: blue tailed bubbles with in-bubble time and double checks, a \"typing…\" header status before replies, reaction chips • fixed light Telegram skin",
+    "icon": "✈️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "TelegramChatFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "contact": {
+          "name": "Alex"
+        },
+        "accentColor": "",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Telegram Chat Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — fixed light Telegram skin; only the accent is overridable",
+        "items": [
+          {
+            "key": "messages",
+            "label": "MESSAGES (JSON [{from: me|them, text, reaction?, time?}] — empty = demo script)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "contact",
+            "label": "CONTACT (JSON {name, avatar?})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "OUTGOING / ACCENT (blank = default)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "telegram"
+    },
+    "defaultDurationInFrames": 360
+  },
+  {
+    "id": "remocn_ui_imessage_chat_flow",
+    "componentName": "ImessageChatFlowScene",
+    "name": "iMessage Chat Flow (remocn-ui)",
+    "desc": "remocn-ui block • an iMessage-skinned thread: gray / blue tailed bubbles, a dots typing bubble before replies, \"Delivered\", tapback badges, lucide chrome icons",
+    "icon": "🍏",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ImessageChatFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "contact": {
+          "name": "Alex"
+        },
+        "accentColor": "",
+        "speed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "iMessage Chat Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — fixed iMessage skin; only the accent is overridable",
+        "items": [
+          {
+            "key": "messages",
+            "label": "MESSAGES (JSON [{from: me|them, text, reaction?}] — empty = demo script)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "contact",
+            "label": "CONTACT (JSON {name, avatar?})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "OUTGOING / ACCENT (blank = default)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "imessage"
+    },
+    "defaultDurationInFrames": 360
+  },
+  {
+    "id": "remocn_ui_signup_flow",
+    "componentName": "SignupFlowScene",
+    "name": "Signup Flow (remocn-ui)",
+    "desc": "remocn-ui block • a shadcn signup card: the cursor fills Full Name / Email / Password / Confirm, presses Create account through loading to success, and a toast confirms • transparent",
+    "icon": "🪪",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "SignupFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "title": "Create an account",
+        "description": "Enter your information below to create your account",
+        "fullName": "John Doe",
+        "email": "m@example.com",
+        "password": "••••••••",
+        "createLabel": "Create account",
+        "googleLabel": "Sign up with Google",
+        "signinText": "Already have an account?",
+        "toastTitle": "Account created"
+      }
+    },
+    "controls": [
+      {
+        "group": "Signup Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — fields at 66 / 100 / 144 / 182 (the source adds a 48-frame intro the docs omit), submit 224 → success 282, toast 282–348; layer 370",
+        "items": [
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "fullName",
+            "label": "FULL NAME",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "email",
+            "label": "EMAIL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "password",
+            "label": "PASSWORD (masked)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "createLabel",
+            "label": "SUBMIT LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "googleLabel",
+            "label": "SOCIAL BUTTON",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "signinText",
+            "label": "FOOTER PROMPT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toastTitle",
+            "label": "TOAST",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "signup"
+    },
+    "defaultDurationInFrames": 370
+  },
+  {
+    "id": "remocn_ui_checkout_flow",
+    "componentName": "CheckoutFlowScene",
+    "name": "Checkout Flow (remocn-ui)",
+    "desc": "remocn-ui block • a checkout card blurs in, then the cursor flips monthly → yearly, types the card number, ticks the terms and pays through loading to success; toast confirms • transparent",
+    "icon": "💳",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "CheckoutFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "title": "Upgrade your plan",
+        "description": "Complete your purchase to unlock every feature.",
+        "cardLabel": "Card number",
+        "cardPlaceholder": "4242 4242 4242 4242",
+        "termsLabel": "I accept the terms and conditions",
+        "payLabel": "Pay $49",
+        "toastTitle": "Payment successful"
+      }
+    },
+    "controls": [
+      {
+        "group": "Checkout Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — blur-in 0–58, toggle 64, card 96–150, terms 150, pay 180–224, toast 224–286",
+        "items": [
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "plans",
+            "label": "PLANS (JSON [{value, label}] — first is the resting pick, the cursor clicks the second)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "cardLabel",
+            "label": "CARD LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "cardPlaceholder",
+            "label": "CARD NUMBER (typed)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "termsLabel",
+            "label": "TERMS",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "payLabel",
+            "label": "PAY LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toastTitle",
+            "label": "TOAST",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "checkout"
+    },
+    "defaultDurationInFrames": 300
+  },
+  {
+    "id": "remocn_ui_onboarding_stepper_flow",
+    "componentName": "OnboardingStepperFlowScene",
+    "name": "Onboarding Stepper Flow (remocn-ui)",
+    "desc": "remocn-ui block • a three-step onboarding: the stepper advances account → plan → preferences (email types, a radio picks, switches flip) and Finish runs to success • transparent",
+    "icon": "🧭",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "OnboardingStepperFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "name": "jane@acme.com",
+        "nextLabel": "Next",
+        "finishLabel": "Finish"
+      }
+    },
+    "controls": [
+      {
+        "group": "Onboarding Stepper Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — advances at 64 and 104, success at 156, ends 175",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEP LABELS (JSON, exactly three — the schedule is fixed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "name",
+            "label": "EMAIL (typed)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "plans",
+            "label": "PLAN OPTIONS (JSON string array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "nextLabel",
+            "label": "NEXT LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "finishLabel",
+            "label": "FINISH LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "onboarding"
+    },
+    "defaultDurationInFrames": 175
+  },
+  {
+    "id": "remocn_ui_ai_prompt_flow",
+    "componentName": "AiPromptFlowScene",
+    "name": "AI Prompt Flow (remocn-ui)",
+    "desc": "remocn-ui block • prompt-to-answer: the prompt types, Generate runs hover → press → loading, a skeleton shimmers, the answer crossfades in and a ready toast slides in • transparent",
+    "icon": "✨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "AiPromptFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "prompt": "Summarize this thread",
+        "buttonLabel": "Generate",
+        "toastTitle": "Response ready"
+      }
+    },
+    "controls": [
+      {
+        "group": "AI Prompt Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — toast dismisses near 220, ends 230",
+        "items": [
+          {
+            "key": "prompt",
+            "label": "PROMPT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "buttonLabel",
+            "label": "BUTTON",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "answerLines",
+            "label": "ANSWER LINES (JSON string array — empty = demo answer)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "toastTitle",
+            "label": "TOAST",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "ai"
+    },
+    "defaultDurationInFrames": 230
+  },
+  {
+    "id": "remocn_ui_settings_toggle_flow",
+    "componentName": "SettingsToggleFlowScene",
+    "name": "Settings Toggle Flow (remocn-ui)",
+    "desc": "remocn-ui block • a two-column settings card blurs in, then the cursor flips a switch, picks a theme from a select, drags the volume slider and saves; toast confirms • transparent",
+    "icon": "⚙️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "SettingsToggleFlowScene",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "mode": "light",
+        "title": "Notification settings",
+        "description": "Manage how you receive alerts, set your theme, and tune the volume.",
+        "saveLabel": "Save settings",
+        "toastTitle": "Settings saved"
+      }
+    },
+    "controls": [
+      {
+        "group": "Settings Toggle Flow (remocn-ui) (whole clip) • self-timed block on the 1280×720 stage at scale 1.5 — switch 68, select 99–124, slider 149–194, save 224, toast 240–300",
+        "items": [
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "rows",
+            "label": "ROW LABELS (JSON [{label}] ×3 — switch, select, slider)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "selectItems",
+            "label": "THEME OPTIONS (JSON string array — the cursor picks the last)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "saveLabel",
+            "label": "SAVE LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "toastTitle",
+            "label": "TOAST",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiflow",
+      "style": "settings"
+    },
+    "defaultDurationInFrames": 320
   }
 ];

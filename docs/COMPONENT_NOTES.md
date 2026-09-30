@@ -52,6 +52,11 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Value channels:** Cursor (`path` waypoints), Progress (`valueSteps`), Slider (`sliderSteps`) and Stepper (`stepperSteps`) have no string states. `at` is the ARRIVAL frame, and the move runs over `[at − duration, at)`.
     - Slider folds two channels independently: steps with `value` move the fill, steps with `thumbState` move the thumb.
   - **Context-only atoms:** SkeletonBlock calls `useRemocnTheme()` with no override, so its wrappers add a `RemocnUIProvider` (mode + theme) to make dark mode reach it.
+  - **Blocks (whole scenes), 2026-09-30:** remocn-ui `blocks` (chat / Telegram / iMessage flows, signup, checkout, onboarding, AI prompt, settings) orchestrate the atoms on their own fixed schedule, so they take no `steps`.
+    - Registration: through `withMode(Block)` in `ui-timeline.tsx` (`<Block>Scene` exports), which adds the same `mode` switch (full palette as `theme` + a `RemocnUIProvider`).
+    - Blank fields: `withMode` drops empty-string props, so blank catalog fields use the block default. Telegram / iMessage read `accentColor ?? BLUE`, so '' would otherwise blank the bubbles.
+    - Layout: 1280×720 box at 1.5; the blocks fill it (`width/height: 100%`).
+    - Timing: set the layer to the natural length and use `speed` where the block has it.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
   - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
@@ -1633,6 +1638,44 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Tooltip:** appears above a hovered outline "Hover me" Button.
   - **Typing Indicator:** a typing bubble under an outgoing question hands over at 60–64 to the reply bubble in the same slot.
   - The chat scene's `simultaneous_entrances` warning is the usual steps false positive.
+
+### Chat Flow, Telegram Chat Flow, iMessage Chat Flow, Signup, Checkout, Onboarding Stepper, AI Prompt and Settings Toggle flows (remocn-ui blocks)
+
+- **Catalog ids:** `remocn_ui_chat_flow`, `remocn_ui_telegram_chat_flow`, `remocn_ui_imessage_chat_flow`, `remocn_ui_signup_flow`, `remocn_ui_checkout_flow`, `remocn_ui_onboarding_stepper_flow`, `remocn_ui_ai_prompt_flow`, `remocn_ui_settings_toggle_flow`.
+- **Files:**
+  - Verbatim, MIT, plus `select.tsx` + `use-select-transition.ts` (settings flow dependency; not registered yet).
+  - All other dependencies were already installed.
+  - The iMessage flow needs `lucide-react` (ArrowUp, ChevronLeft, Plus, Video), now in `render-project` (1.49.0).
+- **Chat flows:** a 460 px mobile column, full height, centred.
+  - `messages` JSON `[{from: me|them, text, reaction?}]`; Telegram adds `time?`. Empty uses the demo script.
+  - Outgoing text types into the composer then sends; replies are preceded by a typing bubble (Chat, iMessage) or a "typing…" header (Telegram).
+  - `contact {name, avatar?}` shows the header (the default is `{name: "Alex"}`); `accentColor` sets outgoing; `speed`. Natural length 360.
+  - Skins: Chat Flow follows the theme. Telegram uses a fixed light skin (white thread, blue tailed bubbles with time + checks, a "typing…" status under the name). iMessage uses gray `#e9e9eb` / blue with "Delivered" and tapbacks. Only the accent is overridable on the skinned two.
+- **Signup Flow:** a 376 px card on the 1280 stage.
+  - Schedule: the source adds `DEMO = 48` (a card blur-in intro) to every documented frame, which the docs page omits. Real schedule: the cursor fills Full Name 66 / Email 100 / Password 144 / Confirm 182; Create account from 224 → success 282; toast 282–348. Layer 370.
+    - A 320-frame layer (the docs' timings) cut the toast off; verified at 370.
+  - All text is props. The stage wants `theme.muted` behind it (#f4f4f5 in the test).
+- **Checkout Flow:**
+  - Schedule: the card blurs in 0–58; the cursor clicks the second plan at 64, types the card number 100–140, ticks terms at 150, pays 180 → success 224; toast 224–286. Layer 300.
+  - `plans` JSON `[{value, label}]`.
+- **Onboarding Stepper Flow:** exactly three steps, because the schedule is fixed.
+  - Schedule: email types, advance at 64 → plan radio, 104 → preferences switches, Finish success at 156. Layer 175.
+  - `steps` renames the three panels and `plans` sets the radio options.
+- **AI Prompt Flow:**
+  - Schedule: the prompt types, Generate hover → press → loading, skeleton shimmer, answer crossfade, "Response ready" toast dismissing near 220. Layer 230.
+  - `answerLines` JSON.
+- **Settings Toggle Flow:** a two-column card.
+  - Schedule: switch at 68; select opens at 99 and picks the last `selectItems` at 124; volume slider drag 149–194; Save at 224; toast 240–300. Layer 320.
+  - `rows` JSON `[{label}]`: switch, select, slider.
+  - Select label: the trigger always shows `selectItems[0]`. The source passes `label={selectItems[0]}`, so after the cursor picks the last option the panel closes but the trigger still reads "System". That's the source's behaviour; put the option you want shown first if it matters.
+- **Preview:** kind `uiflow`, schematics of each layout following the documented beat schedule (cursor, fields, toast, a beat caption). The real chrome is the block's.
+- **Verified:** 2026-09-30, [remocn-ui-blocks-contact.png](renders/remocn-ui-blocks-contact.png), 34 stills, 0 errors:
+  - **Chat flows:** the chat thread types, the dots hand over to the 🔥 reply, and the 👍 lands; Telegram shows "typing…" and checks; iMessage shows Delivered, tapbacks and the lucide icons.
+  - **Signup:** fills and submits to success + "Account created"; dark mode verified.
+  - **Checkout:** Yearly → card → terms → Pay ✓ + toast.
+  - **Onboarding:** Account ✓ → Plan ✓ → switches → Finish ✓.
+  - **AI Prompt:** loading → skeleton → answer + "Response ready".
+  - **Settings:** switch, select panel, slider drag, Save ✓ + toast.
 
 ### Typewriter Text
 

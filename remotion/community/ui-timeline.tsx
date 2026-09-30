@@ -1,11 +1,12 @@
 // Authored for this project (not a remocn file): timeline wrappers around the verbatim remocn-ui state atoms
 // (accordion, alert-dialog, blur-in, button, checkbox, dialog, drawer, sheet, context-menu, dropdown-menu, combobox, command-menu,
 // input, message-bubble, popover, radio, skeleton, switch, tabs, toast, toggle-group, tooltip), the field layout family, the
-// skeleton-block shimmer and typing indicator, and the value-channel cursor, progress bar, slider and stepper. State atoms never read the frame, so each wrapper takes a JSON `steps`
+// skeleton-block shimmer and typing indicator, and the value-channel cursor, progress bar, slider and stepper; plus `mode`
+// adapters (withMode) for the self-timed remocn-ui blocks (chat / telegram / imessage flows, signup, checkout, onboarding, AI prompt, settings). State atoms never read the frame, so each wrapper takes a JSON `steps`
 // array and resolves it with useCurrentState (smooth=false, snap) or the atom's own use<Name>Transition hook (smooth).
 // `mode: "dark"` passes the full dark palette as the theme override: the atoms call useRemocnTheme(override, "light"),
 // so a plain mode would only reach the hook's colours and leave the atom's borders and text light.
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
 import { type RemocnTheme, RemocnUIProvider, type Step, clamp01, defaultDarkTheme, easings, revealCount, useCurrentState, useRemocnTheme } from "./remocn-ui";
 import { Accordion, type AccordionState } from "./accordion";
@@ -69,6 +70,14 @@ import { useToggleGroupTransition } from "./use-toggle-group-transition";
 import { Tooltip, type TooltipSide, type TooltipState } from "./tooltip";
 import { useTooltipTransition } from "./use-tooltip-transition";
 import { TypingIndicator } from "./typing-indicator";
+import { ChatFlow } from "./chat-flow";
+import { TelegramChatFlow } from "./telegram-chat-flow";
+import { ImessageChatFlow } from "./imessage-chat-flow";
+import { SignupFlow } from "./signup-flow";
+import { CheckoutFlow } from "./checkout-flow";
+import { OnboardingStepperFlow } from "./onboarding-stepper-flow";
+import { AiPromptFlow } from "./ai-prompt-flow";
+import { SettingsToggleFlow } from "./settings-toggle-flow";
 
 type Mode = "light" | "dark";
 interface Timed<S extends string> { steps?: Step<S>[]; smooth?: boolean; speed?: number }
@@ -474,3 +483,29 @@ export function TypingIndicatorTimeline({ inBubble = true, steps, smooth = true,
     </div>
   );
 }
+
+/** Blocks run their own schedule from the frame, so they need no steps — only the same `mode` switch as the atoms: the full palette
+ *  goes in as `theme` (the blocks forward it to every primitive) and the provider reaches the atoms that read context only.
+ *  Empty-string props are dropped so blank catalog fields fall back to the block's own defaults. */
+function withMode<P extends { theme?: Partial<RemocnTheme> }>(Block: ComponentType<P>, name: string) {
+  const Moded = ({ mode, theme, ...rest }: P & { mode?: Mode }) => {
+    const th = themeFor(mode, theme);
+    // a blank catalog field means "use the block default" (Telegram / iMessage read accentColor with ??)
+    const props = Object.fromEntries(Object.entries(rest).filter(([, v]) => v !== "")) as unknown as P;
+    return (
+      <RemocnUIProvider mode={mode} theme={th}>
+        <Block {...props} theme={th} />
+      </RemocnUIProvider>
+    );
+  };
+  Moded.displayName = name;
+  return Moded;
+}
+export const ChatFlowScene = withMode(ChatFlow, "ChatFlowScene");
+export const TelegramChatFlowScene = withMode(TelegramChatFlow, "TelegramChatFlowScene");
+export const ImessageChatFlowScene = withMode(ImessageChatFlow, "ImessageChatFlowScene");
+export const SignupFlowScene = withMode(SignupFlow, "SignupFlowScene");
+export const CheckoutFlowScene = withMode(CheckoutFlow, "CheckoutFlowScene");
+export const OnboardingStepperFlowScene = withMode(OnboardingStepperFlow, "OnboardingStepperFlowScene");
+export const AiPromptFlowScene = withMode(AiPromptFlow, "AiPromptFlowScene");
+export const SettingsToggleFlowScene = withMode(SettingsToggleFlow, "SettingsToggleFlowScene");
