@@ -17519,5 +17519,1063 @@ window.CommunityManifest = [
       "style": "caret"
     },
     "defaultDurationInFrames": 90
+  },
+  {
+    "id": "remocn_ui_checkbox",
+    "componentName": "CheckboxTimeline",
+    "name": "Checkbox (remocn-ui)",
+    "desc": "remocn-ui • a shadcn checkbox that fills with primary and draws its check on scripted steps (checked ↔ unchecked), optional label • transparent",
+    "icon": "☑️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "CheckboxTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 18,
+            "state": "checked",
+            "duration": 14
+          },
+          {
+            "at": 78,
+            "state": "unchecked",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "label": "Accept terms",
+        "size": "default",
+        "align": "center",
+        "primary": ""
+      }
+    },
+    "controls": [
+      {
+        "group": "Checkbox (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; stack several checkbox layers for a to-do list",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: unchecked | checked)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "label",
+            "label": "LABEL (blank = bare box)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "size",
+            "label": "SIZE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "sm",
+                "Small (16)"
+              ],
+              [
+                "default",
+                "Default (20)"
+              ],
+              [
+                "lg",
+                "Large (24)"
+              ]
+            ]
+          },
+          {
+            "key": "align",
+            "label": "ALIGN IN BOX",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "start",
+                "Start"
+              ],
+              [
+                "center",
+                "Centre"
+              ],
+              [
+                "end",
+                "End"
+              ]
+            ]
+          },
+          {
+            "key": "primary",
+            "label": "PRIMARY (blank = theme)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "checkbox"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_dialog",
+    "componentName": "DialogTimeline",
+    "name": "Dialog (remocn-ui)",
+    "desc": "remocn-ui • a generic modal (edit profile): backdrop dims to 50%, popup with close ✕ fades and zooms in on scripted steps; primary action • transparent, compose over a scene",
+    "icon": "🪟",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "DialogTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 32,
+            "state": "opened",
+            "duration": 16
+          },
+          {
+            "at": 92,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "title": "Edit profile",
+        "description": "Make changes to your profile here. Click save when you're done.",
+        "actionLabel": "Save changes",
+        "cancelLabel": "Cancel"
+      }
+    },
+    "controls": [
+      {
+        "group": "Dialog (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; the backdrop dims this whole box — keep it full frame",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "actionLabel",
+            "label": "ACTION (primary)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "cancelLabel",
+            "label": "CANCEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "dialog"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_drawer",
+    "componentName": "DrawerTimeline",
+    "name": "Drawer (remocn-ui)",
+    "desc": "remocn-ui • a bottom sheet with a drag handle that slides up from the bottom edge over a 50% backdrop on scripted steps • transparent, compose over a scene",
+    "icon": "🗄️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "DrawerTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 32,
+            "state": "opened",
+            "duration": 16
+          },
+          {
+            "at": 92,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "title": "Edit profile",
+        "description": "Make changes to your profile here. Click save when you're done.",
+        "actionLabel": "Save changes",
+        "cancelLabel": "Cancel"
+      }
+    },
+    "controls": [
+      {
+        "group": "Drawer (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; panel spans the box width and sits on its bottom edge — keep it full frame",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "title",
+            "label": "TITLE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "description",
+            "label": "DESCRIPTION",
+            "kind": "multiline",
+            "keyframable": false
+          },
+          {
+            "key": "actionLabel",
+            "label": "ACTION (primary)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "cancelLabel",
+            "label": "CANCEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "drawer"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_combobox",
+    "componentName": "ComboboxTimeline",
+    "name": "Combobox (remocn-ui)",
+    "desc": "remocn-ui • a searchable select: the query types into the trigger, the panel opens below and filters the options, rows hover / press / select on scripted steps • transparent",
+    "icon": "🔽",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ComboboxTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 16,
+            "state": "opened",
+            "duration": 12
+          },
+          {
+            "at": 96,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "query": "ba",
+        "typeStart": 32,
+        "cps": 4,
+        "placeholder": "Select a fruit…",
+        "items": [
+          "Apple",
+          "Banana",
+          "Orange",
+          "Grape"
+        ],
+        "rowSteps": [
+          {
+            "at": 60,
+            "index": 0,
+            "state": "hover",
+            "duration": 8
+          },
+          {
+            "at": 72,
+            "index": 0,
+            "state": "press",
+            "duration": 6
+          },
+          {
+            "at": 80,
+            "index": 0,
+            "state": "selected",
+            "duration": 8
+          }
+        ],
+        "selectedIndex": -1,
+        "highlightedIndex": -1,
+        "pressedIndex": -1
+      }
+    },
+    "controls": [
+      {
+        "group": "Combobox (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; trigger 280 px wide, centred; the panel opens below it",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "query",
+            "label": "QUERY",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "typeStart",
+            "label": "TYPING STARTS (layer frame; -1 = instant)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "cps",
+            "label": "TYPING chars / s",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 40,
+            "step": 0.5
+          },
+          {
+            "key": "placeholder",
+            "label": "PLACEHOLDER",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "items",
+            "label": "ITEMS (JSON string array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "rowSteps",
+            "label": "ROW STEPS (JSON [{at, index, state, duration?}] — index into the FILTERED list; idle | hover | press | selected)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "selectedIndex",
+            "label": "SELECTED ROW (-1 none; used when no row steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "highlightedIndex",
+            "label": "HOVERED ROW",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "pressedIndex",
+            "label": "PRESSED ROW",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "combobox"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_command_menu",
+    "componentName": "CommandMenuTimeline",
+    "name": "Command Menu (remocn-ui)",
+    "desc": "remocn-ui • a ⌘K command palette: backdrop dims, panel zooms in, the query types and filters icon rows with shortcuts, rows hover / press / select on scripted steps • transparent",
+    "icon": "⌘",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "CommandMenuTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 1280,
+        "height": 720,
+        "steps": [
+          {
+            "at": 16,
+            "state": "opened",
+            "duration": 16
+          },
+          {
+            "at": 108,
+            "state": "closed",
+            "duration": 12
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "query": "settings",
+        "typeStart": 20,
+        "cps": 4,
+        "items": [
+          {
+            "icon": "user",
+            "label": "Profile",
+            "shortcut": "⌘ P"
+          },
+          {
+            "icon": "settings",
+            "label": "Settings",
+            "shortcut": "⌘ S"
+          },
+          {
+            "icon": "file",
+            "label": "New File",
+            "shortcut": "⌘ N"
+          },
+          {
+            "icon": "search",
+            "label": "Search docs"
+          }
+        ],
+        "rowSteps": [
+          {
+            "at": 84,
+            "index": 0,
+            "state": "hover",
+            "duration": 8
+          },
+          {
+            "at": 92,
+            "index": 0,
+            "state": "press",
+            "duration": 6
+          },
+          {
+            "at": 100,
+            "index": 0,
+            "state": "selected",
+            "duration": 8
+          }
+        ],
+        "selectedIndex": -1,
+        "highlightedIndex": -1,
+        "pressedIndex": -1
+      }
+    },
+    "controls": [
+      {
+        "group": "Command Menu (remocn-ui) (whole clip) • 1280×720 layout at scale 1.5; panel 440 px wide at 18% from the top; the backdrop dims the whole box",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "query",
+            "label": "QUERY",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "typeStart",
+            "label": "TYPING STARTS (layer frame; -1 = instant)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 600,
+            "step": 1
+          },
+          {
+            "key": "cps",
+            "label": "TYPING chars / s",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 40,
+            "step": 0.5
+          },
+          {
+            "key": "items",
+            "label": "ITEMS (JSON [{label, icon?: search|settings|user|file, shortcut?}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "rowSteps",
+            "label": "ROW STEPS (JSON [{at, index, state, duration?}] — index into the FILTERED list; idle | hover | press | selected)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "selectedIndex",
+            "label": "SELECTED ROW (-1 none; used when no row steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "highlightedIndex",
+            "label": "HOVERED ROW",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "pressedIndex",
+            "label": "PRESSED ROW",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "commandmenu"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_context_menu",
+    "componentName": "ContextMenuTimeline",
+    "name": "Context Menu (remocn-ui)",
+    "desc": "remocn-ui • a right-click menu that grows from its top-left corner (the click point) on scripted steps; rows hover / press • transparent",
+    "icon": "📋",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "ContextMenuTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 700,
+      "baseY": 380,
+      "scale": 1.5,
+      "customProperties": {
+        "width": 200,
+        "height": 160,
+        "steps": [
+          {
+            "at": 44,
+            "state": "opened",
+            "duration": 10
+          },
+          {
+            "at": 92,
+            "state": "closed",
+            "duration": 10
+          }
+        ],
+        "smooth": true,
+        "speed": 1,
+        "mode": "light",
+        "items": [
+          "Back",
+          "Reload",
+          "Save As…",
+          "Inspect"
+        ],
+        "rowSteps": [
+          {
+            "at": 60,
+            "index": 1,
+            "state": "hover"
+          },
+          {
+            "at": 72,
+            "index": 1,
+            "state": "press"
+          },
+          {
+            "at": 82,
+            "index": 1,
+            "state": "idle"
+          }
+        ],
+        "highlightedIndex": -1,
+        "pressedIndex": -1
+      }
+    },
+    "controls": [
+      {
+        "group": "Context Menu (remocn-ui) (whole clip) • 200 px panel at scale 1.5; the box top-left IS the click point",
+        "items": [
+          {
+            "key": "steps",
+            "label": "STEPS (JSON [{at, state, duration?}] — layer frames; states: opened | closed)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "smooth",
+            "label": "SMOOTH (transition hook; off = snap)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "items",
+            "label": "ITEMS (JSON string array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "rowSteps",
+            "label": "ROW STEPS (JSON [{at, index, state, duration?}] — index into the list; idle | hover | press)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "highlightedIndex",
+            "label": "HOVERED ROW (used when no row steps)",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "pressedIndex",
+            "label": "PRESSED ROW",
+            "kind": "range",
+            "keyframable": false,
+            "min": -1,
+            "max": 20,
+            "step": 1
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "contextmenu"
+    },
+    "defaultDurationInFrames": 120
+  },
+  {
+    "id": "remocn_ui_cursor",
+    "componentName": "CursorTimeline",
+    "name": "Cursor (remocn-ui)",
+    "desc": "remocn-ui • a macOS arrow or hand pointer that eases along scripted waypoints; click fires a ripple + press dip, press holds for drags • full frame, transparent",
+    "icon": "🖱️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ui-timeline",
+      "exportName": "CursorTimeline",
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "path": [
+          {
+            "at": 0,
+            "x": 480,
+            "y": 300
+          },
+          {
+            "at": 40,
+            "x": 960,
+            "y": 540,
+            "duration": 28
+          },
+          {
+            "at": 72,
+            "x": 960,
+            "y": 540,
+            "click": true,
+            "duration": 0
+          }
+        ],
+        "variant": "arrow",
+        "size": 42,
+        "rippleColor": "",
+        "speed": 1,
+        "mode": "light"
+      }
+    },
+    "controls": [
+      {
+        "group": "Cursor (remocn-ui) (whole clip) • waypoints in composition px; `at` = ARRIVAL frame, the move runs over [at − duration, at)",
+        "items": [
+          {
+            "key": "path",
+            "label": "PATH (JSON [{at, x, y, duration? (24), click?, press?, easing?: linear|in|out|inOut}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "variant",
+            "label": "CURSOR",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "arrow",
+                "Arrow"
+              ],
+              [
+                "pointer",
+                "Hand pointer"
+              ]
+            ]
+          },
+          {
+            "key": "size",
+            "label": "SIZE px (42 = 1.5× 720p)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 12,
+            "max": 160,
+            "step": 1
+          },
+          {
+            "key": "rippleColor",
+            "label": "RIPPLE (blank = theme primary)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "mode",
+            "label": "MODE",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "light",
+                "Light"
+              ],
+              [
+                "dark",
+                "Dark"
+              ]
+            ]
+          },
+          {
+            "key": "theme",
+            "label": "THEME TOKENS (JSON, concrete oklch/hex/rgb — e.g. {\"primary\":\"#2563eb\",\"radius\":6})",
+            "kind": "json",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "uiatom",
+      "style": "cursor"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 120
   }
 ];

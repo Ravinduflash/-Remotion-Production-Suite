@@ -41,6 +41,11 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
     - Precedence, highest first: the component's own `theme`, then `RemocnUIProvider`, then the light/dark default for the active `mode`.
     - Animated colours must be concrete oklch, hex or rgb values. `var(--x)` falls back to the JS default.
   - **Dependencies:** the registry items reference `@remocn/remocn-ui` (already installed) and sometimes `@remocn/spinner` (Button needs it). Install spinner before the components that need it.
+  - **List atoms (Combobox, Command Menu, Context Menu), 2026-09-30:**
+    - Rows take `rowSteps: [{at, index, state, duration?}]`, with `index` into the filtered list. `ui-timeline.tsx` resolves each row with a pure twin of `useStateTransition` plus the row atom's exported `<row>Style` / `tween<Row>Style`, because hooks can't run in a loop over rows.
+    - Rows without steps fall back to the `selectedIndex` / `highlightedIndex` / `pressedIndex` props.
+    - Typing: `query` + `typeStart` (layer frame; -1 shows it at once) + `cps` feed `revealCount`, which also filters the list.
+  - **Registry-only dependency atoms:** `input`, `select-item`, `command-menu-item` and `dropdown-menu-item` are installed verbatim for the list atoms but aren't catalog entries yet. Register them when their pages arrive; the files are already there.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
   - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
@@ -1484,6 +1489,39 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Blur In:** the wrapped accordion goes from hidden to blurred and rising, lands sharp, then opens on its own steps.
   - **Spinner and caret:** turn and blink.
   - The first attempt at one still failed with a Remotion browser-connect timeout on a cold start; the re-run passed.
+
+### Checkbox, Combobox, Command Menu, Context Menu, Cursor, Dialog and Drawer (remocn-ui)
+
+- **Catalog ids:** `remocn_ui_checkbox`, `remocn_ui_combobox`, `remocn_ui_command_menu`, `remocn_ui_context_menu`, `remocn_ui_cursor`, `remocn_ui_dialog`, `remocn_ui_drawer`.
+- **Files:**
+  - Verbatim, MIT: each atom + its `use-*-transition.ts` hook, and the dependency atoms `input`, `select-item`, `command-menu-item`, `dropdown-menu-item` (each with its hook).
+  - `cursor.tsx` + `use-cursor-path.ts` were already installed (X Follow Card) and are byte-identical to `r/cursor.json`.
+  - All seven are driven through `ui-timeline.tsx` (`<Name>Timeline`).
+- **Layout:**
+  - **Checkbox, Combobox, Command Menu, Dialog and Drawer** are 1280×720 boxes at scale 1.5.
+    - Dialog (440 px popup, close ✕, primary action), Command Menu (440 px panel, 18% from the top) and Drawer (full-width 320 px bottom sheet with a handle) all dim the whole box with a 50% backdrop; keep them full frame.
+    - The combobox trigger is 280 px, centred, and the panel drops below it.
+  - **Context Menu** has no trigger and isn't absolutely positioned: a 200 px panel grows from its top-left corner. The layer box top-left IS the click point (box 200×160 at 1.5; default 700, 380).
+  - **Cursor** is full frame at scale 1. `path` waypoints are composition px `{at, x, y, duration?, click?, press?, easing?}`:
+    - `at` is the ARRIVAL frame, and the move runs over `[at − duration, at)` (default 24, easing inOut).
+    - `click` fires a 16-frame ripple and an 8-frame press dip; `press` holds the pressed look until the next waypoint (drag).
+    - `size` defaults to 42, 1.5× 28.
+- **Steps (docs examples as defaults):**
+  - Checkbox: checked at 18, unchecked at 78; default duration 10.
+  - Dialog and Drawer: open 32, close 92 (12).
+  - Combobox: open 16, close 96 (12); "ba" typed from 32 at 4 cps; row 0 hover 60 → press 72 → selected 80.
+  - Command Menu: open 16, close 108 (12); "settings" typed from 20 at 4 cps; row 0 hover 84 → press 92 → selected 100.
+  - Context Menu: open 44, close 92 (10); row 1 hover 60 → press 72 → idle 82.
+- **Syncing with a Cursor:** schedule the menu's `opened` step 1–2 frames after the cursor's `click` waypoint, and a Button's `press` a few frames before it.
+- **Preview:** kind `uiatom`, with the same step and row resolution. Row, icon and text metrics are approximate, and the icons are placeholders.
+- **Verified:** 2026-09-30, [remocn-ui-atoms2-contact.png](renders/remocn-ui-atoms2-contact.png), 28 stills, 0 errors:
+  - **Checkbox:** fills and draws its check, then unchecks.
+  - **Dialog:** zooms in over an outline "Edit profile" Button, then clears; dark mode verified.
+  - **Drawer:** slides up with the handle, then away.
+  - **Context Menu:** the cursor clicks at 700, 380 with a ripple, the menu grows from that corner, "Reload" hovers then presses.
+  - **Combobox:** "ba" types in and filters to Banana, which hovers, presses and is selected with a check.
+  - **Command Menu:** "settings" filters to Settings, which hovers and is selected.
+  - **Cursor + Button:** the hand pointer glides to the button, clicks into press → spinner → check.
 
 ### Typewriter Text
 
