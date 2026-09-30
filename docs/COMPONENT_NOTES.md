@@ -57,6 +57,15 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
     - Blank fields: `withMode` drops empty-string props, so blank catalog fields use the block default. Telegram / iMessage read `accentColor ?? BLUE`, so '' would otherwise blank the bubbles.
     - Layout: 1280×720 box at 1.5; the blocks fill it (`width/height: 100%`).
     - Timing: set the layer to the natural length and use `speed` where the block has it.
+- **remocn `shaders` tier (backdrops), 2026-09-30:** read from remocn.dev/docs/shaders (introduction). Each `shader-*` wraps a paper-design shader and is driven per frame, so renders are deterministic:
+  - How the wrappers work: they freeze the shader (`speed={0}`), feed `frame` from `useCurrentFrame()`, gate the first paint with `delayRender`, and draw `fit="cover"` at the composition's width/height.
+  - Props: a `speed` control, a few shader-specific props, and every other paper-design prop passed through. Defaults are muted, so set a palette to make one lead.
+  - Registration: full-frame backdrops go BEHIND content, at scale 1, 1920×1080, as the bottom layer.
+  - Registry, checked 2026-09-30: 26 `shader-*` items.
+    - **Installed, byte-identical, not yet catalog backdrops** (they came in as transition dependencies): `dithering`, `grain-gradient`, `light-tunnel`, `perlin-noise`, `smoke-ring`, `swirl`, `warp`.
+    - **Already registered:** `seam`, `spiral-pass`, `text-reveal`.
+    - **New:** `mesh-gradient`, `water`, `spiral`, `liquid-metal`, `color-panels`, `neuro-noise`, `simplex-noise`, `voronoi`, `dot-orbit`, `god-rays`, `metaballs`, `pulsing-border`, `caustics`, `gem-smoke`, `strata`, `weave`.
+  - **Render caveats:** see the SwiftShader note under Transition layers. Software WebGL is slow here (30–145 s a still), and some paper-design shapes render empty on it (GrainGradient blob, dots and truchet). Verify each new shader with a real still before trusting it, and keep the 120 s delayRender timeout.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
   - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
