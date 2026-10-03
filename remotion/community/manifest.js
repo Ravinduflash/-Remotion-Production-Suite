@@ -25331,5 +25331,506 @@ window.CommunityManifest = [
     "fullFrame": true,
     "defaultDurationInFrames": 554,
     "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_icon",
+    "componentName": "RemocnIcon",
+    "name": "Animated Icon (remocn, 100 icons)",
+    "desc": "remocn icons • pick any of 100 Lucide-derived icons; each draws its strokes on (14 f) then plays its own action (check pops, bell rings, loader spins, rocket lifts…) • the box is the icon",
+    "icon": "✨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/remocn-icon",
+      "exportName": "RemocnIcon",
+      "packages": [
+        "@remotion/paths"
+      ],
+      "sizeMode": "props"
+    },
+    "defaults": {
+      "baseX": 880,
+      "baseY": 460,
+      "scale": 1,
+      "customProperties": {
+        "width": 160,
+        "height": 160,
+        "icon": "check",
+        "animation": "both",
+        "loop": false,
+        "speed": 1,
+        "color": "#ffffff",
+        "strokeWidth": 2
+      }
+    },
+    "controls": [
+      {
+        "group": "Animated Icon (remocn) (whole clip) • box width = icon size; icons draw on then act (≈ 40 f); paths derived from Lucide (ISC)",
+        "items": [
+          {
+            "key": "icon",
+            "label": "ICON (100)",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "check",
+                "check"
+              ],
+              [
+                "check-circle",
+                "check circle"
+              ],
+              [
+                "x",
+                "x"
+              ],
+              [
+                "alert-triangle",
+                "alert triangle"
+              ],
+              [
+                "info",
+                "info"
+              ],
+              [
+                "loader",
+                "loader"
+              ],
+              [
+                "refresh-cw",
+                "refresh cw"
+              ],
+              [
+                "shield",
+                "shield"
+              ],
+              [
+                "help-circle",
+                "help circle"
+              ],
+              [
+                "plus-circle",
+                "plus circle"
+              ],
+              [
+                "x-circle",
+                "x circle"
+              ],
+              [
+                "search",
+                "search"
+              ],
+              [
+                "bell",
+                "bell"
+              ],
+              [
+                "download",
+                "download"
+              ],
+              [
+                "upload",
+                "upload"
+              ],
+              [
+                "copy",
+                "copy"
+              ],
+              [
+                "settings",
+                "settings"
+              ],
+              [
+                "trash",
+                "trash"
+              ],
+              [
+                "plus",
+                "plus"
+              ],
+              [
+                "send",
+                "send"
+              ],
+              [
+                "menu",
+                "menu"
+              ],
+              [
+                "more-horizontal",
+                "more horizontal"
+              ],
+              [
+                "maximize",
+                "maximize"
+              ],
+              [
+                "layout-grid",
+                "layout grid"
+              ],
+              [
+                "pencil",
+                "pencil"
+              ],
+              [
+                "share-2",
+                "share 2"
+              ],
+              [
+                "filter",
+                "filter"
+              ],
+              [
+                "eye",
+                "eye"
+              ],
+              [
+                "eye-off",
+                "eye off"
+              ],
+              [
+                "save",
+                "save"
+              ],
+              [
+                "link",
+                "link"
+              ],
+              [
+                "bookmark",
+                "bookmark"
+              ],
+              [
+                "lock",
+                "lock"
+              ],
+              [
+                "key",
+                "key"
+              ],
+              [
+                "log-out",
+                "log out"
+              ],
+              [
+                "play",
+                "play"
+              ],
+              [
+                "pause",
+                "pause"
+              ],
+              [
+                "skip-forward",
+                "skip forward"
+              ],
+              [
+                "volume-2",
+                "volume 2"
+              ],
+              [
+                "volume-x",
+                "volume x"
+              ],
+              [
+                "mic",
+                "mic"
+              ],
+              [
+                "video",
+                "video"
+              ],
+              [
+                "camera",
+                "camera"
+              ],
+              [
+                "image",
+                "image"
+              ],
+              [
+                "user",
+                "user"
+              ],
+              [
+                "users",
+                "users"
+              ],
+              [
+                "user-plus",
+                "user plus"
+              ],
+              [
+                "mail",
+                "mail"
+              ],
+              [
+                "message-circle",
+                "message circle"
+              ],
+              [
+                "phone",
+                "phone"
+              ],
+              [
+                "at-sign",
+                "at sign"
+              ],
+              [
+                "inbox",
+                "inbox"
+              ],
+              [
+                "calendar",
+                "calendar"
+              ],
+              [
+                "clock",
+                "clock"
+              ],
+              [
+                "timer",
+                "timer"
+              ],
+              [
+                "home",
+                "home"
+              ],
+              [
+                "folder",
+                "folder"
+              ],
+              [
+                "file-text",
+                "file text"
+              ],
+              [
+                "code",
+                "code"
+              ],
+              [
+                "terminal",
+                "terminal"
+              ],
+              [
+                "database",
+                "database"
+              ],
+              [
+                "cloud",
+                "cloud"
+              ],
+              [
+                "globe",
+                "globe"
+              ],
+              [
+                "monitor",
+                "monitor"
+              ],
+              [
+                "smartphone",
+                "smartphone"
+              ],
+              [
+                "sun",
+                "sun"
+              ],
+              [
+                "moon",
+                "moon"
+              ],
+              [
+                "shopping-cart",
+                "shopping cart"
+              ],
+              [
+                "credit-card",
+                "credit card"
+              ],
+              [
+                "dollar-sign",
+                "dollar sign"
+              ],
+              [
+                "tag",
+                "tag"
+              ],
+              [
+                "package",
+                "package"
+              ],
+              [
+                "gift",
+                "gift"
+              ],
+              [
+                "wallet",
+                "wallet"
+              ],
+              [
+                "activity",
+                "activity"
+              ],
+              [
+                "bar-chart-3",
+                "bar chart 3"
+              ],
+              [
+                "target",
+                "target"
+              ],
+              [
+                "trending-down",
+                "trending down"
+              ],
+              [
+                "trending-up",
+                "trending up"
+              ],
+              [
+                "heart",
+                "heart"
+              ],
+              [
+                "rocket",
+                "rocket"
+              ],
+              [
+                "trophy",
+                "trophy"
+              ],
+              [
+                "award",
+                "award"
+              ],
+              [
+                "crown",
+                "crown"
+              ],
+              [
+                "gem",
+                "gem"
+              ],
+              [
+                "star",
+                "star"
+              ],
+              [
+                "sparkles",
+                "sparkles"
+              ],
+              [
+                "zap",
+                "zap"
+              ],
+              [
+                "flame",
+                "flame"
+              ],
+              [
+                "thumbs-up",
+                "thumbs up"
+              ],
+              [
+                "party-popper",
+                "party popper"
+              ],
+              [
+                "arrow-right",
+                "arrow right"
+              ],
+              [
+                "arrow-left",
+                "arrow left"
+              ],
+              [
+                "arrow-up",
+                "arrow up"
+              ],
+              [
+                "arrow-down",
+                "arrow down"
+              ],
+              [
+                "external-link",
+                "external link"
+              ],
+              [
+                "chevron-up",
+                "chevron up"
+              ],
+              [
+                "chevron-down",
+                "chevron down"
+              ],
+              [
+                "chevron-left",
+                "chevron left"
+              ],
+              [
+                "chevron-right",
+                "chevron right"
+              ]
+            ]
+          },
+          {
+            "key": "animation",
+            "label": "ANIMATION",
+            "kind": "select",
+            "keyframable": false,
+            "options": [
+              [
+                "both",
+                "Draw on, then action"
+              ],
+              [
+                "draw",
+                "Draw on only"
+              ],
+              [
+                "action",
+                "Action only (already drawn)"
+              ]
+            ]
+          },
+          {
+            "key": "loop",
+            "label": "LOOP THE ACTION",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "speed",
+            "label": "SPEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.25,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "color",
+            "label": "COLOUR",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "strokeWidth",
+            "label": "STROKE (24-unit grid)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.5,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "icon",
+      "style": "icon"
+    },
+    "defaultDurationInFrames": 150
   }
 ];

@@ -21,6 +21,9 @@
       "@/lib/remocn-ui": [
         "src/remotion/community/remocn-ui"
       ],
+      "@/lib/remocn-icons": [
+        "src/remotion/community/remocn-icons"
+      ],
       "@/lib/remocn/*": [
         "src/remotion/community/*"
       ],

@@ -1838,6 +1838,32 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Showcase:** chrome words (WebGL2 on software GL works) → glass button → laptop over the photo plate → symbol field → frame mark.
   - **Order Flow:** intro → phone UI → exit-price slider → price close-up → closing.
 
+### Animated Icon — all 100 remocn icons (remocn icons)
+
+- **Catalog id:** `remocn_icon`, ONE entry for all 100. The `icon` select picks the glyph.
+  - Why one entry: 100 near-identical catalog rows would bury the rest of the community tab.
+  - The icons: check, check-circle, x, alert-triangle, info, loader, refresh-cw, shield, help-circle, plus-circle, x-circle, search, bell, download, upload, copy, settings, trash, plus, send, menu, more-horizontal, maximize, layout-grid, pencil, share-2, filter, eye, eye-off, save, link, bookmark, lock, key, log-out, play, pause, skip-forward, volume-2, volume-x, mic, video, camera, image, user, users, user-plus, mail, message-circle, phone, at-sign, inbox, calendar, clock, timer, home, folder, file-text, code, terminal, database, cloud, globe, monitor, smartphone, sun, moon, shopping-cart, credit-card, dollar-sign, tag, package, gift, wallet, activity, bar-chart-3, target, trending-down, trending-up, heart, rocket, trophy, award, crown, gem, star, sparkles, zap, flame, thumbs-up, party-popper, arrow-right/left/up/down, external-link, chevron-up/down/left/right.
+- **Files** (verbatim, MIT; paths derived from Lucide, ISC):
+  - `icons/icon-<name>.tsx` ×100 (a sub-folder to keep `community/` tidy).
+  - `remocn-icons/index.ts` (icons-core: `useIconAnimation`, `iconTimeline`, `drawnPathProps` via `@remotion/paths` `evolvePath`, `staggeredProgress`).
+  - `remocn-icon.tsx` (project code): imports every animated export into a name → component map, `REMOCN_ICONS`, and renders the chosen one centred in the box.
+- **Setup:**
+  - New alias `@/lib/remocn-icons` → `community/remocn-icons` in `render-project/remotion.config.ts` and the tsconfig paths. It's its own key, like `remocn-ui`.
+  - `@remotion/paths` 4.0.526 (exact) installed.
+- **Motion:** shared timeline. Strokes draw on over `drawDurationInFrames` (≈ 14, ease-out, with a spring scale-in), then each icon's own action after a 2-frame delay (≈ 18–20 f): check pops, bell swings, loader spins, party-popper bursts, rocket lifts…
+  - `animation`: both | draw | action.
+  - `loop` repeats the action.
+  - `speed` scales the playhead.
+- **Layout:** `sizeMode: props`, so the box width is the icon size (default 160, scale 1). Also `color` (default #ffffff), `strokeWidth` 2 on the 24-unit grid.
+  - Layer default 150 frames, so the icon persists after its ≈ 40-frame entrance. The first registration used 60, and the test caught the icon vanishing at frame 60.
+- **Preview:** kind `icon`, a stand-in tile with the icon's name following the same draw → action timing. The real glyph only appears in renders.
+- **Verified:** 2026-10-04, [remocn-icons-contact.png](renders/remocn-icons-contact.png), 0 errors. A 12-icon grid (check, bell, rocket, heart, loader, settings, download, trash, sparkles, party-popper, trending-up, lock):
+  - mid-draw at f7;
+  - drawn and acting at f22 (bell swing, popper burst);
+  - holding at f85;
+  - a looping-action variant in light blue at stroke 2.5.
+  - `check_scene` warns `simultaneous_entrances` for a grid of icons entering together; that's intended here.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`

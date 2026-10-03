@@ -19,6 +19,7 @@ Config.overrideWebpackConfig((config) => ({
     alias: {
       ...(config.resolve?.alias as Record<string, string> | undefined),
       '@/lib/remocn-ui': path.join(COMMUNITY, 'remocn-ui'), // multi-file core lib (useTypewriter, colour, theme)
+      '@/lib/remocn-icons': path.join(COMMUNITY, 'remocn-icons'), // icons-core (useIconAnimation, drawnPathProps)
       '@/lib/remocn': COMMUNITY,
       '@/components/remocn': COMMUNITY,
     },

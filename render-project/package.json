@@ -22,6 +22,7 @@
     "@remotion/layout-utils": "4.0.526",
     "@remotion/media": "4.0.526",
     "@remotion/media-utils": "4.0.526",
+    "@remotion/paths": "4.0.526",
     "@remotion/rough-notation": "4.0.526",
     "@remotion/rounded-text-box": "4.0.526",
     "@remotion/sfx": "4.0.526",
