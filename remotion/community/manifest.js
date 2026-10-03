@@ -24017,5 +24017,412 @@ window.CommunityManifest = [
     "fullFrame": true,
     "defaultDurationInFrames": 150,
     "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_camera_lens",
+    "componentName": "CameraLens",
+    "name": "Camera Lens (remocn filter)",
+    "desc": "remocn filter • WRAPPER: puts the scene behind real glass — corners soften, highlights bloom, edges fringe, light falls off; quiet enough to leave on a whole demo",
+    "icon": "📷",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/camera-lens",
+      "exportName": "CameraLens",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "softness": 0.5,
+        "bloom": 0.5,
+        "aberration": 0.5,
+        "vignette": 0.5,
+        "distortion": 0.05
+      }
+    },
+    "controls": [
+      {
+        "group": "Camera Lens (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; heaviest filter (multi-tap blur + bloom); put a camera move (drift) INSIDE it",
+        "items": [
+          {
+            "key": "softness",
+            "label": "CORNER SOFTNESS",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "bloom",
+            "label": "BLOOM",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "aberration",
+            "label": "EDGE FRINGING",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "vignette",
+            "label": "VIGNETTE (cos⁴)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "distortion",
+            "label": "BARREL (keep near 0)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.005
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "lens"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_security_cam",
+    "componentName": "SecurityCam",
+    "name": "Security Cam (remocn filter)",
+    "desc": "remocn filter • WRAPPER: runs the scene through a cheap recorder — macroblocks, half-resolution colour, crushed blacks, hunting exposure, shadow noise",
+    "icon": "📹",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/security-cam",
+      "exportName": "SecurityCam",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "compression": 0.7,
+        "blockSize": 10,
+        "noise": 0.6,
+        "intensity": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Security Cam (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; burned-in OSD (timestamp, REC) goes INSIDE the wrap",
+        "items": [
+          {
+            "key": "compression",
+            "label": "COMPRESSION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          },
+          {
+            "key": "blockSize",
+            "label": "MACROBLOCK px (colour blocks are 2×)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 40,
+            "step": 1
+          },
+          {
+            "key": "noise",
+            "label": "SHADOW NOISE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY (keyframe to 0 on a hard cut = clean scene)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "security"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_hologram",
+    "componentName": "Hologram",
+    "name": "Hologram (remocn filter)",
+    "desc": "remocn filter • WRAPPER: plays the scene as projected light — ghost double, emission lines, a travelling crest; only the bright parts carry, the rest sinks into a dark tinted volume",
+    "icon": "🛸",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/hologram",
+      "exportName": "Hologram",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "tint": "#63e8ff",
+        "glow": 1,
+        "ghost": 1,
+        "flicker": 1,
+        "intensity": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Hologram (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; best on bright thin lines on black; the filter paints its own dark volume",
+        "items": [
+          {
+            "key": "tint",
+            "label": "TINT (the light)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "glow",
+            "label": "GLOW (edge emission + halo)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          },
+          {
+            "key": "ghost",
+            "label": "GHOST (instability; keyframe high → 1 to boot)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 6,
+            "step": 0.05
+          },
+          {
+            "key": "flicker",
+            "label": "FLICKER (15-frame pulse)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 4,
+            "step": 0.05
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "hologram"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_vhs_filter",
+    "componentName": "VhsFilter",
+    "name": "VHS Filter (remocn filter)",
+    "desc": "remocn filter • WRAPPER: holds the scene under analog tape — sideways chroma bleed (luma stays sharp), wandering rows, a head-switch tear at the bottom, luma noise",
+    "icon": "📼",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/vhs-filter",
+      "exportName": "VhsFilter",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "bleed": 1,
+        "wobble": 1,
+        "noise": 1,
+        "intensity": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "VHS Filter (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; expects a full-bleed opaque scene",
+        "items": [
+          {
+            "key": "bleed",
+            "label": "CHROMA BLEED",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          },
+          {
+            "key": "wobble",
+            "label": "TAPE WOBBLE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          },
+          {
+            "key": "noise",
+            "label": "NOISE",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY (scales all; keyframe to surface the scene)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "vhs"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_crt_screen",
+    "componentName": "CrtScreen",
+    "name": "CRT Screen (remocn filter)",
+    "desc": "remocn filter • WRAPPER: puts the scene behind curved glass — barrel bulge, RGB phosphor mask, curved scanlines, blooming brights, corners running off into black",
+    "icon": "🖥️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/crt-screen",
+      "exportName": "CrtScreen",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "curvature": 1,
+        "scanlines": 1,
+        "maskScale": 2,
+        "vignette": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "CRT Screen (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; keep content off the corners (they fall into the rim)",
+        "items": [
+          {
+            "key": "curvature",
+            "label": "CURVATURE (0 = flat panel)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "scanlines",
+            "label": "SCANLINES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "maskScale",
+            "label": "PHOSPHOR STRIPE (device px)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 1,
+            "max": 8,
+            "step": 0.5
+          },
+          {
+            "key": "vignette",
+            "label": "RIM FALLOFF",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "crt"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
   }
 ];

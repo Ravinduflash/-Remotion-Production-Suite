@@ -68,6 +68,15 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Render caveats:** see the SwiftShader note under Transition layers. Software WebGL is slow here (30–145 s a still), and some paper-design shapes render empty on it (GrainGradient blob, dots and truchet). Verify each new shader with a real still before trusting it, and keep the 120 s delayRender timeout.
 - **`external.paintGate: {waitFor}`, 2026-09-30:** plain layers that paint asynchronously get the same per-frame hold transition layers use (`usePaintGate` in `SceneRenderer`, now shared). Every frame waits until the selector matches inside the layer, plus four animation frames; it gives up after 15 s and never outlives 90 s.
   - The paper-design shader backdrops use `'[data-paper-shader] canvas'`. remocn's own gate only holds two animation frames once, at mount.
+- **remocn `filters` tier, 2026-10-03:** read from remocn.dev/docs/filters (introduction).
+  - What a filter is: it wraps a scene and re-reads its pixels every frame through the experimental html-in-canvas API, the same `canvas-presentation` foundation as the canvas transitions and TV Power Off (`makeCanvasFilter` / `makeFilterShader`).
+  - Unlike a transition, a filter has no progress and no second scene. It's a look that lasts exactly as long as the scene it wraps ("length: sustained").
+  - Determinism: motion is a pure function of the frame and oscillates rather than drifting, so renders are identical.
+  - Why not CSS: each output pixel is written from a *different* source coordinate (bleed, curvature, block averages), which a CSS `filter` can't do.
+  - Registration: a WRAPPER, full frame, scale 1, `children.fit: full`. Wrap the WHOLE scene with `update_asset { assetId, wraps }`, **its backdrop included**: filters read displaced pixels, so a transparent scene has nothing to gather and the untouched scene shows through.
+  - Html-in-canvas: enabled in `render-project/remotion.config.ts` (`Config.setAllowHtmlInCanvasEnabled(true)`), so renders take the shader path. Browsers without it fall back to each filter's CSS approximation.
+  - Nesting: the innermost filter applies first. Each level is another capture + shader pass, so keep stacks shallow and put the geometry-changing one (CRT curvature, lens distortion) outermost.
+  - Studio preview: wrapper geometry may now return `overlay`, SVG drawn ABOVE the wrapped layers (`studio.js`). Filter previews use it for scanlines / tint / vignette.
 - **Transition layers, 2026-09-28:** remocn transitions are `@remotion/transitions` presentation factories, not components. `external.transition` marks such an entry; the layer's `componentName` equals `exportName`, the factory's name.
   - **Slots:** the layer is a two-slot wrapper (`children.slots: ['from', 'to']`). Wrap the outgoing layers as `from` and the incoming ones as `to` with `update_asset { wraps: { from: [...], to: [...] } }`.
   - **Timing:** `SceneRenderer`'s `TransitionLayer` plays the presentation like `TransitionSeries` with `linearTiming`. It shows `from` alone until layer frame `transitionAt`, then both for `transitionFrames` (exiting under entering, progress linear), then `to` alone. The presentation sees its own frame 0 at the transition start, as it would inside `TransitionSeries`. The wrapped layers are shifted back, so they keep composition time and their own keyframes.
@@ -1734,6 +1743,31 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - Smoke Ring curls (mean frame change 17). Metaballs merge in custom colours (61).
   - The border pulses. Gem Smoke flows inside the diamond mark (23).
   - On their DEFAULT palettes, Caustics, Strata and Weave are near-black and barely move (frame change 0.6–1.4; Weave's speed drives only the sheen). Lifted palettes read clearly: teal caustics with accent, violet strata, a brown woven grid. Set `colors` for anything but a very dark base.
+
+### Camera Lens, Security Cam, Hologram, VHS Filter and CRT Screen (remocn filters)
+
+- **Catalog ids:** `remocn_camera_lens`, `remocn_security_cam`, `remocn_hologram`, `remocn_vhs_filter`, `remocn_crt_screen`.
+- **Files and registration:**
+  - Verbatim, MIT. The only dependency is `canvas-presentation`, already installed and byte-identical.
+  - All are full-frame WRAPPERS (see the filters-tier pipeline note) with `renderTimeoutMs` 120000 and a default layer of 150, which is arbitrary: a filter lasts as long as you make the layer.
+- **Camera Lens:** `softness`, `bloom`, `aberration`, `vignette` (all 0.5), `distortion` 0.05 (keep near 0, or it reads as a CRT).
+  - Quiet by design, so it can stay on under a whole demo, and nothing animates.
+  - Put a camera move (`drift`) INSIDE it, so the scene travels behind stationary glass.
+  - It's the heaviest filter (multi-tap corner blur + bloom, aberration triples the blur), so it's slow on software GL.
+- **Security Cam:** `compression` 0.7, `blockSize` 10 (colour on 2× blocks, the codec signature), `noise` 0.6 (shadow-weighted), `intensity`.
+  - Motion: only a 90-frame exposure pump and per-frame shadow noise.
+  - Burned-in OSD (timestamp, REC dot) goes INSIDE the wrap so it gets compressed too.
+  - Cold open: keyframe `intensity` 1 → 0 on a HARD cut, not a fade. Starve the feed by driving `compression` and `blockSize` up together.
+- **Hologram:** `tint` #63e8ff, `glow` 1, `ghost` 1, `flicker` 1 (15-frame pulse), `intensity`.
+  - Only bright content carries, so it suits bright thin lines on black (HUDs, wireframes, mono type).
+  - The filter paints its own dark tinted volume and owns the background.
+  - Boot: keyframe `ghost` and `flicker` from high down to 1 over about 34 frames.
+- **VHS Filter:** `bleed`, `wobble`, `noise`, `intensity` (all 1). Chroma smears sideways while luma stays sharp, rows wander, the bottom 4% tears at the head switch, and there's luma grain. `intensity` scales all of it.
+- **CRT Screen:** `curvature` 1 (0 = flat panel), `scanlines` 1, `maskScale` 2 device px per phosphor stripe (finer relative to the frame at larger renders), `vignette` 1.
+  - Outside the tube is opaque black. Keep content off the corners; they fall into the rim.
+  - The only motion is a 1% breath on a 60-frame cycle.
+- **Preview:** kind `canvasfilter`. The wrapper itself draws nothing (a dashed "wrap the scene" box when empty), and the look is an approximate `overlay` above the wrapped layers.
+- **Verified:** 2026-10-03, [remocn-filters-contact.png](renders/remocn-filters-contact.png).
 
 ### Typewriter Text
 

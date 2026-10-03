@@ -267,7 +267,9 @@
       // slots paint in geo z order (Page Turn keeps its exiting page above the entering scene)
       if (slots && window.StudioCatalog.wrapGeometry) { const geo = window.StudioCatalog.wrapGeometry(p.customProperties, ctx);
         Object.entries(slots).sort(([a], [b]) => ((geo[a] || {}).z || 0) - ((geo[b] || {}).z || 0)).forEach(([slot, ids]) => { const g = geo[slot] || geo.children || { transform: '' }; const kids = store.assets.filter(k => ids.includes(k.id)).map(k => drawAsset(k, depth + 1)).join(''); const cid = `wrapclip_${asset.id}_${slot}`;
-          inner += `<g transform="${g.transform}" opacity="${g.opacity ?? 1}">${g.clip ? `<clipPath id="${cid}"><rect width="${g.clip.w}" height="${g.clip.h}" rx="${g.clip.r || 0}"/></clipPath>` : ''}<g ${g.clip ? `clip-path="url(#${cid})"` : ''}><g transform="${g.inner || ''}">${kids}</g></g></g>`; }); }
+          inner += `<g transform="${g.transform}" opacity="${g.opacity ?? 1}">${g.clip ? `<clipPath id="${cid}"><rect width="${g.clip.w}" height="${g.clip.h}" rx="${g.clip.r || 0}"/></clipPath>` : ''}<g ${g.clip ? `clip-path="url(#${cid})"` : ''}><g transform="${g.inner || ''}">${kids}</g></g></g>`; });
+        // geometry.overlay: SVG drawn above the wrapped layers (filter wrappers tint / scan / vignette what they wrap)
+        if (geo.overlay) inner += geo.overlay; }
       return `<g class="asset ${asset.locked ? 'locked' : ''}" data-id="${asset.id}" transform="${transformOf(p)}" opacity="${round2(p.opacity ?? 1)}">${inner}</g>`;
     };
     store.assets.forEach(asset => { if (!wrapperOf(asset.id)) svg += drawAsset(asset, 0); });
