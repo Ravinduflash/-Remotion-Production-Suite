@@ -24424,5 +24424,377 @@ window.CommunityManifest = [
     "fullFrame": true,
     "defaultDurationInFrames": 150,
     "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_sustained_glitch",
+    "componentName": "SustainedGlitch",
+    "name": "Sustained Glitch (remocn filter)",
+    "desc": "remocn filter • WRAPPER: holds the scene clean between scheduled bursts of broadcast corruption — slices tear, channels split, blocks fill with picture from elsewhere — then it recovers",
+    "icon": "📛",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/sustained-glitch",
+      "exportName": "SustainedGlitch",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "intensity": 1,
+        "frequency": 1,
+        "slices": 24,
+        "seed": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Sustained Glitch (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; intermittent, not a texture",
+        "items": [
+          {
+            "key": "intensity",
+            "label": "INTENSITY (keyframe it to land a hit; 0 = clean)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 3,
+            "step": 0.01
+          },
+          {
+            "key": "frequency",
+            "label": "BURSTS / s (≈6 = continuous; let intensity time it)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 10,
+            "step": 0.05
+          },
+          {
+            "key": "slices",
+            "label": "SLICES",
+            "kind": "range",
+            "keyframable": false,
+            "min": 2,
+            "max": 96,
+            "step": 1
+          },
+          {
+            "key": "seed",
+            "label": "SEED (different rhythm per scene)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "glitch"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_pixelate_region",
+    "componentName": "PixelateRegion",
+    "name": "Pixelate Region (remocn filter)",
+    "desc": "remocn filter • WRAPPER (utility): covers rectangles of the scene with an opaque averaged mosaic — redact API keys, emails, tokens — and leaves everything else sharp; fails CLOSED (opaque block) everywhere",
+    "icon": "🔲",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/pixelate-region",
+      "exportName": "PixelateRegion",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "regions": [
+          {
+            "x": 640,
+            "y": 440,
+            "width": 640,
+            "height": 110
+          }
+        ],
+        "cellSize": 24
+      }
+    },
+    "controls": [
+      {
+        "group": "Pixelate Region (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; rectangles are fixed; nest a second one for > 8",
+        "items": [
+          {
+            "key": "regions",
+            "label": "REGIONS (JSON [{x, y, width, height}] in COMPOSITION px from top-left — max 8, more THROWS)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "cellSize",
+            "label": "CELL px (≈ ⅓ of the cap height or coarser)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 4,
+            "max": 120,
+            "step": 1
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "pixelate"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_ascii_render",
+    "componentName": "AsciiRender",
+    "name": "ASCII Render (remocn filter)",
+    "desc": "remocn filter • WRAPPER: redraws the live scene as ASCII, one glyph per cell chosen by brightness, tracking the picture as it moves; intensity blends back to the clean scene",
+    "icon": "🔣",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/ascii-render",
+      "exportName": "AsciiRender",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "glyphSize": 26,
+        "charset": " .:-=+*#%@",
+        "colored": false,
+        "ink": "#9dff9d",
+        "intensity": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "ASCII Render (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; no CSS fallback (renders untouched without html-in-canvas)",
+        "items": [
+          {
+            "key": "glyphSize",
+            "label": "GLYPH CELL HEIGHT px",
+            "kind": "range",
+            "keyframable": false,
+            "min": 6,
+            "max": 80,
+            "step": 1
+          },
+          {
+            "key": "charset",
+            "label": "CHARSET (density ramp, darkest first)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "colored",
+            "label": "COLOURED GLYPHS (each takes its cell colour)",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "ink",
+            "label": "INK (mono mode)",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "intensity",
+            "label": "INTENSITY (keyframe 1 → 0 to resolve out of text)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "ascii"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_halftone_print",
+    "componentName": "HalftonePrint",
+    "name": "Halftone Print (remocn filter)",
+    "desc": "remocn filter • WRAPPER: prints the scene onto paper — CMY dot screens at 15/75/0°, each dot sized by its ink, slightly out of register; feed it a LIGHT scene",
+    "icon": "🗞️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/halftone-print",
+      "exportName": "HalftonePrint",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "dotSize": 10,
+        "angle": 0,
+        "misregistration": 1.2,
+        "paperTint": "#f4efe4"
+      }
+    },
+    "controls": [
+      {
+        "group": "Halftone Print (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; dark scenes saturate into a flat field — invert first",
+        "items": [
+          {
+            "key": "dotSize",
+            "label": "DOT PITCH px (fine offset ↔ coarse newsprint)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 3,
+            "max": 60,
+            "step": 0.5
+          },
+          {
+            "key": "angle",
+            "label": "SCREEN ANGLE °",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 90,
+            "step": 0.5
+          },
+          {
+            "key": "misregistration",
+            "label": "MISREGISTRATION px (keyframe 9 → 1.2 to find register)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 20,
+            "step": 0.1
+          },
+          {
+            "key": "paperTint",
+            "label": "PAPER",
+            "kind": "color",
+            "keyframable": false
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "halftone"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_underwater_ripple",
+    "componentName": "UnderwaterRipple",
+    "name": "Underwater Ripple (remocn filter)",
+    "desc": "remocn filter • WRAPPER: holds the scene under moving water — layered refraction with slope-scaled colour dispersion, looping on whole cycles of the LAYER length",
+    "icon": "🌊",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/underwater-ripple",
+      "exportName": "UnderwaterRipple",
+      "sizeMode": "none",
+      "children": {
+        "fit": "full"
+      }
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "amplitude": 7,
+        "scale": 1,
+        "speed": 2,
+        "dispersion": 1
+      }
+    },
+    "controls": [
+      {
+        "group": "Underwater Ripple (remocn filter) (whole clip) • WRAPPER (html-in-canvas): wrap the WHOLE scene, its backdrop included, with update_asset wraps; wrap the backdrop, keep type OUTSIDE",
+        "items": [
+          {
+            "key": "amplitude",
+            "label": "AMPLITUDE px (keyframe → 0 to surface; 0 = untouched)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 60,
+            "step": 0.5
+          },
+          {
+            "key": "scale",
+            "label": "WAVE SIZE (low = swells, high = chop)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0.1,
+            "max": 5,
+            "step": 0.05
+          },
+          {
+            "key": "speed",
+            "label": "CYCLES PER LAYER (whole numbers loop seamlessly)",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 12,
+            "step": 1
+          },
+          {
+            "key": "dispersion",
+            "label": "DISPERSION",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 4,
+            "step": 0.05
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "canvasfilter",
+      "style": "underwater"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 150,
+    "renderTimeoutMs": 120000
   }
 ];

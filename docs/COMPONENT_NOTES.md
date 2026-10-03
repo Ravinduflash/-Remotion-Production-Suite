@@ -1769,6 +1769,41 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
 - **Preview:** kind `canvasfilter`. The wrapper itself draws nothing (a dashed "wrap the scene" box when empty), and the look is an approximate `overlay` above the wrapped layers.
 - **Verified:** 2026-10-03, [remocn-filters-contact.png](renders/remocn-filters-contact.png).
 
+### Sustained Glitch, Pixelate Region, ASCII Render, Halftone Print and Underwater Ripple (remocn filters II)
+
+- **Catalog ids:** `remocn_sustained_glitch`, `remocn_pixelate_region`, `remocn_ascii_render`, `remocn_halftone_print`, `remocn_underwater_ripple`.
+- **Files and registration:**
+  - Verbatim, MIT, `canvas-presentation` only.
+  - Full-frame WRAPPERS like the first filter batch: wrap the whole scene, backdrop included, but avoid backdrop + remocn-ui Tabs inside one filter (see the known issue above).
+- **Sustained Glitch:** the one intermittent filter. Clean frames, then a seeded burst (slices tear, channels split, blocks show picture from elsewhere) that decays over a few frames.
+  - `frequency` (1 = up to one burst a second) sets how often; `intensity` (0 = nothing) sets how hard; plus `slices` 24 and `seed`.
+  - To land a hit on a beat, set `frequency` about 6 and keyframe `intensity` (e.g. 0 → 1.6 → 0 over 40/44/52).
+  - The CSS fallback has its own schedule.
+- **Pixelate Region:** a redaction utility. `regions` JSON `[{x, y, width, height}]` in COMPOSITION px (1920×1080 here) from the top-left.
+  - At most 8; more THROWS rather than silently dropping one. Nest a second filter for more.
+  - `cellSize` 24, about ⅓ of the covered text's cap height or coarser. The mosaic cells are averaged, and the grid is anchored to each region's corner.
+  - Always fully opaque on every path, including the no-html-in-canvas fallback (a solid block), so it can't fail open.
+  - Regions are fixed rectangles, so they don't track moving content.
+- **ASCII Render:** each `glyphSize` (26) cell is replaced by a character from the `charset` density ramp (darkest first, default ` .:-=+*#%@`).
+  - Colour: mono in `ink` #9dff9d on black, or `colored` per cell.
+  - `intensity` blends back to the clean scene: keyframe 1 → 0 to resolve out of text, or 0 → 1 → 0 (2 frames in, 12 out) for a hit.
+  - The glyph atlas uses the system monospace face, cached.
+  - No CSS fallback (it renders untouched without html-in-canvas).
+  - Moving backdrop pattern: wrap only the backdrop, keep content outside.
+- **Halftone Print:** CMY screens at 15/75/0° (+`angle`), dots sized by ink, `misregistration` 1.2 px (keyframe 9 → 1.2 so the plates find register), `dotSize` 10 (coarse above ~22 shimmers on moving content), `paperTint` #f4efe4.
+  - Feed it a LIGHT scene: dark scenes saturate into a flat field, so invert first.
+  - No master switch, and no CSS fallback.
+- **Underwater Ripple:** `amplitude` 7 px (keyframe → 0 to surface), `scale` (wave size; customProperties.scale is the filter prop, not the layer scale), `dispersion` 1.
+  - `speed` 2 is complete CYCLES over the composition, read from `useVideoConfig().durationInFrames`, which inside our layer Sequence is the LAYER length. Whole numbers loop seamlessly on the layer.
+  - Wrap the backdrop and keep type outside.
+- **Preview:** kind `canvasfilter` overlays (burst bars, mosaic blocks, glyph grid, dot screen, a water tint with drift).
+- **Verified:** 2026-10-03, [remocn-filters2-contact.png](renders/remocn-filters2-contact.png), 12 stills, 0 errors. The scene is backdrop + an opened Dialog (description carrying a fake API key) + Toggle Group, in dark and light versions:
+  - **Glitch** (frequency 6, intensity 1.6): heavy slice tearing, channel split and displaced blocks at f40/41 (mean change 7–8).
+  - **Pixelate:** a region over the description line mosaics the key; the rest stays sharp. Read coordinates straight off the frame; one test rectangle aimed at the title missed because the coordinates were estimated.
+  - **ASCII** (mono and coloured): works, but on this mostly dark scene only the brighter UI turns into glyphs and the frame reads near-black. Feed it high-contrast or bright content.
+  - **Underwater:** subtle at amplitude 7 (change 1.0), clearly wavy at 34.
+  - **Halftone:** prints the dialog with fringed registration (strong at misregistration 9). The dialog's own 50% grey backdrop dim saturates into dense dark dots, exactly the "feed it a light scene" warning.
+
 ### Typewriter Text
 
 - **Catalog id:** `community_typewriter`
