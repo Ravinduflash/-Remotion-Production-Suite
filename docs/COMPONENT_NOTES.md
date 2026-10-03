@@ -68,6 +68,11 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **Render caveats:** see the SwiftShader note under Transition layers. Software WebGL is slow here (30–145 s a still), and some paper-design shapes render empty on it (GrainGradient blob, dots and truchet). Verify each new shader with a real still before trusting it, and keep the 120 s delayRender timeout.
 - **`external.paintGate: {waitFor}`, 2026-09-30:** plain layers that paint asynchronously get the same per-frame hold transition layers use (`usePaintGate` in `SceneRenderer`, now shared). Every frame waits until the selector matches inside the layer, plus four animation frames; it gives up after 15 s and never outlives 90 s.
   - The paper-design shader backdrops use `'[data-paper-shader] canvas'`. remocn's own gate only holds two animation frames once, at mount.
+- **remocn `templates` (whole films), 2026-10-04:** each template is a folder `components/remocn/templates/<name>/` with `index.tsx`, `content.ts`, `motion.ts`, `ui.tsx` and a `scenes/` subfolder, sometimes plus a large `assets.ts` of embedded data-URI photos (0.8 MB / 1.7 MB).
+  - **Install path:** `write_component_file` now accepts up to THREE folder levels (`^([\w-]+\/){0,3}…`, still `\w`/`-` only, so no `..`). Files go to `remotion/community/templates/<name>/…`, and the render sync's `copyDir` is recursive.
+  - **Fonts:** they arrive as Fontsource CSS side-effect imports (`import "@fontsource/inter/500.css"`), and Remotion's bundler handles them. `@fontsource/inter`, `@fontsource/manrope` and `@fontsource/roboto-mono` are now in `render-project`.
+  - **Frame rate:** the films are authored at 60 (or 59.94) fps but scale their reference clock by `useVideoConfig().fps`. On our 30 fps timeline the layer length is the docs' "natural length @ 30fps" (`Math.round(seconds × fps)`).
+  - **Registration:** full frame (their 960×540 / 480×270 design space scales up), and they paint their own background.
 - **remocn `filters` tier, 2026-10-03:** read from remocn.dev/docs/filters (introduction).
   - What a filter is: it wraps a scene and re-reads its pixels every frame through the experimental html-in-canvas API, the same `canvas-presentation` foundation as the canvas transitions and TV Power Off (`makeCanvasFilter` / `makeFilterShader`).
   - Unlike a transition, a filter has no progress and no second scene. It's a look that lasts exactly as long as the scene it wraps ("length: sustained").
@@ -1803,6 +1808,35 @@ Components live in `remotion/community/`, their catalog entries in `remotion/com
   - **ASCII** (mono and coloured): works, but on this mostly dark scene only the brighter UI turns into glyphs and the frame reads near-black. Feed it high-contrast or bright content.
   - **Underwater:** subtle at amplitude 7 (change 1.0), clearly wavy at 34.
   - **Halftone:** prints the dialog with fringed registration (strong at misregistration 9). The dialog's own 50% grey backdrop dim saturates into dense dark dots, exactly the "feed it a light scene" warning.
+
+### Release Teaser, Brand Guidelines, Workflow Console, Product Showcase and Order Flow (remocn templates)
+
+- **Catalog ids:**
+  - `remocn_tpl_release_teaser` (`ReleaseTeaser`, 481 f)
+  - `remocn_tpl_brand_guidelines` (`BrandGuidelines`, 536 f)
+  - `remocn_tpl_workflow_console` (`WorkflowConsole`, 1405 f)
+  - `remocn_tpl_product_showcase` (`ProductShowcase` from `launch-anything`, 800 f)
+  - `remocn_tpl_order_flow` (`OrderFlow` from `fomo-limit-orders`, 554 f)
+  - Lengths are at 30 fps.
+- **Files:** 57, verbatim, MIT, under `remotion/community/templates/`. Registry dependencies already installed: `caret`, `typed-split-wipe`, `shader-text-reveal`. All demo content is fictional (Orvio, Form Study, DEMO market).
+- **Release Teaser:** five statement slots (`statements` JSON; `\n` breaks; blanks keep defaults), then `brandName` + `release` (blank hides the suffix) + `tagline`.
+  - Also: `accentColor`, `theme` {background, surface, foreground, muted, accent}, `lightIntensity` 0–2, `logoSrc` (a flat logo replaces the ring), `reducedMotion`.
+  - The ring is a projected 2D-canvas mesh.
+- **Brand Guidelines:** `brandName` (≤ 24), `accentColor`, `theme` {ink, accent, stone, paper}, `content` {openingTagline, guidelinesLabel, collageTitle, collectionLabel, footer}, `phrases` (8 slots, ≤ 25 chars), `closingWords` (3), `photos` {ceramics, materials, chair}, `logoSrc`, `reducedMotion`.
+  - The photos are bundled AI-generated data URIs.
+- **Workflow Console:** 18 scenes. `productName`, `accentColor`, `backgroundColor`, `content` (every title / response), `environments` [{label, topology: single|parallel|cluster|canary}], `tools`, `bars` (≤ 8), `terminalRows` {campaign|launched|stats: [{at s, text, kind?, highlight?}]}, `logoSrc`.
+  - The legacy `countries` map prop isn't exposed.
+- **Product Showcase:** `opening` + `subject` (chrome words), `brandUrl`, `accentColor`, `content` {proof, industry, promise, integrations}, `screenImages` (7 keys, ≈ 1.52:1, cover), `media` {desk, horizon, rocket, earth}, `logos`, `logoSrc`.
+  - The chrome intro needs WebGL2 (`shader-text-reveal`).
+- **Order Flow:** `brandName`, `accentColor`, `content` {intro, ticker, assetName, limitPrice, action, closing, …}, `theme` {ink, panel, paper, accent, positive}.
+- **All templates:** `audioSrc` + `volume` (silent by default, bring your own licensed track). Only the reduced-motion templates (Release Teaser, Brand Guidelines) have `reducedMotion`.
+- **Preview:** kind `template`, a schematic card: the template's palette, its title text, the current beat from the documented timeline, and a progress bar.
+- **Verified:** 2026-10-04, [remocn-templates-contact.png](renders/remocn-templates-contact.png), 26 stills, 0 errors, at 30 fps across each film:
+  - **Teaser:** statements over the beveled ring → the "Orvio 2" lockup. A customised run shows "Northwind 3", the new tagline and a gold accent.
+  - **Brand:** mark → palette → "Keep" typing → photo collage (embedded data-URI photos render) → wordmark.
+  - **Console:** typed command → environment diagrams → tool log → chart → mark.
+  - **Showcase:** chrome words (WebGL2 on software GL works) → glass button → laptop over the photo plate → symbol field → frame mark.
+  - **Order Flow:** intro → phone UI → exit-price slider → price close-up → closing.
 
 ### Typewriter Text
 

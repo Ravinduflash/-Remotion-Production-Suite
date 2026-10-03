@@ -24796,5 +24796,540 @@ window.CommunityManifest = [
     "fullFrame": true,
     "defaultDurationInFrames": 150,
     "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_tpl_release_teaser",
+    "componentName": "ReleaseTeaser",
+    "name": "Release Teaser (remocn template)",
+    "desc": "remocn template • 16 s cinematic release announcement: five short statements over an extreme close-up of a beveled open ring, a camera pull-back to the release lockup, then the light recedes (fictional \"Orvio 2\")",
+    "icon": "🎬",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/templates/release-teaser",
+      "exportName": "ReleaseTeaser",
+      "packages": [
+        "@fontsource/inter",
+        "@fontsource/manrope",
+        "@fontsource/roboto-mono"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "brandName": "Orvio",
+        "release": "2",
+        "tagline": "Your next chapter starts here.",
+        "accentColor": "#9BC8DD",
+        "lightIntensity": 1,
+        "reducedMotion": false
+      }
+    },
+    "controls": [
+      {
+        "group": "Release Teaser (remocn template) (whole clip) • complete film, full frame, paints its own background; natural 481 f at 30 fps (16.016 s)",
+        "items": [
+          {
+            "key": "brandName",
+            "label": "BRAND (final title)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "release",
+            "label": "RELEASE (blank hides the suffix)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "tagline",
+            "label": "TAGLINE",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "statements",
+            "label": "STATEMENTS (JSON, 5 slots; \\n for a line break; blanks keep defaults)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "theme",
+            "label": "THEME (JSON {background, surface, foreground, muted, accent})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "lightIntensity",
+            "label": "EDGE LIGHT",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 2,
+            "step": 0.01
+          },
+          {
+            "key": "logoSrc",
+            "label": "LOGO URL (replaces the ring with a flat logo)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "reducedMotion",
+            "label": "REDUCED MOTION",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "audioSrc",
+            "label": "SOUNDTRACK URL (your licensed audio; silent by default)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "volume",
+            "label": "VOLUME",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "template",
+      "style": "teaser"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 481,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_tpl_brand_guidelines",
+    "componentName": "BrandGuidelines",
+    "name": "Brand Guidelines (remocn template)",
+    "desc": "remocn template • 17.9 s editorial identity film: an architectural mark, a sliding palette, a self-typing type specimen, a layered collage of bundled still-life photos, flipping tiles and the closing wordmark (fictional \"Form Study\")",
+    "icon": "🎨",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/templates/brand-guidelines",
+      "exportName": "BrandGuidelines",
+      "packages": [
+        "@fontsource/inter",
+        "@fontsource/manrope",
+        "@fontsource/roboto-mono"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "brandName": "Form Study",
+        "reducedMotion": false
+      }
+    },
+    "controls": [
+      {
+        "group": "Brand Guidelines (remocn template) (whole clip) • complete film, full frame, paints its own background; natural 536 f at 30 fps",
+        "items": [
+          {
+            "key": "brandName",
+            "label": "BRAND (≤ 24 chars)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "theme",
+            "label": "THEME (JSON {ink, accent, stone, paper})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "content",
+            "label": "CONTENT (JSON {openingTagline, guidelinesLabel, collageTitle, collectionLabel, footer})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "phrases",
+            "label": "PHRASES (JSON, 8 slots ≤ 25 chars: 2 typed + 6 style cuts)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "closingWords",
+            "label": "CLOSING WORDS (JSON, 3 × ≤ 10 chars)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "photos",
+            "label": "PHOTOS (JSON {ceramics, materials, chair} URLs / data URIs)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "logoSrc",
+            "label": "LOGO URL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "reducedMotion",
+            "label": "REDUCED MOTION",
+            "kind": "checkbox",
+            "keyframable": false
+          },
+          {
+            "key": "audioSrc",
+            "label": "SOUNDTRACK URL (your licensed audio; silent by default)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "volume",
+            "label": "VOLUME",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "template",
+      "style": "brand"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 536,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_tpl_workflow_console",
+    "componentName": "WorkflowConsole",
+    "name": "Workflow Console (remocn template)",
+    "desc": "remocn template • 46.8 s release-automation film in navy and ice blue: typed commands, context loading, environment node diagrams, tool execution, pipeline metrics, a scaling decision and a throughput chart (18 scenes, fictional data)",
+    "icon": "🖥️",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/templates/workflow-console",
+      "exportName": "WorkflowConsole",
+      "packages": [
+        "@fontsource/inter",
+        "@fontsource/manrope",
+        "@fontsource/roboto-mono"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "productName": "Workflow",
+        "accentColor": "#8ed8f8",
+        "backgroundColor": "#0e1b2b"
+      }
+    },
+    "controls": [
+      {
+        "group": "Workflow Console (remocn template) (whole clip) • complete film, full frame, paints its own background; natural 1405 f at 30 fps (46.83 s)",
+        "items": [
+          {
+            "key": "productName",
+            "label": "PRODUCT",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "backgroundColor",
+            "label": "BACKGROUND",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "content",
+            "label": "CONTENT (JSON {command, geography, campaign, terminalTitle, chartTitle, closing, …})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "environments",
+            "label": "ENVIRONMENTS (JSON [{label, topology: single|parallel|cluster|canary}])",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "tools",
+            "label": "TOOL LOG LABELS (JSON string array)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "bars",
+            "label": "CHART BARS (JSON [{label, value, detail}] ≤ 8)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "terminalRows",
+            "label": "TERMINAL ROWS (JSON {campaign|launched|stats: [{at s, text, kind?, highlight?}]})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "logoSrc",
+            "label": "LOGO URL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "audioSrc",
+            "label": "SOUNDTRACK URL (your licensed audio; silent by default)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "volume",
+            "label": "VOLUME",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "template",
+      "style": "console"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 1405,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_tpl_product_showcase",
+    "componentName": "ProductShowcase",
+    "name": "Product Showcase (remocn template)",
+    "desc": "remocn template • 26.7 s editorial product film in cream and forest green: chrome-word opening (WebGL2), a laptop camera move through seven code-native demos, a symbol field, architecture, embedded photo plates, an address and a frame mark",
+    "icon": "💻",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/templates/launch-anything",
+      "exportName": "ProductShowcase",
+      "packages": [
+        "@fontsource/inter",
+        "@fontsource/manrope",
+        "@fontsource/roboto-mono"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "opening": "Launch",
+        "subject": "anything",
+        "brandUrl": "yourproduct.example",
+        "accentColor": "#245744"
+      }
+    },
+    "controls": [
+      {
+        "group": "Product Showcase (remocn template) (whole clip) • complete film, full frame, paints its own background; natural 800 f at 30 fps; chrome intro needs WebGL2",
+        "items": [
+          {
+            "key": "opening",
+            "label": "OPENING WORD",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "subject",
+            "label": "SUBJECT WORD",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "brandUrl",
+            "label": "CLOSING URL / LABEL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "content",
+            "label": "CONTENT (JSON {proof, industry, promise, integrations: [...]})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "screenImages",
+            "label": "SCREEN IMAGES (JSON {dashboard, shoppers, exchange, builder, trading, loyalty, integrations} ≈1.52:1)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "media",
+            "label": "PHOTO PLATES (JSON {desk, horizon, rocket, earth})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "logos",
+            "label": "SYMBOL FIELD (JSON array of image URLs)",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "logoSrc",
+            "label": "CLOSING MARK URL",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "audioSrc",
+            "label": "SOUNDTRACK URL (your licensed audio; silent by default)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "volume",
+            "label": "VOLUME",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "template",
+      "style": "showcase"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 800,
+    "renderTimeoutMs": 120000
+  },
+  {
+    "id": "remocn_tpl_order_flow",
+    "componentName": "OrderFlow",
+    "name": "Order Flow (remocn template)",
+    "desc": "remocn template • 18.5 s trading-interface demo: graphite surfaces, amber controls, a phone UI, an exit-price slider morph, confirmation and closing identity (fictional DEMO market, illustrative figures)",
+    "icon": "📈",
+    "tab": "community",
+    "external": {
+      "importPath": "./community/templates/fomo-limit-orders",
+      "exportName": "OrderFlow",
+      "packages": [
+        "@fontsource/inter",
+        "@fontsource/manrope",
+        "@fontsource/roboto-mono"
+      ],
+      "sizeMode": "none"
+    },
+    "defaults": {
+      "baseX": 0,
+      "baseY": 0,
+      "customProperties": {
+        "width": 1920,
+        "height": 1080,
+        "brandName": "Order Flow",
+        "accentColor": "#e8b45a"
+      }
+    },
+    "controls": [
+      {
+        "group": "Order Flow (remocn template) (whole clip) • complete film, full frame, paints its own background; natural 554 f at 30 fps",
+        "items": [
+          {
+            "key": "brandName",
+            "label": "BRAND",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "accentColor",
+            "label": "ACCENT",
+            "kind": "color",
+            "keyframable": false
+          },
+          {
+            "key": "content",
+            "label": "CONTENT (JSON {intro, ticker, assetName, limitPrice, action, closing, …})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "theme",
+            "label": "THEME (JSON {ink, panel, paper, accent, positive})",
+            "kind": "json",
+            "keyframable": false
+          },
+          {
+            "key": "audioSrc",
+            "label": "SOUNDTRACK URL (your licensed audio; silent by default)",
+            "kind": "text",
+            "keyframable": false
+          },
+          {
+            "key": "volume",
+            "label": "VOLUME",
+            "kind": "range",
+            "keyframable": false,
+            "min": 0,
+            "max": 1,
+            "step": 0.01
+          }
+        ]
+      }
+    ],
+    "preview": {
+      "kind": "template",
+      "style": "orders"
+    },
+    "fullFrame": true,
+    "defaultDurationInFrames": 554,
+    "renderTimeoutMs": 120000
   }
 ];
